@@ -5,15 +5,21 @@
 #include <time.h>
 #include <QWindow>
 #include "global.h"
+#include <qlabel.h>
 
 class CzeWindow : public QWidget
 {
 	Q_OBJECT
 
 public:
-	CzeWindow(QWidget* parent);
+	CzeWindow(QWidget* parent, const char* title = "");
 	void resizeEvent(QResizeEvent* event)
 	{
+		if (!resizehelper)
+		{
+			QWidget::resizeEvent(event);
+			return;
+		}
 		resizehelper->setFixedSize(event->size());
 		corners[0][0]->setGeometry(0, 0, 8, 8);
 		corners[1][0]->setGeometry(8, 0, width() - 16, 2);
@@ -26,6 +32,7 @@ public:
 		QWidget::resizeEvent(event);
 		titlebar->setGeometry(0, 0, event->size().width(), 24);
 		closebutton->setGeometry(event->size().width() - closebutton->width() - 4, 4, closebutton->width(), closebutton->height());
+		inner->setGeometry(0, 24, event->size().width(), event->size().height() - 24);
 	}
 	void mousePressEvent(QMouseEvent* event)
 	{
@@ -89,10 +96,54 @@ public:
 		r.setWidth(r.width() - 0.5);
 		r.setHeight(r.height() - 0.5);
 		qp.drawRoundedRect(r, 8, 8);
+
+		if (title.length() == 0)
+			return;
+
+		qp.setRenderHint(QPainter::SmoothPixmapTransform);
+		QFont fn("Segoe UI", 9);
+		QFontMetrics fm(fn);
+		QImage img(7, 7, QImage::Format::Format_RGBA8888);
+		img.fill(QColor(255, 255, 255, 0));
+		img.setPixel(3, 2, 0xcfffffff);
+		img.setPixel(2, 2, 0xbfffffff);
+		img.setPixel(4, 2, 0xbfffffff);
+		QSize textsize = fm.size(Qt::TextSingleLine, title);
+		qp.drawImage(QRect(6 - textsize.width() * 0.75, 4 - textsize.height()*1.5, textsize.width()*2.5, textsize.height() * 6), img);
+		qp.setPen(QColor(0, 0, 0));
+		qp.setFont(fn);
+		qp.drawText(6, 18, title);
 		
 	}
-	QWidget* resizehelper;
+	void childEvent(QChildEvent* event)
+	{
+		if (done && event->type() == QEvent::Type::ChildAdded)
+		{
+			if (event->child()->isWidgetType())
+			{
+				((QWidget*)event->child())->setParent(inner);
+				((QWidget*)event->child())->show();
+				return;
+			}
+		}
+		else if (event->type() == QEvent::Type::ChildPolished)
+		{
+			if (event->child()->isWidgetType() && ((QWidget*)event->child())->isHidden())
+			{
+				((QWidget*)event->child())->show();
+			}
+		}
+		QWidget::childEvent(event);
+	}
+	void SetTitle(const char* titlech)
+	{
+		title = title.fromUtf8(titlech, strlen(titlech));
+	}
+	bool done = false;
+	QWidget* resizehelper = 0;
 	QWidget* titlebar;
 	QWidget* corners[3][3];
 	QWidget* closebutton;
+	QWidget* inner;
+	QString title;
 };

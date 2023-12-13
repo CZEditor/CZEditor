@@ -8,5 +8,6 @@ class CzeViewport : public CzeWindow
 
 public:
 	CzeViewport(QWidget* parent);
+	QWidget* test;
 };
 

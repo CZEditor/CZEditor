@@ -1,6 +1,19 @@
 #include "CzeWindow.h"
 #include <QWindow>
+#include <QLayout>
 #include <QtWidgets/QToolButton.h>
+
+class CzeWindowLayout : public QLayout
+{
+public:
+	CzeWindowLayout(QWidget* parent) : QLayout(parent)
+	{
+		inner = new QWidget();
+		addWidget(inner);
+	}
+
+	QWidget* inner;
+};
 
 class CzeCloseButton : public QAbstractButton
 {
@@ -8,6 +21,7 @@ public:
 	CzeCloseButton(QWidget* parent) : QAbstractButton(parent)
 	{
 		setFixedSize(18, 18);
+		
 		setAttribute(Qt::WA_NoMousePropagation);
 	}
 
@@ -59,6 +73,8 @@ public:
 		qp.setPen(QPen(QColor(255, 255, 255), 2));
 		qp.drawLine(7, 6, width() - 7, height() - 6);
 		qp.drawLine(width() - 7, 6, 7, height() - 6);
+		
+		
 		event->accept();
 	}
 
@@ -91,11 +107,13 @@ public:
 		parentWidget()->close();
 	}
 
+	
+
 	bool hovered = false;
 	bool held = false;
 };
 
-CzeWindow::CzeWindow(QWidget* parent) : QWidget(nullptr)
+CzeWindow::CzeWindow(QWidget* parent, const char* title) : QWidget(nullptr)
 {
 	
 	//setStyleSheet("#CzeWindow { border-image: url(:/CZEditor/Rounded Frame.png) 6; border-width: 6px;}");
@@ -103,7 +121,7 @@ CzeWindow::CzeWindow(QWidget* parent) : QWidget(nullptr)
 	setWindowFlag(Qt::FramelessWindowHint);
 	setAttribute(Qt::WA_NoSystemBackground, true);
 	setAttribute(Qt::WA_TranslucentBackground, true);
-
+	show();
 	resizehelper = new QWidget(this);
 	resizehelper->setObjectName("CzeWindow");
 	titlebar = new QWidget(this);
@@ -111,6 +129,7 @@ CzeWindow::CzeWindow(QWidget* parent) : QWidget(nullptr)
 	titlebar->setGeometry(0, 0, 128, 24);
 	//titlebar->setStyleSheet("#CzeWindowTitlebar { border-image: url(:/CZEditor/Rounded Frame.png) 6; border-width: 6px; }");
 	titlebar->setMinimumSize(128, 24);
+	inner = new QWidget(this);
 	(corners[0][0] = new QWidget(this))->setCursor(QCursor(Qt::SizeFDiagCursor));
 	(corners[1][0] = new QWidget(this))->setCursor(QCursor(Qt::SizeVerCursor));
 	(corners[2][0] = new QWidget(this))->setCursor(QCursor(Qt::SizeBDiagCursor));
@@ -120,8 +139,9 @@ CzeWindow::CzeWindow(QWidget* parent) : QWidget(nullptr)
 	(corners[1][2] = new QWidget(this))->setCursor(QCursor(Qt::SizeVerCursor));
 	(corners[2][2] = new QWidget(this))->setCursor(QCursor(Qt::SizeFDiagCursor));
 	closebutton = new CzeCloseButton(this);
+	SetTitle(title);
 	setMinimumSize(128, 32);
+	done = true;
+	resize(200, 200);
 	
-
-	show();
 }
