@@ -5,7 +5,7 @@
 #include <QtWidgets/QDockWidget>
 
 
-CZEditor::CZEditor(QWidget *parent) : QMainWindow(parent)
+CZEditor::CZEditor(QWidget *parent) : CzeWindow(parent)
 {
     
     viewport = new CzeViewport(this);
