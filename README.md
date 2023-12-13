@@ -1,2 +1,2 @@
 # CZEditor
-General purpose video editor.
+Under construction
