@@ -1,4 +1,4 @@
-#include "global.h"
+#include "global.hpp"
 #include <time.h>
 
 static int todayshue;

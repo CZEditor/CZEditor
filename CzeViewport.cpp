@@ -1,5 +1,5 @@
-#include "CzeViewport.h"
-#include "CzeButton.h"
+#include "CzeViewport.hpp"
+#include "CzeButton.hpp"
 
 CzeViewport::CzeViewport(QWidget* parent) : CzeWindow(parent)
 {

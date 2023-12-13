@@ -4,7 +4,7 @@
 #include <QtGui/QPainter.h>
 #include <time.h>
 #include <QWindow>
-#include "global.h"
+#include "global.hpp"
 #include <qlabel.h>
 
 class CzeWindow : public QWidget

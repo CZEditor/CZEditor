@@ -3,7 +3,7 @@
 #include <functional>
 #include <QEvent.h>
 #include <QPainter.h>
-#include "global.h"
+#include "global.hpp"
 
 class CzeButton : public QAbstractButton
 {

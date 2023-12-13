@@ -98,7 +98,7 @@
     <ClCompile Include="CzeViewport.cpp" />
     <QtRcc Include="CZEditor.qrc" />
     <QtUic Include="CZEditor.ui" />
-    <QtMoc Include="CZEditor.h" />
+    <QtMoc Include="CZEditor.hpp" />
     <ClCompile Include="CZEditor.cpp" />
     <ClCompile Include="CzeWindow.cpp" />
     <ClCompile Include="global.cpp" />
@@ -107,16 +107,16 @@
     <ResourceCompile Include="CZEditor.rc" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="CzeViewport.h" />
+    <QtMoc Include="CzeViewport.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="CzeButton.h" />
+    <QtMoc Include="CzeButton.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="CzeWindow.h" />
+    <QtMoc Include="CzeWindow.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="global.h" />
+    <ClInclude Include="global.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

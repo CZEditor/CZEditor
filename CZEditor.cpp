@@ -1,4 +1,4 @@
-#include "CZEditor.h"
+#include "CZEditor.hpp"
 #include <QtWidgets/QSplitter>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QLabel>

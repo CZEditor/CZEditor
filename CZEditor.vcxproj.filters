@@ -29,7 +29,7 @@
     <QtUic Include="CZEditor.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtMoc Include="CZEditor.h">
+    <QtMoc Include="CZEditor.hpp">
       <Filter>Header Files</Filter>
     </QtMoc>
     <ClCompile Include="CZEditor.cpp">
@@ -60,18 +60,18 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="CzeViewport.h">
+    <QtMoc Include="CzeViewport.hpp">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="CzeButton.h">
+    <QtMoc Include="CzeButton.hpp">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="CzeWindow.h">
+    <QtMoc Include="CzeWindow.hpp">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="global.h">
+    <ClInclude Include="global.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,8 +2,8 @@
 
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QSplitter>
-#include "CzeViewport.h"
-#include "CzeWindow.h"
+#include "CzeViewport.hpp"
+#include "CzeWindow.hpp"
 
 class CZEditor : public CzeWindow
 {
