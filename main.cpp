@@ -1,6 +1,6 @@
-#include "CZEditor.h"
+#include "CZEditor.hpp"
 #include <QtWidgets/QApplication>
-#include "global.h"
+#include "global.hpp"
 
 int main(int argc, char *argv[])
 {

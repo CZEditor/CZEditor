@@ -1,4 +1,4 @@
-#include "CzeButton.h"
+#include "CzeButton.hpp"
 
 
 CzeButton::CzeButton(QWidget* parent, const char* text, std::function<void()> callbackIn, void* argsIn) : QToolButton(parent)

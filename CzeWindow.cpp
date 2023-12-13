@@ -1,6 +1,6 @@
-#include "CzeWindow.h"
-#include <QWindow>
-#include <QtWidgets/QToolButton.h>
+#include "CzeWindow.hpp"
+#include <QtGui/QWindow>
+#include <QtWidgets/QToolButton>
 
 class CzeCloseButton : public QAbstractButton
 {
