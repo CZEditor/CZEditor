@@ -9,19 +9,15 @@ find_package(Qt6 REQUIRED COMPONENTS Core Widgets Gui)
 qt_standard_project_setup()
 
 set(SOURCES
-	main.cpp
-	global.cpp
-	CzeWindow.cpp
-	CzeViewport.cpp
-	CZEditor.cpp
-	CzeButton.cpp
+	src/main.cpp
+	src/global.cpp
+	src/CzeWindow.cpp
+	src/CzeViewport.cpp
+	src/CZEditor.cpp
+	src/CzeButton.cpp
 )
 
-set(RESOURCES
-	CZEditor.qrc
-)
-
-qt_add_executable(czeditor ${SOURCES} ${RESOURCES})
+qt_add_executable(czeditor ${SOURCES})
 
 target_link_libraries(czeditor PRIVATE Qt6::Core Qt6::Widgets Qt6::Gui)
 
