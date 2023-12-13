@@ -1,7 +1,7 @@
 #include "CzeWindow.hpp"
 #include <QWindow>
 #include <QLayout>
-#include <QtWidgets/QToolButton.h>
+#include <QtWidgets/QToolButton>
 
 class CzeWindowLayout : public QLayout
 {

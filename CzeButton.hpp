@@ -1,8 +1,9 @@
 #pragma once
-#include <QtWidgets/QAbstractButton.h>
+#include <QtWidgets/QAbstractButton>
 #include <functional>
-#include <QEvent.h>
-#include <QPainter.h>
+#include <QtCore/QEvent>
+#include <QtGui/QPainter>
+#include <QtGui/QPaintEvent>
 #include "global.hpp"
 
 class CzeButton : public QAbstractButton

@@ -1,11 +1,12 @@
 #pragma once
-#include <QtWidgets/QWidget.h>
-#include <QtGui/QEvent.h>
-#include <QtGui/QPainter.h>
+#include <QtWidgets/QWidget>
+#include <QtCore/QEvent>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QPainter>
 #include <time.h>
-#include <QWindow>
+#include <QtGui/QWindow>
 #include "global.hpp"
-#include <qlabel.h>
+#include <QtWidgets/QLabel>
 
 class CzeWindow : public QWidget
 {
