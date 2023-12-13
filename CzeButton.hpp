@@ -1,5 +1,5 @@
 #pragma once
-#include <QtWidgets/QToolButton.h>
+#include <QtWidgets/QToolButton>
 #include <functional>
 
 class CzeButton : public QToolButton

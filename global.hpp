@@ -1,6 +1,6 @@
 #pragma once
 
-#include <qcolor.h>
+#include <QtGui/QColor>
 
 
 extern void InitGlobals();

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CzeWindow.h"
+#include "CzeWindow.hpp"
 
 class CzeViewport : public CzeWindow
 {
