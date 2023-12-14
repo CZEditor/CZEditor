@@ -74,7 +74,6 @@ public:
 		
 
 		QRadialGradient grad(width() * 2, height() * 3, fmax(width(), height()) * 4);
-		QColor col(255, 0, 0, 255);
 		grad.setColorAt(0, GetAccentColor(30,40));
 		grad.setColorAt(1, GetAccentColor(70,10));
 		qp.setBrush(grad);
@@ -88,7 +87,7 @@ public:
 		qp.drawLine(QLineF(0, 24.5, width(), 24.5));
 		qp.setBrush(Qt::NoBrush);
 		qp.setPen(QPen(QColor(0, 0, 0), 0));
-		qp.drawLine(QLineF(0, 25.5, width(), 25.5));
+		qp.drawLine(QLineF(2.5, 25.5, width()-3.5, 25.5));
 		
 
 		r = rect();

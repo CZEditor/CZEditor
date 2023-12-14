@@ -11,7 +11,7 @@ class CzeButton : public QAbstractButton
 	Q_OBJECT
 
 public:
-	CzeButton(QWidget* parent, const char* text, std::function<void()> callbackIn, void* argsIn);
+	CzeButton(QWidget* parent, const char* text, std::function<void()> callbackIn, void* argsIn = nullptr);
 	void pressedEvent()
 	{
 		callback();

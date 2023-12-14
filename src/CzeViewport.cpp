@@ -11,6 +11,7 @@ public:
 	{
 
 	}
+
 	void initializeGL()
 	{
 		glEnable(GL_DEPTH_TEST);
@@ -18,6 +19,7 @@ public:
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glDepthFunc(GL_LEQUAL);
 	}
+
 	void paintGL()
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -35,7 +37,6 @@ CzeViewport::CzeViewport(QWidget* parent) : CzeWindow(parent)
 	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->addWidget(opengl);
 	opengl->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	setLayout(layout);
+	inner->setLayout(layout);
 	opengl->update();
-
 }

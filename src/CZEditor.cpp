@@ -1,15 +1,17 @@
 #include "CZEditor.hpp"
 #include <QtWidgets/QSplitter>
-#include <QtWidgets/QPushButton>
 #include <QtWidgets/QLabel>
-#include <QtWidgets/QLineEdit>
-
+#include "CzeTextbox.hpp"
+#include "CzeLabel.hpp"
+#include "CzeButton.hpp"
 
 CZEditor::CZEditor(QWidget *parent) : CzeWindow(parent)
 {
     SetTitle("CZEditor");
-    QLineEdit* idk = new QLineEdit(this);
-    idk->setGeometry(16, 16, 64, 64);
+    CzeTextbox* idk = new CzeTextbox(this);
+    idk->move(16,16);
+    (new CzeLabel(this, "czeditor ! !"))->move(16, 48);
+    (new CzeButton(this, "      !      ", [&]() {return;}))->move(96, 48);
     viewport = new CzeViewport(nullptr);
     resize(200, 200);
     
