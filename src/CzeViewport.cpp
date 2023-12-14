@@ -1,15 +1,41 @@
 #include "CzeViewport.hpp"
 #include "CzeButton.hpp"
 #include "CzeTextbox.hpp"
+#include <QBoxLayout>
+#include <QOpenGLFunctions>
+
+class CzeViewportOpenGL : public QOpenGLWidget
+{
+public:
+	CzeViewportOpenGL(QWidget* parent = nullptr) : QOpenGLWidget(parent)
+	{
+
+	}
+	void initializeGL()
+	{
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glDepthFunc(GL_LEQUAL);
+	}
+	void paintGL()
+	{
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClearColor(0.0, 0.0, 0.5, 1.0);
+		glLoadIdentity();
+	}
+
+
+};
 
 CzeViewport::CzeViewport(QWidget* parent) : CzeWindow(parent)
 {
 	SetTitle("Viewport");
-	(new CzeButton(this, "LOOONG        BUTTTONNNN", [&]() {return; }, nullptr))->move(16, 20);
-	(new CzeButton(this, "LONG        BUTTTON", [&]() {return; }, nullptr))->move(16, 50);
-	(new CzeButton(this, "LONG      BUTTON", [&]() {return; }, nullptr))->move(16, 80);
-	(new CzeButton(this, "LONG BUTTON", [&]() {return; }, nullptr))->move(16, 110);
-	(new CzeButton(this, "                      \n                       ", [&]() {return; }, nullptr))->setGeometry(110, 110,64,64);
-	(new CzeTextbox(this))->setGeometry(220, 110, 120, 24);
+	opengl = new CzeViewportOpenGL(this);
+	QVBoxLayout* layout = new QVBoxLayout(this);
+	layout->addWidget(opengl);
+	opengl->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	setLayout(layout);
+	opengl->update();
 
 }

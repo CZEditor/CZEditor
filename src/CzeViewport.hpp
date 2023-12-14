@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CzeWindow.hpp"
+#include <QOpenGLWidget>
 
 class CzeViewport : public CzeWindow
 {
@@ -8,6 +9,6 @@ class CzeViewport : public CzeWindow
 
 public:
 	CzeViewport(QWidget* parent);
-	QWidget* test;
+	QOpenGLWidget* opengl;
 };
 

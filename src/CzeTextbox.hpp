@@ -1,7 +1,7 @@
 #pragma once
 
-#include <QtWidgets/QLineEdit.h>
-#include <QtGui/QPainter.h>
+#include <QtWidgets/QLineEdit>
+#include <QtGui/QPainter>
 #include "global.hpp"
 
 class CzeTextbox : public QLineEdit
