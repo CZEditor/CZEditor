@@ -51,36 +51,37 @@ public:
 	void paintEvent(QPaintEvent* event)
 	{
 		QPainter qp(this);
-		QRadialGradient grad(width() / 2, height() * 2, height() * 3);
+		QRadialGradient grad(width() / 2, fmax(height(), width()) * 4, fmax(height(),width()) * 8-height()*1);
 		qp.setRenderHint(QPainter::Antialiasing);
 		qp.setRenderHint(QPainter::TextAntialiasing);
+		float aspect = ((float)height() / (float)width());
 		if (held)
 		{
-			grad.setColorAt(0.3, GetAccentColor(255, 255));
-			grad.setColorAt(0.45, GetAccentColor(255, 92));
+			grad.setColorAt(0.5 - 0.06 * (aspect), GetAccentColor(255, 192));
+			grad.setColorAt(0.5 - 0.02 * (aspect), GetAccentColor(255, 64));
 			grad.setColorAt(0.5, GetAccentColor(255, 32));
-			grad.setColorAt(0.52, GetAccentColor(50, 64));
-			grad.setColorAt(0.66, GetAccentColor(50, 128));
+			grad.setColorAt(0.5 + 0.04 * (aspect), GetAccentColor(96, 64));
+			grad.setColorAt(0.5 + 0.06 * (aspect), GetAccentColor(96, 128));
 			qp.setPen(QColor(255, 255, 255));
 			qp.setBrush(grad);
 		}
 		else if (hovered)
 		{
-			grad.setColorAt(0.3, GetAccentColor(192, 255));
-			grad.setColorAt(0.45, GetAccentColor(255, 128));
-			grad.setColorAt(0.5, GetAccentColor(255, 92));
-			grad.setColorAt(0.52, GetAccentColor(50, 128));
-			grad.setColorAt(0.66, GetAccentColor(50, 255));
+			grad.setColorAt(0.5 - 0.06*(aspect), GetAccentColor(192, 255));
+			grad.setColorAt(0.5 - 0.02 * (aspect), GetAccentColor(255, 128));
+			grad.setColorAt(0.5, GetAccentColor(255, 96));
+			grad.setColorAt(0.5 + 0.04 * (aspect), GetAccentColor(50, 192));
+			grad.setColorAt(0.5 + 0.06 * (aspect), GetAccentColor(10, 255));
 			qp.setPen(QColor(255, 255, 255));
 			qp.setBrush(grad);
 		}
 		else
 		{
 			//grad.setColorAt(0.3, GetAccentColor(192, 255));
-			grad.setColorAt(0.45, GetAccentColor(32, 32));
+			grad.setColorAt(0.5 - 0.02 * (aspect), GetAccentColor(32, 32));
 			grad.setColorAt(0.5, GetAccentColor(32, 16));
-			grad.setColorAt(0.52, GetAccentColor(12, 64));
-			grad.setColorAt(0.66, GetAccentColor(12, 128));
+			grad.setColorAt(0.5 + 0.02 * (aspect), GetAccentColor(12, 64));
+			grad.setColorAt(0.5 + 0.06 * (aspect), GetAccentColor(12, 192));
 			qp.setPen(QColor(255, 255, 255));
 			qp.setBrush(grad);
 
