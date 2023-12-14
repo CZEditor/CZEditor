@@ -8,16 +8,13 @@ find_package(Qt6 REQUIRED COMPONENTS Core Widgets Gui OpenGLWidgets)
 
 qt_standard_project_setup()
 
-set(SOURCES
-	src/main.cpp
-	src/global.cpp
-	src/CzeWindow.cpp
-	src/CzeViewport.cpp
-	src/CZEditor.cpp
-	src/CzeButton.cpp
-)
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.cpp")
 
 qt_add_executable(czeditor ${SOURCES})
 
-target_link_libraries(czeditor PRIVATE Qt6::Core Qt6::Widgets Qt6::Gui Qt6::OpenGLWidgets opengl32)
+if(WIN32)
+	target_link_libraries(czeditor PRIVATE Qt6::Core Qt6::Widgets Qt6::Gui Qt6::OpenGLWidgets opengl32)
+elseif(UNIX)
+	target_link_libraries(czeditor PRIVATE Qt6::Core Qt6::Widgets Qt6::Gui Qt6::OpenGLWidgets GL)
+endif()
 
