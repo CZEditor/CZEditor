@@ -21,3 +21,5 @@ debug
 
 # CMake
 build
+CMakePresets.json
+CMakeUserPresets.json
