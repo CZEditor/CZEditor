@@ -1,6 +1,0 @@
-<RCC>
-    <qresource prefix="/CZEditor">
-        <file>Square Frame.png</file>
-        <file>Rounded Frame.png</file>
-    </qresource>
-</RCC>
