@@ -62,9 +62,9 @@ public:
 class CzeTimelineView : public QGraphicsView
 {
 public:
-	CzeTimelineView(QGraphicsScene* scene, QWidget* parent, KeyframeList* keyframelistIn) : QGraphicsView(scene, parent)
+	CzeTimelineView(QGraphicsScene* scene, QWidget* parent = nullptr) : QGraphicsView(scene, parent)
 	{
-		keyframelist = keyframelistIn;
+		
 	}
 
 	void keyPressEvent(QKeyEvent* event)
@@ -72,21 +72,21 @@ public:
 		if (event->text() == 'k')
 		{
 			Keyframe* newKeyframe = new Keyframe();
-			keyframelist->keyframes.push_back(newKeyframe);
+			keyframelist.keyframes.push_back(newKeyframe);
 			scene()->addItem(new CzeTimelineKeyframeItem(newKeyframe));
 		}
 	}
-	KeyframeList* keyframelist;
 };
 
 CzeTimeline::CzeTimeline(QWidget* parent) : CzeWindow(parent)
 {
 	SetTitle("Timeline");
 	scene = new QGraphicsScene(this);
-	opengl = new CzeTimelineView(scene,nullptr,&keyframelist);
+	opengl = new CzeTimelineView(scene);
 	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->addWidget(opengl);
 	opengl->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setLayout(layout);
 	scene->setBackgroundBrush(QColor(0, 0, 0));
+	
 }

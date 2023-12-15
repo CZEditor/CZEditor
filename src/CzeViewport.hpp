@@ -2,6 +2,7 @@
 
 #include "CzeWindow.hpp"
 #include <QGraphicsView>
+#include <qopenglwidget.h>
 
 class CzeViewport : public CzeWindow
 {
@@ -9,7 +10,6 @@ class CzeViewport : public CzeWindow
 
 public:
 	CzeViewport(QWidget* parent);
-	QGraphicsView* opengl;
-	QGraphicsScene* scene;
+	QOpenGLWidget* opengl;
 };
 

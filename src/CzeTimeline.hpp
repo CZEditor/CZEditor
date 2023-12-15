@@ -12,6 +12,5 @@ public:
 	CzeTimeline(QWidget* parent);
 	QGraphicsView* opengl;
 	QGraphicsScene* scene;
-	KeyframeList keyframelist;
 };
 

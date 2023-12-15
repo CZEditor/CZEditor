@@ -1,8 +1,11 @@
 #include "global.hpp"
 #include <time.h>
+#include "Keyframes.hpp"
 
 static int todayshue;
 QFont defaultfont;
+int currentframe = 0;
+KeyframeList keyframelist;
 
 void InitGlobals()
 {
