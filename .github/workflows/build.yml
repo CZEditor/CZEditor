@@ -35,6 +35,7 @@ jobs:
           pcre2:p
           libpng:p
           harfbuzz:p
+          libjpeg:p
     - name: 'Build application'
       run: |
         cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release
