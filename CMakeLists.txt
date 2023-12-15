@@ -17,7 +17,7 @@ qt_add_executable(czeditor ${SOURCES})
 set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
 
 if(WIN32)
-	target_link_libraries(czeditor PRIVATE Qt6::Core Qt6::Widgets Qt6::Gui Qt6::OpenGLWidgets opengl32 rpcrt4 -static)
+	target_link_libraries(czeditor PRIVATE Qt6::Core Qt6::Widgets Qt6::Gui Qt6::OpenGLWidgets opengl32 Rpcrt4.lib -static)
 	set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
 	target_link_libraries(czeditor PRIVATE b2 harfbuzz freetype jpeg graphite2)
 elseif(UNIX)
