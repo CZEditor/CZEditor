@@ -34,6 +34,7 @@ jobs:
           qt6-static:p
           pcre2:p
           libpng:p
+          harfbuzz:p
     - name: 'Build application'
       run: |
         cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release
