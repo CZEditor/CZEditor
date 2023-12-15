@@ -2,7 +2,7 @@
 # See: https://github.com/actions/starter-workflows/blob/main/ci/cmake-single-platform.yml
 name: Build application
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   build:
@@ -11,19 +11,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { sys: mingw32 }
           - { sys: mingw64 }
-          - { sys: ucrt64  }
-          - { sys: clang64 }
-    name: ${{ matrix.sys }}
+    name: mingw64
     defaults:
       run:
         shell: msys2 {0}
     steps:
     - name: 'Checkout repository'
       uses: actions/checkout@v4
-
-    - name: 'Setup MSYS2 (${{ matrix.sys }})'
+    - name: 'Setup MSYS2'
       uses: msys2/setup-msys2@v2
       with:
         msystem: ${{matrix.sys}}
@@ -36,8 +32,11 @@ jobs:
           cmake:p
           ninja:p
           qt6-base:p
-
     - name: 'Build application'
       run: |
         cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release
         cmake --build build
+    - name: 'Upload artifact'
+      uses: actions/upload@v4.0.0
+      with:
+        path: 'build/*.exe'
