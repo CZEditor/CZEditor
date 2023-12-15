@@ -6,6 +6,8 @@
 #include <qgraphicsview.h>
 #include <qgraphicsitem.h>
 #include "global.hpp"
+#include <QGraphicsSceneMouseEvent>
+#include "Property.hpp"
 
 class CzeTimelineKeyframeItem : public QGraphicsItem
 {
@@ -38,24 +40,46 @@ public:
 		maingrad.setColorAt(0.7, GetAccentColor(8, 128));
 		maingrad.setColorAt(1.0, GetAccentColor(0, 255));
 
+		float cornerradius = fmin(10.0,boundingRect().width() / 2);
+
 		painter->setPen(Qt::NoPen);
 		painter->setBrush(maingrad);
-		painter->drawRoundedRect(boundingRect(), 10,10);
+		painter->drawRoundedRect(boundingRect(), cornerradius, cornerradius);
 
-		painter->setBrush(grad);
-		
-		painter->drawPie(boundingRect().x(), boundingRect().y(), 20, 20, 90 * 16, 180 * 16);
+		if (boundingRect().width() > boundingRect().height())
+		{
+			painter->setBrush(grad);
 
-		grad.setCenter(boundingRect().right() - 10, 10);
-		grad.setFocalPoint(boundingRect().right() - 10, 10);
-		painter->setBrush(grad);
-		painter->drawPie(boundingRect().right() - 20, boundingRect().y(), 20, 20, -90 * 16, 180 * 16);
+			painter->drawPie(boundingRect().x(), boundingRect().y(), 20, 20, 90 * 16, 180 * 16);
+
+			grad.setCenter(boundingRect().right() - 10, 10);
+			grad.setFocalPoint(boundingRect().right() - 10, 10);
+			painter->setBrush(grad);
+			painter->drawPie(boundingRect().right() - 20, boundingRect().y(), 20, 20, -90 * 16, 180 * 16);
+		}
 
 		painter->setPen(QColor(255, 255, 255));
 		painter->setBrush(Qt::NoBrush);
-		painter->drawRoundedRect(boundingRect(), 10, 10);
+		painter->drawRoundedRect(boundingRect(), cornerradius, cornerradius);
 	}
 
+	void mousePressEvent(QGraphicsSceneMouseEvent* event)
+	{
+		startdragpos = event->pos();
+	}
+
+	void mouseMoveEvent(QGraphicsSceneMouseEvent* event)
+	{
+		keyframe->frame = (event->scenePos() - startdragpos).x();
+		UpdateVisual();
+	}
+
+	void UpdateVisual()
+	{
+		setPos(keyframe->frame, 0);
+	}
+
+	QPointF startdragpos;
 	Keyframe* keyframe;
 };
 
@@ -72,6 +96,8 @@ public:
 		if (event->text() == 'k')
 		{
 			Keyframe* newKeyframe = new Keyframe();
+			newKeyframe->effects.push_back(new Params());
+			newKeyframe->effects[0]->elements["verticefunc"] = new VerticeProperty();
 			keyframelist.keyframes.push_back(newKeyframe);
 			scene()->addItem(new CzeTimelineKeyframeItem(newKeyframe));
 		}

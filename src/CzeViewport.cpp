@@ -6,7 +6,7 @@
 #include <qopenglextrafunctions.h>
 #include <qopenglwidget.h>
 #include <qmatrix4x4.h>
-// this is for later
+#include "global.hpp"
 
 class CzeViewportOpenGL : public QOpenGLWidget
 {
@@ -52,10 +52,9 @@ public:
 		fragshader = extra.glCreateShader(GL_FRAGMENT_SHADER);
 		extra.glShaderSource(fragshader, 1, &fragshadersource, 0);
 		extra.glCompileShader(fragshader);
-		char IDK[512];
-		int retlen;
-		extra.glGetShaderInfoLog(fragshader, 512, &retlen, IDK);
-		qWarning("%s\n",IDK);
+		//char IDK[512];
+		//int retlen;
+		//extra.glGetShaderInfoLog(fragshader, 512, &retlen, IDK);
 
 		program = extra.glCreateProgram();
 		extra.glAttachShader(program, vertshader);
@@ -76,16 +75,22 @@ public:
 		extra.glBindVertexArray(vao);
 		QMatrix4x4* projection = new QMatrix4x4();
 		projection->perspective(90, width() / height(), 1, 128);
-		static float vertices[3][5] = { {0.0,0.0,0.0, 0.0,0.0}, {1.0,0.0,0.0, 1.0,0.0}, {0.0,1.0,0.0, 0.0,1.0} };
+		static float verticesL[3][5] = { {4.0,0.0,-5.0, 0.0,0.0}, {5.0,0.0,-3.0, 1.0,0.0}, {4.0,1.0,-5.0, 0.0,1.0} };
+		std::vector<float> vertices;
+		for (int i = 0; i < sizeof(verticesL)/4; i++)
+		{
+			vertices.push_back(((float*)verticesL)[i]);
+		}
 		
 		glBindTexture(GL_TEXTURE_2D, texture);
-		
-		
+		extra.glUniformMatrix4fv(extra.glGetUniformLocation(program, "matrix"), 1, GL_FALSE, projection->data());
 
-		extra.glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
+		DoKeyframeShit(vertices);
+
+		extra.glBufferData(GL_ARRAY_BUFFER, vertices.size()*4, vertices.data(), GL_DYNAMIC_DRAW);
 		extra.glUseProgram(program);
 		glViewport(0, 0, width(), height());
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawArrays(GL_TRIANGLES, 0, (int)(vertices.size()/5));
 	}
 
 	GLuint vao;
@@ -95,19 +100,26 @@ public:
 	GLuint vertshader;
 	GLuint fragshader;
 	GLuint program;
-	const char* vertshadersource = "#version 330 core\n\
+	const char* vertshadersource = "#version 460 core\n\
 		layout (location = 0) in vec3 aPos;\n\
 layout (location=1) in vec2 vertexColor; \n\
+uniform highp mat4 matrix;\n\
+out vec2 fragmentColor;\n\
+out vec3 worldPos;\n\
 		void main()\n\
 		{\n\
-		   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n\
+		   gl_Position = matrix*vec4(aPos.x, aPos.y, aPos.z, 1.0);\n\
+		fragmentColor = vertexColor;\n\
 		}\0";
-	const char* fragshadersource = "#version 330 core \n\
+	const char* fragshadersource = "#version 460 core \n\
 		out vec4 FragColor; \n\
- \n\
+in vec2 fragmentColor;\n\
+in vec3 worldPos; \n\
 	void main() \n\
 	{  \n\
-		FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f); \n\
+\n\
+\n\
+		FragColor = vec4(fragmentColor,0.25,1.0); \n\
 	} \0";
 };
 

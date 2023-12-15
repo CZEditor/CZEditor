@@ -3,13 +3,13 @@
 #include "Params.hpp"
 #include <vector>
 
-class Keyframe 
+class Keyframe
 {
 public:
 	int frame;
 	Params source;
-	Params actions;
-	Params effects;
+	std::vector<Params*> actions;
+	std::vector<Params*> effects;
 };
 
 class KeyframeList

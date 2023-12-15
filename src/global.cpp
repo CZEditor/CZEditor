@@ -19,3 +19,14 @@ QColor GetAccentColor(int saturation, int value, int alpha)
 	ret.setHsv(todayshue, saturation, value, alpha);
 	return ret;
 }
+
+void DoKeyframeShit(std::vector<float> &vertices)
+{
+	for (auto& keyframe : keyframelist.keyframes)
+	{
+		for (auto& effect : keyframe->effects)
+		{
+			((VerticeProperty*)effect->elements["verticefunc"])->ChangeVertices(vertices);
+		}
+	}
+}
