@@ -17,5 +17,4 @@ CzeTimeline::CzeTimeline(QWidget* parent) : CzeWindow(parent)
 	inner->setLayout(layout);
 	(scene->addText("YIPPE", defaultfont))->setDefaultTextColor(QColor(255, 255, 255));
 	scene->setBackgroundBrush(QColor(0, 0, 0));
-
 }
