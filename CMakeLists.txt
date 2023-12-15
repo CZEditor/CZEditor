@@ -12,8 +12,11 @@ file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.cpp")
 
 qt_add_executable(czeditor ${SOURCES})
 
+
 if(WIN32)
 	target_link_libraries(czeditor PRIVATE Qt6::Core Qt6::Widgets Qt6::Gui Qt6::OpenGLWidgets opengl32)
+	set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
+	target_link_libraries(PRIVATE libb2 libharfbuzz libfreetype libjpeg)
 elseif(UNIX)
 	target_link_libraries(czeditor PRIVATE Qt6::Core Qt6::Widgets Qt6::Gui Qt6::OpenGLWidgets GL)
 endif()
