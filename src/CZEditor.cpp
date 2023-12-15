@@ -4,6 +4,7 @@
 #include "CzeTextbox.hpp"
 #include "CzeLabel.hpp"
 #include "CzeButton.hpp"
+#include "CzeTimeline.hpp"
 
 CZEditor::CZEditor(QWidget *parent) : CzeWindow(parent)
 {
@@ -13,6 +14,7 @@ CZEditor::CZEditor(QWidget *parent) : CzeWindow(parent)
     (new CzeLabel(this, "czeditor ! !"))->move(16, 48);
     (new CzeButton(this, "      !      ", [&]() {return;}))->move(96, 48);
     viewport = new CzeViewport(nullptr);
+    new CzeTimeline(nullptr);
     resize(200, 200);
     
     //char yeah[64];

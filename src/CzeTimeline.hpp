@@ -3,12 +3,12 @@
 #include "CzeWindow.hpp"
 #include <QGraphicsView>
 
-class CzeViewport : public CzeWindow
+class CzeTimeline : public CzeWindow
 {
 	Q_OBJECT
 
 public:
-	CzeViewport(QWidget* parent);
+	CzeTimeline(QWidget* parent);
 	QGraphicsView* opengl;
 	QGraphicsScene* scene;
 };

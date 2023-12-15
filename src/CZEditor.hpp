@@ -5,6 +5,8 @@
 #include "CzeViewport.hpp"
 #include "CzeWindow.hpp"
 
+#include "Property.hpp"
+
 class CZEditor : public CzeWindow
 {
     Q_OBJECT

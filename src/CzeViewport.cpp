@@ -3,7 +3,11 @@
 #include "CzeTextbox.hpp"
 #include <QBoxLayout>
 #include <QOpenGLFunctions>
-
+#include <qgraphicsscene.h>
+#include <qgraphicsview.h>
+#include <qgraphicsitem.h>
+// this is for later
+/*
 class CzeViewportOpenGL : public QOpenGLWidget
 {
 public:
@@ -29,14 +33,18 @@ public:
 
 
 };
+*/
 
 CzeViewport::CzeViewport(QWidget* parent) : CzeWindow(parent)
 {
 	SetTitle("Viewport");
-	opengl = new CzeViewportOpenGL(this);
+	scene = new QGraphicsScene(this);
+	opengl = new QGraphicsView(scene);
 	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->addWidget(opengl);
 	opengl->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	inner->setLayout(layout);
-	opengl->update();
+	(scene->addText("YIPPE", defaultfont))->setDefaultTextColor(QColor(255,255,255));
+	scene->setBackgroundBrush(QColor(0, 0, 0));
+	
 }

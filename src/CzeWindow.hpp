@@ -7,6 +7,7 @@
 #include <QtGui/QWindow>
 #include "global.hpp"
 #include <QtWidgets/QLabel>
+#include <qdockwidget.h>
 
 class CzeWindow : public QWidget
 {
