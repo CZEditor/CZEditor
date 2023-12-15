@@ -18,7 +18,6 @@ public:
 
 	void UpdateParams()
 	{
-		qWarning("huh");
 		for (auto& it : params.elements)
 		{
 			qWarning("%s: %ls",it.first,it.second->Serialize().data());

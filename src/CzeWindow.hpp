@@ -136,6 +136,12 @@ public:
 		}
 		QWidget::childEvent(event);
 	}
+
+	void setLayout(QLayout* layout)
+	{
+		inner->setLayout(layout);
+	}
+	
 	void SetTitle(const char* titlech)
 	{
 		title = title.fromUtf8(titlech, strlen(titlech));

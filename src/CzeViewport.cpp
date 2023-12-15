@@ -43,7 +43,7 @@ CzeViewport::CzeViewport(QWidget* parent) : CzeWindow(parent)
 	QVBoxLayout* layout = new QVBoxLayout(this);
 	layout->addWidget(opengl);
 	opengl->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	inner->setLayout(layout);
+    setLayout(layout);
 	(scene->addText("YIPPE", defaultfont))->setDefaultTextColor(QColor(255,255,255));
 	scene->setBackgroundBrush(QColor(0, 0, 0));
 	

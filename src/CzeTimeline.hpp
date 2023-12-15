@@ -2,6 +2,7 @@
 
 #include "CzeWindow.hpp"
 #include <QGraphicsView>
+#include "Keyframes.hpp"
 
 class CzeTimeline : public CzeWindow
 {
@@ -11,5 +12,6 @@ public:
 	CzeTimeline(QWidget* parent);
 	QGraphicsView* opengl;
 	QGraphicsScene* scene;
+	KeyframeList keyframelist;
 };
 
