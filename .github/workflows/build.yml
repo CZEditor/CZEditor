@@ -5,7 +5,6 @@ name: Build application
 on: [push, pull_request]
 
 jobs:
-
   build:
     runs-on: windows-latest
     strategy:
