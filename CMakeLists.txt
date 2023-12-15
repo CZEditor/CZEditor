@@ -3,6 +3,7 @@ project(CZEditor LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(Qt6GuiTools_DIR "D:/a/_temp/msys64/mingw64/qt6-static/lib/cmake/Qt6GuiTools")
 
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets Gui OpenGLWidgets)
 
