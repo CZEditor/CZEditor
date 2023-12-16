@@ -43,6 +43,4 @@ void CzeTextbox::paintEvent(QPaintEvent* event)
 	qp.setPen(QColor(0, 0, 0));
 	qp.setBrush(Qt::NoBrush);
 	qp.drawRect(QRectF(r.x() + 0.5, r.y() + 0.5, r.width() - 1, r.height() - 1));
-
-
 }

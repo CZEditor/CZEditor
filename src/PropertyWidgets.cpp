@@ -5,7 +5,7 @@
 
 IntPropertyWidget::IntPropertyWidget(IntProperty* propIn, QWidget* parent) : QWidget(parent)
 {
-	textbox = new QSpinBox(this);
+	textbox = new CzeSpinBox(this);
 	textbox->setValue(propIn->data.data);
 	connect(textbox, &QSpinBox::valueChanged, this, &IntPropertyWidget::textchanged);
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);

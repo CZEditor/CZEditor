@@ -2,6 +2,7 @@
 
 #include <qspinbox.h>
 #include <QWidget>
+#include "CzeSpinBox.hpp"
 
 class IntProperty;
 class CzeTextbox;
@@ -12,6 +13,6 @@ public:
 	IntPropertyWidget(IntProperty* propIn, QWidget* parent = nullptr);
 	void textchanged(int);
 
-	QSpinBox* textbox;
+	CzeSpinBox* textbox;
 	IntProperty* prop;
 };
