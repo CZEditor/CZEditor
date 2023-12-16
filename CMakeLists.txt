@@ -8,6 +8,7 @@ set(CMAKE_DISABLE_FIND_PACKAGE_harfbuzz TRUE)
 set(CMAKE_FIND_LIBRARY_SUFFIXES ".a;.lib")
 set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ /lib/libmng.a /usr/lib/libbrotlidec.a /usr/lib/libbz2.a /usr/lib/librt.a")
 set(VERBOSE 1)
+set(HAVE_GETTIME ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets Gui OpenGLWidgets)
 
