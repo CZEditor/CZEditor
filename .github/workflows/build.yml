@@ -27,6 +27,8 @@ jobs:
         install: >-
           git
           make
+          brotli-devel
+          libbz2-devel
         pacboy: >-
           toolchain:p
           cmake:p
@@ -38,8 +40,6 @@ jobs:
           libjpeg:p
           libwebp:p
           libmng:p
-          brotli-devel:p
-          libbz2-devel:p
     - name: 'Build application'
       run: |
         cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release
