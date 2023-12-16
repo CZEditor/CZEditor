@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(Qt6GuiTools_DIR "D:/a/_temp/msys64/mingw64/qt6-static/lib/cmake/Qt6GuiTools")
 set(CMAKE_DISABLE_FIND_PACKAGE_harfbuzz TRUE)
 set(CMAKE_FIND_LIBRARY_SUFFIXES ".a;.lib")
-set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ D:/a/_temp/msys64/mingw64/lib/libmng.a D:/a/_temp/msys64/usr/lib/libbrotlidec.a D:/a/_temp/msys64/usr/lib/libbz2.a D:/a/_temp/msys64/usr/lib/librt.a")
+set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ D:/a/_temp/msys64/mingw64/lib/libmng.a D:/a/_temp/msys64/usr/lib/libbrotlidec.a D:/a/_temp/msys64/usr/lib/libbz2.a")
 set(VERBOSE 1)
 set(HAVE_GETTIME ON)
 
