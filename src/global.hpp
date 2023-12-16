@@ -2,7 +2,6 @@
 
 #include <qcolor.h>
 #include <QFont>
-#include "Keyframes.hpp"
 
 
 extern void InitGlobals();
@@ -12,6 +11,11 @@ extern QFont defaultfont;
 
 extern int currentframe;
 
+#include "Keyframes.hpp"
+
 extern KeyframeList keyframelist;
 
 void DoKeyframeShit(std::vector<float> &vertices);
+
+#include "ICZEditor.hpp"
+extern ICZEditor* cze;

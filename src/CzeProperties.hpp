@@ -3,26 +3,36 @@
 #include "Params.hpp"
 #include "CzeWindow.hpp"
 #include "CzeButton.hpp"
-
+#include <qformlayout.h>
+#include "Property.hpp"
+#include "CzeLabel.hpp"
 
 class CzeProperties : public CzeWindow
 {
 public:
 	CzeProperties(QWidget* parent = nullptr) : CzeWindow(parent)
 	{
-		(new CzeButton(this, "updateparam", [&]() {UpdateParams(); }))->move(16, 16);
-		params.elements["test"] = new IntProperty(new IntData(123));
-		params.elements["test2"] = new IntProperty(new IntData(14234));
-		params.elements["test3"] = new IntProperty(new IntData(132375));
+		layout = new QFormLayout(this);
+		setLayout(layout);
 	}
 
 	void UpdateParams()
 	{
-		for (auto& it : params.elements)
+		if (!params)
+			return;
+		int c = layout->rowCount();
+		for (int i = 0; i < c; i++)
 		{
-			qWarning("%s: %ls",it.first,it.second->Serialize().data());
+			layout->removeRow(0);
+		}
+		for (auto& it : params->elements)
+		{
+			QWidget* w = it.second->Widget(this);
+			layout->addRow(new CzeLabel(this,it.first), w);
 		}
 	}
 
-	Params params;
+
+	QFormLayout* layout;
+	Params* params = 0;
 };

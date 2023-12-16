@@ -1,11 +1,13 @@
 #include "global.hpp"
 #include <time.h>
-#include "Keyframes.hpp"
+#include "Properties.hpp"
 
 static int todayshue;
 QFont defaultfont;
 int currentframe = 0;
 KeyframeList keyframelist;
+
+ICZEditor* cze = 0;
 
 void InitGlobals()
 {
@@ -20,6 +22,7 @@ QColor GetAccentColor(int saturation, int value, int alpha)
 	return ret;
 }
 
+#include "Keyframes.hpp"
 void DoKeyframeShit(std::vector<float> &vertices)
 {
 	for (auto& keyframe : keyframelist.keyframes)

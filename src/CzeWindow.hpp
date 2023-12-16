@@ -9,6 +9,8 @@
 #include <QtWidgets/QLabel>
 #include <qdockwidget.h>
 
+#include <qmainwindow.h>
+
 class CzeWindow : public QWidget
 {
 	Q_OBJECT
@@ -116,14 +118,16 @@ public:
 		qp.drawText(6, 18, title);
 		
 	}
+
+
 	void childEvent(QChildEvent* event)
 	{
+		//qWarning("%i", event->type());
 		if (done && event->type() == QEvent::Type::ChildAdded)
 		{
 			if (event->child()->isWidgetType())
 			{
 				((QWidget*)event->child())->setParent(inner);
-				((QWidget*)event->child())->show();
 				return;
 			}
 		}
@@ -136,7 +140,7 @@ public:
 		}
 		QWidget::childEvent(event);
 	}
-
+	
 	void setLayout(QLayout* layout)
 	{
 		inner->setLayout(layout);

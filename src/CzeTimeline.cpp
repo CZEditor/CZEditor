@@ -7,7 +7,9 @@
 #include <qgraphicsitem.h>
 #include "global.hpp"
 #include <QGraphicsSceneMouseEvent>
-#include "Property.hpp"
+#include <QTime>
+#include "Properties.hpp"
+
 
 class CzeTimelineKeyframeItem : public QGraphicsItem
 {
@@ -20,6 +22,7 @@ public:
 	QRectF boundingRect() const
 	{
 		return QRectF(-10.5, -10.5, 20, 20);
+		//sinf(((float)QTime::currentTime().msecsSinceStartOfDay())/1000)*30.0+32.0
 	}
 
 	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr)
@@ -42,6 +45,12 @@ public:
 
 		float cornerradius = fmin(10.0,boundingRect().width() / 2);
 
+		if (cornerradius < 10.0)
+		{
+			grad.setCenter(boundingRect().center().x(), 10);
+			grad.setFocalPoint(boundingRect().center().x(), 10);
+			painter->setBrush(grad);
+		}
 		painter->setPen(Qt::NoPen);
 		painter->setBrush(maingrad);
 		painter->drawRoundedRect(boundingRect(), cornerradius, cornerradius);
@@ -66,6 +75,7 @@ public:
 	void mousePressEvent(QGraphicsSceneMouseEvent* event)
 	{
 		startdragpos = event->pos();
+		cze->SelectParams(&keyframe->source);
 	}
 
 	void mouseMoveEvent(QGraphicsSceneMouseEvent* event)
@@ -96,6 +106,7 @@ public:
 		if (event->text() == 'k')
 		{
 			Keyframe* newKeyframe = new Keyframe();
+			newKeyframe->source.elements["test"] = new IntProperty(new IntData(rand()));
 			newKeyframe->effects.push_back(new Params());
 			newKeyframe->effects[0]->elements["verticefunc"] = new VerticeProperty();
 			keyframelist.keyframes.push_back(newKeyframe);

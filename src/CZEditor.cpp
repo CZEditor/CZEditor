@@ -16,7 +16,7 @@ CZEditor::CZEditor(QWidget *parent) : CzeWindow(parent)
     (new CzeButton(this, "      !      ", [&]() {return;}))->move(96, 48);
     viewport = new CzeViewport(nullptr);
     new CzeTimeline(nullptr);
-    new CzeProperties(nullptr);
+    propertyWidget = new CzeProperties(nullptr);
     resize(200, 200);
     
     //char yeah[64];
@@ -28,4 +28,10 @@ CZEditor::CZEditor(QWidget *parent) : CzeWindow(parent)
 CZEditor::~CZEditor()
 {
 
+}
+
+void CZEditor::SelectParams(Params* params)
+{
+    propertyWidget->params = params;
+    propertyWidget->UpdateParams();
 }

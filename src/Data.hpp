@@ -16,5 +16,6 @@ public:
 	QString Serialize() { return QString::number(data); }
 	void Deserialize(const QString serialized) { data = serialized.toLong(); }
 
+
 	int data;
 };
