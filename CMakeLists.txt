@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(Qt6GuiTools_DIR "D:/a/_temp/msys64/mingw64/qt6-static/lib/cmake/Qt6GuiTools")
 set(CMAKE_DISABLE_FIND_PACKAGE_harfbuzz TRUE)
+set(CMAKE_FIND_LIBRARY_SUFFIXES ".a;.lib")
 
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets Gui OpenGLWidgets)
 
@@ -17,7 +18,6 @@ qt_add_executable(czeditor ${SOURCES})
 set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
 
 if(WIN32)
-	set(CMAKE_FIND_LIBRARY_SUFFIXES ".a;.lib")
 	target_link_libraries(czeditor PRIVATE Qt6::Core Qt6::Widgets Qt6::Gui Qt6::OpenGLWidgets opengl32 b2 harfbuzz freetype jpeg graphite2 mng.dll.a freetype png pcre2-16 tiff jbig webp lerc lzma zstd deflate sharpyuv Rpcrt4.lib -static)
 elseif(UNIX)
 	target_link_libraries(czeditor PRIVATE Qt6::Core Qt6::Widgets Qt6::Gui Qt6::OpenGLWidgets GL -static)
