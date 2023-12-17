@@ -22,14 +22,21 @@ QColor GetAccentColor(int saturation, int value, int alpha)
 	return ret;
 }
 
+
+
 #include "Keyframes.hpp"
 void DoKeyframeShit(std::vector<float> &vertices)
 {
+	if (keyframelist.keyframes.size() == 0)
+		return;
+	qWarning("%llx", keyframelist.keyframes[0]->effects[0]->elements.hash_function()("vertexfunc"));
 	for (auto& keyframe : keyframelist.keyframes)
 	{
+		qWarning("%llx", keyframelist.keyframes[0]->effects[0]->elements.hash_function()("vertexfunc"));
 		for (auto& effect : keyframe->effects)
 		{
-			((VerticeProperty*)effect->elements["verticefunc"])->ChangeVertices(vertices);
+			qWarning("%llx", effect->elements.hash_function()("vertexfunc"));
+			((VertexProperty*)(effect->elements["vertexfunc"]))->ChangeVertices(vertices);
 		}
 	}
 }

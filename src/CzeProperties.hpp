@@ -28,7 +28,7 @@ public:
 		for (auto& it : params->elements)
 		{
 			QWidget* w = it.second->Widget(this);
-			layout->addRow(new CzeLabel(this,it.first), w);
+			layout->addRow(new CzeLabel(this,it.first.c_str()), w);
 		}
 	}
 

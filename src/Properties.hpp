@@ -5,7 +5,7 @@
 #include <float.h>
 #include "PropertyWidgets.hpp"
 #include "Property.hpp"
-
+#include <qvector3d.h>
 
 class IntProperty : public Property
 {
@@ -17,30 +17,30 @@ public:
 	IntData data;
 };
 
-class VerticeProperty : public Property
+class VertexProperty : public Property
 {
 public:
-	VerticeProperty() {}
+	VertexProperty() { }
 	virtual QString Serialize() { return 0; }
 	virtual void Deserialize(const QString serialized) { return; }
-	virtual QWidget* Widget(QWidget* parent) { return new QWidget(parent); }
-	void ChangeVertices(std::vector<float> &vertices)
+	virtual QWidget* Widget(QWidget* parent) { return new VertexPropertyWidget(this, parent); }
+	void ChangeVertices(std::vector<float> &verticesIn)
 	{
-		vertices.push_back((float)(rand()) / (float)(RAND_MAX) * 5.0 - 2.5);
-		vertices.push_back((float)(rand()) / (float)(RAND_MAX) * 5.0 - 2.5);
-		vertices.push_back((float)(rand()) / (float)(RAND_MAX) * -5.0);
-		vertices.push_back(0.0);
-		vertices.push_back(0.0);
-		vertices.push_back((float)(rand()) / (float)(RAND_MAX) * 5.0 - 2.5);
-		vertices.push_back((float)(rand()) / (float)(RAND_MAX) * 5.0 - 2.5);
-		vertices.push_back((float)(rand()) / (float)(RAND_MAX) * -5.0);
-		vertices.push_back(0.0);
-		vertices.push_back(1.0);
-		vertices.push_back((float)(rand()) / (float)(RAND_MAX) * 5.0 - 2.5);
-		vertices.push_back((float)(rand()) / (float)(RAND_MAX) * 5.0 - 2.5);
-		vertices.push_back((float)(rand()) / (float)(RAND_MAX) * -5.0);
-		vertices.push_back(1.0);
-		vertices.push_back(0.0);
+		verticesIn.push_back(vertices[0].x());
+		verticesIn.push_back(vertices[0].y());
+		verticesIn.push_back(vertices[0].z());
+		verticesIn.push_back(0.0);
+		verticesIn.push_back(0.0);
+		verticesIn.push_back(vertices[1].x());
+		verticesIn.push_back(vertices[1].y());
+		verticesIn.push_back(vertices[1].z());
+		verticesIn.push_back(0.0);
+		verticesIn.push_back(1.0);
+		verticesIn.push_back(vertices[2].x());
+		verticesIn.push_back(vertices[2].y());
+		verticesIn.push_back(vertices[2].z());
+		verticesIn.push_back(1.0);
+		verticesIn.push_back(0.0);
 	}
-
+	QVector3D vertices[3];
 };

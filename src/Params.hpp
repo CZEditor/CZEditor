@@ -1,9 +1,10 @@
 #pragma once
 #include <unordered_map>
 #include "Property.hpp"
+#include <xstring>
 
 class Params
 {
 public:
-	std::unordered_map<const char*, Property*> elements;
+	std::unordered_map<std::string, Property*> elements;
 };

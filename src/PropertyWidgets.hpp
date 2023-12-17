@@ -5,7 +5,10 @@
 #include "CzeSpinBox.hpp"
 
 class IntProperty;
+class VertexProperty;
 class CzeTextbox;
+
+#define T(p) _Generic(p, IntProperty : "IntProperty", VertexProperty : "VertexProperty")
 
 class IntPropertyWidget : public QWidget
 {
@@ -15,4 +18,14 @@ public:
 
 	CzeSpinBox* textbox;
 	IntProperty* prop;
+};
+
+class VertexPropertyWidget : public QWidget
+{
+public:
+	VertexPropertyWidget(VertexProperty* propIn, QWidget* parent = nullptr);
+
+	void textchanged(float value, int i);
+	CzeSpinBox* values[3][3];
+	VertexProperty* prop;
 };

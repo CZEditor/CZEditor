@@ -61,6 +61,7 @@ void CzeSpinTextbox::paintEvent(QPaintEvent* event)
 CzeSpinBox::CzeSpinBox(QWidget* parent) : QSpinBox(parent)
 {
 	setMaximum(1000);
+	setMinimum(-1000);
 	setLineEdit(new CzeSpinTextbox(this));
 	setStyleSheet("QSpinBox::down-button{ height: 12px; width:13px; }\n"
 		"QSpinBox::up-button{ height: 12px; width:13px; }\n");
