@@ -10,6 +10,7 @@
 #include <QTime>
 #include "Properties.hpp"
 #include "global.hpp"
+#include "Effects.hpp"
 
 class CzeTimelineKeyframeItem : public QGraphicsItem
 {
@@ -78,7 +79,7 @@ public:
 	void mousePressEvent(QGraphicsSceneMouseEvent* event)
 	{
 		startdragpos = event->pos();
-		cze->SelectParams(keyframe->effects[0]);
+		cze->SelectParams(keyframe->effects[0]->params);
 		//qWarning("%llx ", keyframe->effects[0]->elements.hash_function()("vertexfunc"));
 	}
 
@@ -110,10 +111,8 @@ public:
 		if (event->text() == 'k')
 		{
 			Keyframe* newKeyframe = new Keyframe();
-			newKeyframe->source.elements["test"] = new IntProperty(new IntData(rand()));
-			newKeyframe->effects.push_back(new Params());
+			newKeyframe->effects.push_back(new SimpleVertexEffect());
 			//qWarning("before: %llx", newKeyframe->effects[0]->elements.hash_function()("vertexfunc"));
-			newKeyframe->effects[0]->elements["vertexfunc"] = new VertexProperty();
 			//qWarning("after: %llx", newKeyframe->effects[0]->elements.hash_function()("vertexfunc"));
 			keyframelist.keyframes.push_back(newKeyframe);
 			scene()->addItem(new CzeTimelineKeyframeItem(newKeyframe));

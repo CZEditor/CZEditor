@@ -2,14 +2,17 @@
 
 #include "Params.hpp"
 #include <vector>
+#include "Source.hpp"
+#include "Action.hpp"
+#include "Effect.hpp"
 
 class Keyframe
 {
 public:
 	int frame;
-	Params source;
-	std::vector<Params*> actions;
-	std::vector<Params*> effects;
+	Source* source;
+	std::vector<Action*> actions;
+	std::vector<Effect*> effects;
 };
 
 class KeyframeList
