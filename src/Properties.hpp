@@ -24,23 +24,5 @@ public:
 	virtual QString Serialize() { return 0; }
 	virtual void Deserialize(const QString serialized) { return; }
 	virtual QWidget* Widget(QWidget* parent) { return new VertexPropertyWidget(this, parent); }
-	void ChangeVertices(std::vector<float> &verticesIn)
-	{
-		verticesIn.push_back(vertices[0].x());
-		verticesIn.push_back(vertices[0].y());
-		verticesIn.push_back(vertices[0].z());
-		verticesIn.push_back(0.0);
-		verticesIn.push_back(0.0);
-		verticesIn.push_back(vertices[1].x());
-		verticesIn.push_back(vertices[1].y());
-		verticesIn.push_back(vertices[1].z());
-		verticesIn.push_back(0.0);
-		verticesIn.push_back(1.0);
-		verticesIn.push_back(vertices[2].x());
-		verticesIn.push_back(vertices[2].y());
-		verticesIn.push_back(vertices[2].z());
-		verticesIn.push_back(1.0);
-		verticesIn.push_back(0.0);
-	}
 	QVector3D vertices[3];
 };
