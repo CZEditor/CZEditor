@@ -45,7 +45,7 @@ public:
 
 		float cornerradius = fmin(10.0,boundingRect().width() / 2);
 
-		if (cornerradius <= 10.0)
+		if (cornerradius < 10.0)
 		{
 			grad.setCenter(boundingRect().center().x(), 10);
 			grad.setFocalPoint(boundingRect().center().x(), 10);
@@ -58,7 +58,7 @@ public:
 		painter->setPen(Qt::NoPen);
 		painter->drawRoundedRect(boundingRect(), cornerradius, cornerradius);
 
-		if (boundingRect().width() > boundingRect().height())
+		if (boundingRect().width() >= boundingRect().height())
 		{
 			painter->setBrush(grad);
 
@@ -79,7 +79,7 @@ public:
 	{
 		startdragpos = event->pos();
 		cze->SelectParams(keyframe->effects[0]);
-		qWarning("%llx ", keyframe->effects[0]->elements.hash_function()("vertexfunc"));
+		//qWarning("%llx ", keyframe->effects[0]->elements.hash_function()("vertexfunc"));
 	}
 
 	void mouseMoveEvent(QGraphicsSceneMouseEvent* event)
@@ -112,9 +112,9 @@ public:
 			Keyframe* newKeyframe = new Keyframe();
 			newKeyframe->source.elements["test"] = new IntProperty(new IntData(rand()));
 			newKeyframe->effects.push_back(new Params());
-			qWarning("before: %llx", newKeyframe->effects[0]->elements.hash_function()("vertexfunc"));
+			//qWarning("before: %llx", newKeyframe->effects[0]->elements.hash_function()("vertexfunc"));
 			newKeyframe->effects[0]->elements["vertexfunc"] = new VertexProperty();
-			qWarning("after: %llx", newKeyframe->effects[0]->elements.hash_function()("vertexfunc"));
+			//qWarning("after: %llx", newKeyframe->effects[0]->elements.hash_function()("vertexfunc"));
 			keyframelist.keyframes.push_back(newKeyframe);
 			scene()->addItem(new CzeTimelineKeyframeItem(newKeyframe));
 		}
