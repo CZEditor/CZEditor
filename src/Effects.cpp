@@ -25,6 +25,17 @@ void SimpleVertexEffect::effectVertices(std::vector<float>& verticesIn)
 Params* SimpleVertexEffect::getDefaultParams()
 {
 	Params* ret = new Params();
-	ret->elements["vertexfunc"] = new VertexProperty();
+	VertexProperty* v = new VertexProperty();
+	v->vertices[0][0] = -1;
+	v->vertices[0][1] = 0;
+	v->vertices[0][2] = -3;
+	v->vertices[1][0] = 0;
+	v->vertices[1][1] = 1;
+	v->vertices[1][2] = -3;
+	v->vertices[2][0] = 1;
+	v->vertices[2][1] = 0;
+	v->vertices[2][2] = -3;
+	ret->elements["vertexfunc"] = v;
+
 	return ret;
 }

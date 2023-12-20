@@ -11,6 +11,7 @@
 #include "Properties.hpp"
 #include "global.hpp"
 #include "Effects.hpp"
+#include "Actions.hpp"
 
 class CzeTimelineKeyframeItem : public QGraphicsItem
 {
@@ -111,7 +112,8 @@ public:
 		if (event->text() == 'k')
 		{
 			Keyframe* newKeyframe = new Keyframe();
-			newKeyframe->effects.push_back(new SimpleVertexEffect());
+			newKeyframe->effects.push_back(new Effects::SimpleVertexEffect());
+			newKeyframe->actions.push_back(new Actions::NormalKeyframe());
 			keyframelist.keyframes.push_back(newKeyframe);
 			scene()->addItem(new CzeTimelineKeyframeItem(newKeyframe));
 		}
