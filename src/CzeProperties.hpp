@@ -14,6 +14,7 @@ public:
 	{
 		layout = new QFormLayout(this);
 		setLayout(layout);
+		SetTitle("Properties");
 	}
 
 	void UpdateParams()

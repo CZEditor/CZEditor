@@ -27,7 +27,15 @@ QColor GetAccentColor(int saturation, int value, int alpha)
 #include "Keyframes.hpp"
 void DoKeyframeShit(std::vector<float> &vertices)
 {
+	KeyframeList klist;
 	for (auto& keyframe : keyframelist.keyframes)
+	{
+		for (auto& action : keyframe->actions)
+		{
+			action->actOnKeyframes(&klist, keyframe);
+		}
+	}
+	for (auto& keyframe : klist.keyframes)
 	{
 		for (auto& effect : keyframe->effects)
 		{

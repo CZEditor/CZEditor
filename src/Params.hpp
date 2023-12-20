@@ -3,6 +3,8 @@
 #include "Property.hpp"
 #include <xstring>
 
+#define INIT_PARAMS(cls) cls() { params = getDefaultParams(); }
+
 class Params
 {
 public:

@@ -103,7 +103,7 @@ class CzeTimelineView : public QGraphicsView
 public:
 	CzeTimelineView(QGraphicsScene* scene, QWidget* parent = nullptr) : QGraphicsView(scene, parent)
 	{
-		
+		playbackline = scene->addLine(0, -20, 0, 20, QColor(255, 255, 255));
 	}
 
 	void keyPressEvent(QKeyEvent* event)
@@ -112,12 +112,19 @@ public:
 		{
 			Keyframe* newKeyframe = new Keyframe();
 			newKeyframe->effects.push_back(new SimpleVertexEffect());
-			//qWarning("before: %llx", newKeyframe->effects[0]->elements.hash_function()("vertexfunc"));
-			//qWarning("after: %llx", newKeyframe->effects[0]->elements.hash_function()("vertexfunc"));
 			keyframelist.keyframes.push_back(newKeyframe);
 			scene()->addItem(new CzeTimelineKeyframeItem(newKeyframe));
 		}
 	}
+	
+	void update()
+	{
+		playbackline->setPos(QPointF(currentframe, 0));
+		QGraphicsView::update();
+	}
+	
+	QGraphicsLineItem* playbackline;
+
 };
 
 CzeTimeline::CzeTimeline(QWidget* parent) : CzeWindow(parent)

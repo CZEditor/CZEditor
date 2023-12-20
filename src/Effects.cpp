@@ -1,6 +1,8 @@
 #include "Effects.hpp"
 #include "Properties.hpp"
 
+using namespace Effects;
+
 void SimpleVertexEffect::effectVertices(std::vector<float>& verticesIn)
 {
 	verticesIn.push_back(((VertexProperty*)params->elements["vertexfunc"])->vertices[0].x());

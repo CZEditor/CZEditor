@@ -2,7 +2,7 @@
 
 #include "Params.hpp"
 
-#define INIT_PARAMS(cls) cls() { params = getDefaultParams(); }
+
 
 class Effect
 {
