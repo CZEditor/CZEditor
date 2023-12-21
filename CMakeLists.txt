@@ -21,6 +21,7 @@ endif()
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
  	target_compile_options(${PROJECT_NAME} PRIVATE -stdlib=libc++)
+ 	target_link_options(${PROJECT_NAME} PRIVATE -stdlib=libc++)
 endif()
 
 install(TARGETS ${PROJECT_NAME})
