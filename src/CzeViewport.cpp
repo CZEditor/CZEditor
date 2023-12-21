@@ -73,12 +73,12 @@ public:
 
 		extra.glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		extra.glBindVertexArray(vao);
-		QMatrix4x4* projection = new QMatrix4x4();
-		projection->perspective(90, width() / height(), 1, 128);
+		QMatrix4x4 projection;
+		projection.perspective(90, width() / height(), 1, 128);
 		std::vector<float> vertices;
 		
 		glBindTexture(GL_TEXTURE_2D, texture);
-		extra.glUniformMatrix4fv(extra.glGetUniformLocation(program, "matrix"), 1, GL_FALSE, projection->data());
+		extra.glUniformMatrix4fv(extra.glGetUniformLocation(program, "matrix"), 1, GL_FALSE, projection.data());
 
 		DoKeyframeShit(vertices);
 
