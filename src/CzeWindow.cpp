@@ -15,10 +15,10 @@ public:
 	QWidget* inner;
 };
 
-class CzeCloseButton : public QAbstractButton
+class CzeAbstractTitlebarButton : public QAbstractButton
 {
 public:
-	CzeCloseButton(QWidget* parent) : QAbstractButton(parent)
+	CzeAbstractTitlebarButton(QWidget* parent) : QAbstractButton(parent)
 	{
 		setFixedSize(18, 18);
 		
@@ -67,14 +67,12 @@ public:
 		qp.setBrush(Qt::NoBrush);
 		qp.setPen(QColor(0, 0, 0));
 		qp.drawRoundedRect(QRectF(0.5, 0.5, ((float)width()) - 1.0, ((float)height()) - 1.0), 4, 4);
+
 		qp.setPen(QPen(QColor(0, 0, 0),4));
-		qp.drawLine(7, 6, width() - 7, height() - 6);
-		qp.drawLine(width() - 7, 6, 7, height() - 6);
+		paintButton(qp);
 		qp.setPen(QPen(QColor(255, 255, 255), 2));
-		qp.drawLine(7, 6, width() - 7, height() - 6);
-		qp.drawLine(width() - 7, 6, 7, height() - 6);
-		
-		
+		paintButton(qp);
+
 		event->accept();
 	}
 
@@ -104,13 +102,60 @@ public:
 		held = false;
 		repaint();
 		QWidget::mouseReleaseEvent(event);
-		parentWidget()->close();
+		
+		buttonAction();
 	}
 
-	
+	virtual void paintButton(QPainter& qp) = 0;
+	virtual void buttonAction() = 0;
 
 	bool hovered = false;
 	bool held = false;
+};
+
+class CzeCloseButton : public CzeAbstractTitlebarButton
+{
+public:
+	CzeCloseButton(QWidget* parent) : CzeAbstractTitlebarButton(parent) { }
+
+	void paintButton(QPainter& qp)
+	{
+		qp.drawLine(7, 6, width() - 7, height() - 6);
+		qp.drawLine(width() - 7, 6, 7, height() - 6);
+	}
+
+
+	void buttonAction()
+	{
+		parentWidget()->close();
+	}
+};
+
+class CzeMaximizeButton : public CzeAbstractTitlebarButton
+{
+public:
+	CzeMaximizeButton(QWidget* parent) : CzeAbstractTitlebarButton(parent) { }
+
+	void paintButton(QPainter& qp)
+	{
+		if (parentWidget()->windowState() & Qt::WindowMaximized) {
+			qp.drawRect(QRectF(width() / 2 - 3.5 + 1.5, height() / 2 - 3.5 + 1.5, 7, 7));
+			qp.drawRect(QRectF(width() / 2 - 3.5 - 1.5, height() / 2 - 3.5 - 1.5, 7, 7));
+		} else {
+			qp.drawRect(6, 6, width() - 6 * 2, height() - 6 * 2);
+			qp.drawRect(6, 8, width() - 6 * 2, height() - 6 * 2 - 2);
+		}
+	}
+
+
+	void buttonAction()
+	{
+		if (parentWidget()->windowState() & Qt::WindowMaximized) {
+			parentWidget()->showNormal();
+		} else {
+			parentWidget()->showMaximized();
+		}
+	}
 };
 
 CzeWindow::CzeWindow(QWidget* parent, const char* title) : QWidget(nullptr)
@@ -143,6 +188,7 @@ void CzeWindow::init(const char* title, QWidget* innerIn)
 	(corners[1][2] = new QWidget(this))->setCursor(QCursor(Qt::SizeVerCursor));
 	(corners[2][2] = new QWidget(this))->setCursor(QCursor(Qt::SizeFDiagCursor));
 	closebutton = new CzeCloseButton(this);
+	maximizebutton = new CzeMaximizeButton(this);
 	SetTitle(title);
 	setMinimumSize(128, 32);
 	done = true;
