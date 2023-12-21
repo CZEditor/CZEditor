@@ -81,7 +81,7 @@ jobs:
         mkdir -p build/libs
         ldd install/bin/* | grep "=>" | awk '{print $3}' | xargs -I '{}' cp -L '{}' build/libs
         cp install/bin/* package/
-        cp -r build/libs package/
+        cp -r build/libs/* package/
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4.0.0
