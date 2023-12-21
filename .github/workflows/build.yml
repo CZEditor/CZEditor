@@ -74,14 +74,10 @@ jobs:
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
 
-    - name: Package
+    - name: Package (Windows)
+      if: ${{ matrix.os == 'windows-latest' }}
       run: |
-        cmake --install ${{ steps.strings.outputs.build-output-dir }} --prefix install
-        mkdir package
-        mkdir -p build/libs
-        ldd install/bin/* | grep "=>" | awk '{print $3}' | xargs -I '{}' cp -L '{}' build/libs
-        cp install/bin/* package/
-        cp -r build/libs/* package/
+        windeployqt --release --no-translations --no-opengl-sw --dir package install/bin/*
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4.0.0
