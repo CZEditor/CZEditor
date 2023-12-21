@@ -238,13 +238,21 @@ public:
 		title = title.fromUtf8(titlech, strlen(titlech));
 		setWindowTitle(title);
 	}
+
+	void changeEvent(QEvent* event)
+	{
+		QWidget::changeEvent(event);
+		if (maximizebutton != nullptr)
+			maximizebutton->repaint();
+	}
+
 	bool done = false;
 	bool docked = false;
 	QWidget* resizehelper = 0;
 	QWidget* titlebar;
 	QWidget* corners[3][3];
 	QWidget* closebutton;
-	QWidget* maximizebutton;
+	QWidget* maximizebutton = nullptr;
 	QWidget* inner = 0;
 	QString title;
 };
