@@ -16,6 +16,15 @@ public:
 		
 	}
 
+	~CzeViewportOpenGL()
+	{
+		QOpenGLExtraFunctions extra(context());
+		extra.glDeleteBuffers(1, &vbo);
+		extra.glDeleteVertexArrays(1, &vao);
+		extra.glDeleteTextures(1, &texture);
+
+	}
+
 	void initializeGL()
 	{
 		QOpenGLExtraFunctions extra(context());
