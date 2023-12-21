@@ -76,7 +76,7 @@ jobs:
 
     - name: Package
       run: |
-        cmake --install ${{ steps.strings.outputs.build-output-dir }} -DCMAKE_INSTALL_PREFIX=install
+        cmake --install ${{ steps.strings.outputs.build-output-dir }} --prefix install
         mkdir package
         mkdir -p build/libs
         ldd install/bin/* | grep "=>" | awk '{print $3}' | xargs -I '{}' cp -L '{}' build/libs
