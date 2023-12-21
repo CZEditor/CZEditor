@@ -17,7 +17,7 @@ if(WIN32)
 	target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Core Qt6::Widgets Qt6::Gui Qt6::OpenGLWidgets opengl32)
 
  	if(CMAKE_BUILD_TYPE STREQUAL "Release")
-		target_compile_options(${PROJECT_NAME} PRIVATE -mwindows)
+		target_compile_options(${PROJECT_NAME} PRIVATE /SUBSYSTEM:windows /ENTRY:mainCRTStartup)
   	endif()
 elseif(UNIX)
 	target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Core Qt6::Widgets Qt6::Gui Qt6::OpenGLWidgets GL)
