@@ -6,7 +6,7 @@
 #include "CzeButton.hpp"
 #include "CzeTimeline.hpp"
 #include "CzeProperties.hpp"
-
+#include <qsplitter.h>
 CZEditor::CZEditor(QWidget *parent) : CzeWindow(parent)
 {
     SetTitle("CZEditor");
@@ -15,8 +15,19 @@ CZEditor::CZEditor(QWidget *parent) : CzeWindow(parent)
     (new CzeLabel(this, "czeditor ! !"))->move(16, 48);
     (new CzeButton(this, "      !      ", [&]() {return;}))->move(96, 48);
     viewport = new CzeViewport(nullptr);
-    new CzeTimeline(nullptr);
+    CzeTimeline* timeline = new CzeTimeline(nullptr);
     propertyWidget = new CzeProperties(nullptr);
+
+    //viewport->inner->setParent(propertyWidget->splitter);
+    //propertyWidget->splitter->addWidget(viewport->inner);
+    //QSplitter* newq = new QSplitter(Qt::Vertical, propertyWidget->splitter);
+    //propertyWidget->splitter->addWidget(newq);
+    //propertyWidget->inner->setParent(newq);
+    //timeline->inner->setParent(newq);
+    //newq->addWidget(propertyWidget->inner);
+    //newq->addWidget(timeline->inner);
+
+
     resize(200, 200);
     
     //char yeah[64];

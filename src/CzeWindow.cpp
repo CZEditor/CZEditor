@@ -115,21 +115,25 @@ public:
 
 CzeWindow::CzeWindow(QWidget* parent, const char* title) : QWidget(nullptr)
 {
-	
-	//setStyleSheet("#CzeWindow { border-image: url(:/CZEditor/Rounded Frame.png) 6; border-width: 6px;}");
-	
+	init(title, new QWidget(this));
+}
+
+CzeWindow::CzeWindow(QWidget* parent, QWidget* innerIn) : QWidget(nullptr)
+{
+	init("", innerIn);
+}
+
+void CzeWindow::init(const char* title, QWidget* innerIn)
+{
 	setWindowFlag(Qt::FramelessWindowHint);
 	setAttribute(Qt::WA_NoSystemBackground, true);
 	setAttribute(Qt::WA_TranslucentBackground, true);
 	show();
 	resizehelper = new QWidget(this);
-	resizehelper->setObjectName("CzeWindow");
 	titlebar = new QWidget(this);
-	titlebar->setObjectName("CzeWindowTitlebar");
 	titlebar->setGeometry(0, 0, 128, 24);
-	//titlebar->setStyleSheet("#CzeWindowTitlebar { border-image: url(:/CZEditor/Rounded Frame.png) 6; border-width: 6px; }");
 	titlebar->setMinimumSize(128, 24);
-	inner = new QWidget(this);
+	inner = innerIn;
 	(corners[0][0] = new QWidget(this))->setCursor(QCursor(Qt::SizeFDiagCursor));
 	(corners[1][0] = new QWidget(this))->setCursor(QCursor(Qt::SizeVerCursor));
 	(corners[2][0] = new QWidget(this))->setCursor(QCursor(Qt::SizeBDiagCursor));
@@ -143,5 +147,4 @@ CzeWindow::CzeWindow(QWidget* parent, const char* title) : QWidget(nullptr)
 	setMinimumSize(128, 32);
 	done = true;
 	resize(200, 200);
-	
 }

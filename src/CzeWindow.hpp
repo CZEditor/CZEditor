@@ -8,8 +8,9 @@
 #include "global.hpp"
 #include <QtWidgets/QLabel>
 #include <qdockwidget.h>
-
+#include <qsplitter.h>
 #include <qmainwindow.h>
+#include <qapplication.h>
 
 class CzeWindow : public QWidget
 {
@@ -17,14 +18,19 @@ class CzeWindow : public QWidget
 
 public:
 	CzeWindow(QWidget* parent, const char* title = "");
+	CzeWindow(QWidget* parent, QWidget* innerIn);
+	void init(const char* title, QWidget* innerIn);
 	void resizeEvent(QResizeEvent* event)
 	{
-		if (!resizehelper)
+		QWidget::resizeEvent(event);
+		update();
+	}
+	void update()
+	{
+		if (!inner)
 		{
-			QWidget::resizeEvent(event);
 			return;
 		}
-		resizehelper->setFixedSize(event->size());
 		corners[0][0]->setGeometry(0, 0, 8, 8);
 		corners[1][0]->setGeometry(8, 0, width() - 16, 2);
 		corners[2][0]->setGeometry(width() - 16, 0, 8, 8);
@@ -33,10 +39,9 @@ public:
 		corners[0][2]->setGeometry(0, height() - 8, 8, 8);
 		corners[1][2]->setGeometry(8, height() - 8, width() - 16, 8);
 		corners[2][2]->setGeometry(width() - 8, height() - 8, 8, 8);
-		QWidget::resizeEvent(event);
-		titlebar->setGeometry(0, 0, event->size().width(), 24);
-		closebutton->setGeometry(event->size().width() - closebutton->width() - 4, 4, closebutton->width(), closebutton->height());
-		inner->setGeometry(0, 24, event->size().width(), event->size().height() - 24);
+		titlebar->setGeometry(0, 0, width(), 24);
+		closebutton->setGeometry(width() - closebutton->width() - 4, 4, closebutton->width(), closebutton->height());
+		inner->setGeometry(0, 24, width(), height() - 24);
 	}
 	void mousePressEvent(QMouseEvent* event)
 	{
@@ -70,6 +75,38 @@ public:
 		}
 		QWidget::mousePressEvent(event);
 	}
+	void mouseReleaseEvent(QMouseEvent* event)
+	{
+		for(auto& otherwidget : QApplication::topLevelWidgets())
+		{
+			if (!otherwidget->isVisible() || otherwidget == this)
+				continue;
+			QRect prect(otherwidget->pos(), otherwidget->size());
+			if (prect.contains(pos()+event->pos()))
+			{
+				qWarning("found %ls", otherwidget->windowTitle().data());
+				CzeWindow* otherwindow = (CzeWindow*)otherwidget;
+				otherwindow->done = false;
+				QWidget* otherinner = otherwindow->inner;
+				otherwindow->inner = new QSplitter(otherwindow);
+				otherwindow->inner->lower();
+				otherwindow->resizehelper->lower();
+				otherinner->setParent(otherwindow->inner);
+				((QSplitter*)otherwindow->inner)->addWidget(otherinner);
+				inner->setParent(otherwindow->inner);
+				((QSplitter*)otherwindow->inner)->addWidget(inner);
+				otherwindow->done = true;
+				close();
+				otherwindow->update();
+				//deleteLater();
+				return;
+			}
+			
+		}
+		QWidget::mouseReleaseEvent(event);
+		
+	}
+
 	void paintEvent(QPaintEvent* event)
 	{
 		QPainter qp(this);
@@ -149,12 +186,13 @@ public:
 	void SetTitle(const char* titlech)
 	{
 		title = title.fromUtf8(titlech, strlen(titlech));
+		setWindowTitle(title);
 	}
 	bool done = false;
 	QWidget* resizehelper = 0;
 	QWidget* titlebar;
 	QWidget* corners[3][3];
 	QWidget* closebutton;
-	QWidget* inner;
+	QWidget* inner = 0;
 	QString title;
 };
