@@ -76,11 +76,10 @@ jobs:
 
     - name: Package
       run: |
-        cmake -B ${{ steps.strings.outputs.build-output-dir }} --install . --prefix install
-        cp install/bin/* package/
+        cmake -B ${{ steps.strings.outputs.build-output-dir }} --install -DCMAKE_INSTALL_PREFIX=install
+        mkdir package
         mkdir -p build/libs
         ldd install/bin/* | grep "=>" | awk '{print $3}' | xargs -I '{}' cp -L '{}' build/libs
-        mkdir package
         cp install/bin/* package/
         cp -r build/libs package/
 
