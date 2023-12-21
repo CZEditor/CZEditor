@@ -19,4 +19,8 @@ elseif(UNIX)
 	target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Core Qt6::Widgets Qt6::Gui Qt6::OpenGLWidgets GL)
 endif()
 
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+ 	target_compile_options(${PROJECT_NAME} PRIVATE -stdlib=libc++)
+endif()
+
 install(TARGETS ${PROJECT_NAME})
