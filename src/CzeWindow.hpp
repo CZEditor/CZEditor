@@ -12,6 +12,7 @@
 #include <qmainwindow.h>
 #include <qapplication.h>
 
+
 class CzeWindow : public QWidget
 {
 	Q_OBJECT
@@ -45,6 +46,16 @@ public:
 	}
 	void mousePressEvent(QMouseEvent* event)
 	{
+		if (docked)
+		{
+			if (event->pos().y() < 21)
+			{
+				SwitchToUndocked();
+				windowHandle()->startSystemMove();
+			}
+			QWidget::mousePressEvent(event);
+			return;
+		}
 		Qt::Edges edg;
 		if (event->pos().x() > width() - 9)
 		{
@@ -75,6 +86,7 @@ public:
 		}
 		QWidget::mousePressEvent(event);
 	}
+
 	void mouseReleaseEvent(QMouseEvent* event)
 	{
 		for(auto& otherwidget : QApplication::topLevelWidgets())
@@ -82,22 +94,40 @@ public:
 			if (!otherwidget->isVisible() || otherwidget == this)
 				continue;
 			QRect prect(otherwidget->pos(), otherwidget->size());
-			if (prect.contains(pos()+event->pos()))
+			QPoint curpos = pos() + event->pos();
+			if (prect.contains(curpos))
 			{
+				int after = 1;
+				Qt::Orientation direction = Qt::Horizontal;
+				if (fmin(prect.bottom() - curpos.y(), curpos.y()-prect.top()) < fmin(prect.right()- curpos.x(),curpos.x()-prect.left()))
+				{
+					direction = Qt::Vertical;
+					if (curpos.y() - prect.top() < prect.bottom() - curpos.y())
+					{
+						after = 0;
+					}
+				}
+				else if (curpos.x() - prect.left() < prect.right() - curpos.x())
+				{
+					after = 0;
+				}
 				qWarning("found %ls", otherwidget->windowTitle().data());
 				CzeWindow* otherwindow = (CzeWindow*)otherwidget;
 				otherwindow->done = false;
 				QWidget* otherinner = otherwindow->inner;
-				otherwindow->inner = new QSplitter(otherwindow);
+				otherwindow->inner = new QSplitter(direction,otherwindow);
 				otherwindow->inner->lower();
 				otherwindow->resizehelper->lower();
-				otherinner->setParent(otherwindow->inner);
+				//otherinner->setParent(otherwindow->inner);
 				((QSplitter*)otherwindow->inner)->addWidget(otherinner);
-				inner->setParent(otherwindow->inner);
-				((QSplitter*)otherwindow->inner)->addWidget(inner);
+				//inner->setParent(otherwindow->inner);
+				SwitchToDocked(otherwindow->inner);
+				//((QSplitter*)otherwindow->inner)->addWidget(this);
+				((QSplitter*)otherwindow->inner)->insertWidget(after, this);
 				otherwindow->done = true;
-				close();
+				//close();
 				otherwindow->update();
+				
 				//deleteLater();
 				return;
 			}
@@ -156,6 +186,21 @@ public:
 		
 	}
 
+	void SwitchToDocked(QWidget* parent)
+	{
+		docked = true;
+		setParent(parent);
+	}
+
+	void SwitchToUndocked()
+	{
+		docked = false;
+		QPoint screenpos = mapToGlobal(QPoint(0,0));
+		setParent(nullptr);
+		show();
+		setGeometry(QRect(screenpos,size()));
+		
+	}
 
 	void childEvent(QChildEvent* event)
 	{
@@ -189,6 +234,7 @@ public:
 		setWindowTitle(title);
 	}
 	bool done = false;
+	bool docked = false;
 	QWidget* resizehelper = 0;
 	QWidget* titlebar;
 	QWidget* corners[3][3];
