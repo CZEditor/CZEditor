@@ -73,3 +73,17 @@ jobs:
     - name: Build
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
       run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
+
+    - name: Package
+      run: |
+        mkdir -p build/libs
+        ldd build/your_executable | grep "=>" | awk '{print $3}' | xargs -I '{}' cp -L '{}' build/libs
+        mkdir package
+        cp build/your_executable package/
+        cp -r build/libs package/
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4.0.0
+      with:
+        name: artifact-${{ matrix.os }}
+        path: package
