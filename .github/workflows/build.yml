@@ -79,7 +79,7 @@ jobs:
       run: |
         mkdir install
         cmake --install ${{ steps.strings.outputs.build-output-dir }} --prefix install
-        windeployqt --release --no-translations --no-opengl-sw --dir package install/bin/*
+        windeployqt --release --no-translations --no-opengl-sw --dir package install/bin/czeditor.exe
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4.0.0
