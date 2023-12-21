@@ -76,10 +76,12 @@ jobs:
 
     - name: Package
       run: |
+        cmake --install . --prefix install
+        cp install/bin/* package/
         mkdir -p build/libs
-        ldd build/your_executable | grep "=>" | awk '{print $3}' | xargs -I '{}' cp -L '{}' build/libs
+        ldd install/bin/* | grep "=>" | awk '{print $3}' | xargs -I '{}' cp -L '{}' build/libs
         mkdir package
-        cp build/your_executable package/
+        cp install/bin/* package/
         cp -r build/libs package/
 
     - name: Upload Artifact
