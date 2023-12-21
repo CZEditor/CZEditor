@@ -76,7 +76,7 @@ jobs:
 
     - name: Package
       run: |
-        cmake --install . --prefix install
+        cmake -B ${{ steps.strings.outputs.build-output-dir }} --install . --prefix install
         cp install/bin/* package/
         mkdir -p build/libs
         ldd install/bin/* | grep "=>" | awk '{print $3}' | xargs -I '{}' cp -L '{}' build/libs
