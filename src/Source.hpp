@@ -5,6 +5,9 @@
 class Source
 {
 public:
-	virtual void getImage() = 0;
+	virtual void getImage(unsigned char* img, int width, int height) = 0;
+	virtual void getSize(int& width, int& height) = 0;
 	virtual Params* getDefaultParams() = 0;
+
+	Params* params;
 };

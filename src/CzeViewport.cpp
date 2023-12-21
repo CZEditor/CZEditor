@@ -45,6 +45,7 @@ public:
 		glDepthFunc(GL_LEQUAL);
 
 		glGenTextures(1, &texture);
+		glBindTexture(GL_TEXTURE_2D, texture);
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -54,6 +55,7 @@ public:
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
 
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 1, 1, 0, GL_RGBA, GL_UNSIGNED_BYTE, texturedata);
+		glBindTexture(GL_TEXTURE_2D, 0);
 		vertshader = extra.glCreateShader(GL_VERTEX_SHADER);
 		extra.glShaderSource(vertshader, 1, &vertshadersource, 0);
 		extra.glCompileShader(vertshader);
@@ -83,11 +85,12 @@ public:
 		extra.glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		extra.glBindVertexArray(vao);
 		QMatrix4x4 projection;
-		projection.perspective(90, width() / height(), 1, 128);
+		projection.perspective(90, ((float)width()) / ((float)height()), 1, 128);
 		std::vector<float> vertices;
-		
+		extra.glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture);
 		extra.glUniformMatrix4fv(extra.glGetUniformLocation(program, "matrix"), 1, GL_FALSE, projection.data());
+		extra.glUniform1i(extra.glGetUniformLocation(program, "image"), 0);
 
 		DoKeyframeShit(vertices);
 
@@ -103,7 +106,7 @@ public:
 	GLuint vao;
 	GLuint vbo;
 	GLuint texture;
-	GLuint texturedata[4] = { 255,128,64,255 };
+	GLubyte texturedata[4] = { 255,128,64,255 };
 	GLuint vertshader;
 	GLuint fragshader;
 	GLuint program;
@@ -122,11 +125,12 @@ out vec3 worldPos;\n\
 		out vec4 FragColor; \n\
 in vec2 fragmentColor;\n\
 in vec3 worldPos; \n\
+uniform sampler2D image;\n\
 	void main() \n\
 	{  \n\
 \n\
 \n\
-		FragColor = vec4(fragmentColor,0.25,1.0); \n\
+		FragColor = texture(image,fragmentColor); \n\
 	} \0";
 };
 
