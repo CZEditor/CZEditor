@@ -89,6 +89,10 @@ public:
 
 	void mouseReleaseEvent(QMouseEvent* event)
 	{
+		if (event->pos().y() >= 21)
+		{
+			return;
+		}
 		for(auto& otherwidget : QApplication::topLevelWidgets())
 		{
 			if (!otherwidget->isVisible() || otherwidget == this)
