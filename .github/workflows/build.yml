@@ -81,7 +81,7 @@ jobs:
         mkdir install
         cmake --install ${{ steps.strings.outputs.build-output-dir }} --prefix install
         mkdir package
-        cp install/bin/CZEditor.exe package/CZEditor.exe
+        cp install/usr/bin/CZEditor.exe package/CZEditor.exe
         windeployqt --release --no-translations --no-opengl-sw --dir package package/CZEditor.exe
     
     - name: Package (Linux)
@@ -89,8 +89,6 @@ jobs:
       run: |
         mkdir appdir
         cmake --install ${{ steps.strings.outputs.build-output-dir }} --prefix appdir
-
-        tree appdir
 
         sudo apt install libfuse2 libxcb-cursor0
         
