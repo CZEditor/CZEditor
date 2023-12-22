@@ -103,7 +103,7 @@ jobs:
         chmod +x linuxdeploy-plugin-appimage-x86_64.AppImage
         chmod +x appimagetool-x86_64.AppImage
         
-        ./linuxdeploy-x86_64.AppImage --appdir appdir --verbosity=2 --executable appdir/usr/bin/CZEditor --desktop-file appdir/usr/share/applications/CZEditor.desktop --plugin qt --output=appimage
+        ./linuxdeploy-x86_64.AppImage --appdir appdir --verbosity=2 --executable appdir/bin/CZEditor --desktop-file appdir/share/applications/CZEditor.desktop --plugin qt --output=appimage
 
         ls
 
