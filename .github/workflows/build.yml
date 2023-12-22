@@ -97,19 +97,13 @@ jobs:
         wget -c -nv https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
         wget -c -nv https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
         wget -c -nv https://github.com/linuxdeploy/linuxdeploy-plugin-appimage/releases/download/continuous/linuxdeploy-plugin-appimage-x86_64.AppImage
-        wget -c -nv https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage
 
         chmod +x linuxdeploy-x86_64.AppImage
         chmod +x linuxdeploy-plugin-qt-x86_64.AppImage
         chmod +x linuxdeploy-plugin-appimage-x86_64.AppImage
-        chmod +x appimagetool-x86_64.AppImage
         
         ./linuxdeploy-x86_64.AppImage --appdir appdir --verbosity=2 --executable appdir/usr/bin/CZEditor --desktop-file appdir/usr/share/applications/CZEditor.desktop --icon-file appdir/usr/share/pixmap/CZEditor.png --plugin qt --output=appimage
 
-        ls
-
-        ./appimagetool-x86_64.AppImage appdir CZEditor-x86_64.AppImage
-        
         mkdir package
         mv CZEditor-x86_64.AppImage package
 
