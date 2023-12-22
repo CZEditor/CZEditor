@@ -3,37 +3,37 @@
 #include "Params.hpp"
 #include "CzeWindow.hpp"
 #include "CzeButton.hpp"
-#include <qformlayout.h>
+#include <QLayout>
 #include "Property.hpp"
 #include "CzeLabel.hpp"
+
+class CzeParamView : public QWidget
+{
+public:
+	CzeParamView(QWidget* parent, KeyframeParam* paramsIn);
+	void UpdateParams();
+
+	KeyframeParam* params;
+};
+
+class CzeParamViewList : public QWidget
+{
+public:
+	CzeParamViewList(QWidget* parent, std::list<KeyframeParam*>* paramsListIn);
+	void UpdateParams();
+
+	std::list<KeyframeParam*>* paramsList;
+};
 
 class CzeProperties : public CzeWindow
 {
 public:
-	CzeProperties(QWidget* parent = nullptr) : CzeWindow(parent)
-	{
-		layout = new QFormLayout(this);
-		setLayout(layout);
-		SetTitle("Properties");
-	}
+	CzeProperties(QWidget* parent = nullptr);
 
-	void UpdateParams()
-	{
-		if (!params)
-			return;
-		int c = layout->rowCount();
-		for (int i = 0; i < c; i++)
-		{
-			layout->removeRow(0);
-		}
-		for (auto& it : params->elements)
-		{
-			QWidget* w = it.second->Widget(this);
-			layout->addRow(new CzeLabel(this,it.first.c_str()), w);
-		}
-	}
+	void UpdateParams();
 
-
-	QFormLayout* layout;
-	Params* params = 0;
+	Keyframe* keyframe = 0;
+	CzeParamView* source;
+	CzeParamViewList* actions;
+	CzeParamViewList* effects;
 };

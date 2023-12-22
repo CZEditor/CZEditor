@@ -66,6 +66,7 @@ CzeSpinBox::CzeSpinBox(QWidget* parent) : QSpinBox(parent)
 	setStyleSheet("QSpinBox::down-button{ height: 12px; width:13px; }\n"
 		"QSpinBox::up-button{ height: 12px; width:13px; }\n");
 	setFixedHeight(24);
+	setMinimumWidth(64);
 }
 
 

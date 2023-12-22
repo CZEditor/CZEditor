@@ -12,6 +12,7 @@
 #include "global.hpp"
 #include "Effects.hpp"
 #include "Actions.hpp"
+#include "Sources.hpp"
 
 class CzeTimelineKeyframeItem : public QGraphicsItem
 {
@@ -80,7 +81,7 @@ public:
 	void mousePressEvent(QGraphicsSceneMouseEvent* event)
 	{
 		startdragpos = event->pos();
-		cze->SelectParams(keyframe->effects[0]->params);
+		cze->SelectKeyframe(keyframe);
 		//qWarning("%llx ", keyframe->effects[0]->elements.hash_function()("vertexfunc"));
 	}
 
@@ -114,6 +115,7 @@ public:
 			Keyframe* newKeyframe = new Keyframe();
 			newKeyframe->effects.push_back(new Effects::SimpleVertexEffect());
 			newKeyframe->actions.push_back(new Actions::NormalKeyframe());
+			newKeyframe->source = new Sources::ColorSource();
 			keyframelist.keyframes.push_back(newKeyframe);
 			scene()->addItem(new CzeTimelineKeyframeItem(newKeyframe));
 		}

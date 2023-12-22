@@ -1,5 +1,7 @@
 #include "Sources.hpp"
 #include "Properties.hpp"
+using namespace Sources;
+
 void ColorSource::getImage(unsigned char* img, int width, int height)
 {
 	int s = width * height * 4;

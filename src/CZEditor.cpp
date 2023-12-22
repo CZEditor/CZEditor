@@ -41,8 +41,8 @@ CZEditor::~CZEditor()
 
 }
 
-void CZEditor::SelectParams(Params* params)
+void CZEditor::SelectKeyframe(Keyframe* keyframe)
 {
-    propertyWidget->params = params;
+    propertyWidget->keyframe = keyframe;
     propertyWidget->UpdateParams();
 }

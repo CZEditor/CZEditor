@@ -6,11 +6,8 @@
 class KeyframeList;
 class Keyframe;
 
-class Action
+class Action : public KeyframeParam
 {
 public:
 	virtual void actOnKeyframes(KeyframeList* klist, Keyframe* keyframe) = 0;
-	virtual Params* getDefaultParams() = 0;
-
-	Params* params;
 };

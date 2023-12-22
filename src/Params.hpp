@@ -9,3 +9,10 @@ class Params
 public:
 	std::unordered_map<std::string, Property*> elements;
 };
+
+class KeyframeParam
+{
+public:
+	virtual Params* getDefaultParams() = 0;
+	Params* params;
+};

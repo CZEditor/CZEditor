@@ -21,7 +21,7 @@ class VertexProperty : public Property
 {
 public:
 	VertexProperty() { }
-	virtual QString Serialize() { return 0; }
+	virtual QString Serialize() { return "YEAH"; }
 	virtual void Deserialize(const QString serialized) { return; }
 	virtual QWidget* Widget(QWidget* parent) { return new VertexPropertyWidget(this, parent); }
 	QVector3D vertices[3];

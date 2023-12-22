@@ -11,5 +11,6 @@ void NormalKeyframe::actOnKeyframes(KeyframeList* klist, Keyframe* keyframe)
 Params* NormalKeyframe::getDefaultParams()
 {
 	Params* p = new Params();
+	p->elements.clear();
 	return p;
 }

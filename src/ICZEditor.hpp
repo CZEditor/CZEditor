@@ -1,8 +1,8 @@
 #pragma once
-#include "Params.hpp"
+#include "Keyframes.hpp"
 
 class ICZEditor
 {
 public:
-	virtual void SelectParams(Params* params) = 0;
+	virtual void SelectKeyframe(Keyframe* keyframe) = 0;
 };

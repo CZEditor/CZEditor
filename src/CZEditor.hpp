@@ -14,7 +14,7 @@ class CZEditor :  public CzeWindow, public ICZEditor
 
 public:
     CZEditor(QWidget *parent = nullptr);
-    void SelectParams(Params* params);
+    void SelectKeyframe(Keyframe* keyframe);
     ~CZEditor();
 private:
     QSplitter* hozsplitter;

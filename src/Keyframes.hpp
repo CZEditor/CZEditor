@@ -11,8 +11,9 @@ class Keyframe
 public:
 	int frame;
 	Source* source;
-	std::vector<Action*> actions;
-	std::vector<Effect*> effects;
+	std::list<Action*> actions;
+	std::list<Effect*> effects;
+	int texture;
 };
 
 class KeyframeList

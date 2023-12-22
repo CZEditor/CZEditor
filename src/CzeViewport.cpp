@@ -87,6 +87,7 @@ public:
 		QMatrix4x4 projection;
 		projection.perspective(90, ((float)width()) / ((float)height()), 1, 128);
 		std::vector<float> vertices;
+		glViewport(0, 0, width(), height());
 		extra.glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture);
 		extra.glUniformMatrix4fv(extra.glGetUniformLocation(program, "matrix"), 1, GL_FALSE, projection.data());
@@ -99,7 +100,6 @@ public:
 
 		extra.glBufferData(GL_ARRAY_BUFFER, vertices.size()*4, vertices.data(), GL_DYNAMIC_DRAW);
 		extra.glUseProgram(program);
-		glViewport(0, 0, width(), height());
 		glDrawArrays(GL_TRIANGLES, 0, (int)(vertices.size()/5));
 	}
 
