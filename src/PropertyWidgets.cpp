@@ -1,4 +1,4 @@
-
+#include <QColorDialog>
 #include "PropertyWidgets.hpp"
 #include <qsizepolicy.h>
 #include "Properties.hpp"
@@ -46,3 +46,38 @@ void VertexPropertyWidget::textchanged(float value, int i)
 {
 	prop->vertices[i / 3][i % 3] = value;
 }
+
+ColorPropertyWidget::ColorPropertyWidget(ColorProperty* propIn, QWidget* parent) : QWidget(parent)
+{
+	setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+	setMinimumWidth(64);
+	setMinimumHeight(24);
+
+	prop = propIn;
+}
+
+void ColorPropertyWidget::paintEvent(QPaintEvent* event)
+{
+	QPainter qp(this);
+	qp.setRenderHint(QPainter::Antialiasing);
+	
+	qp.setPen(QColor(255, 255, 255));
+	qp.setBrush(prop->color);
+
+	QRectF r = rect();
+	qp.drawRect(QRectF(r.x() + 1.5, r.y() + 1.5, r.width() - 4, r.height() - 4));
+}
+
+void ColorPropertyWidget::mousePressEvent(QMouseEvent* event)
+{
+	QColorDialog* dialog = new QColorDialog(prop->color, this);
+	connect(dialog, &QColorDialog::colorSelected, this, &ColorPropertyWidget::colorSelected);
+	dialog->show();
+}
+
+void ColorPropertyWidget::colorSelected(const QColor& color)
+{
+	prop->color = color;
+	repaint();
+}
+

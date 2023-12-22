@@ -6,6 +6,7 @@
 #include "PropertyWidgets.hpp"
 #include "Property.hpp"
 #include <qvector3d.h>
+#include <QColor>
 
 class IntProperty : public Property
 {
@@ -26,3 +27,14 @@ public:
 	virtual QWidget* Widget(QWidget* parent) { return new VertexPropertyWidget(this, parent); }
 	QVector3D vertices[3];
 };
+
+class ColorProperty : public Property
+{
+public:
+	ColorProperty(QColor colorIn) : color(colorIn) { }
+	virtual QString Serialize() { return ""; }
+	virtual void Deserialize(const QString serialized) { return; }
+	virtual QWidget* Widget(QWidget* parent) { return new ColorPropertyWidget(this, parent); }
+	QColor color;
+};
+

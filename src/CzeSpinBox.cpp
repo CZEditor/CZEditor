@@ -97,3 +97,4 @@ void CzeSpinBox::paintEvent(QPaintEvent* event)
 	static QPointF uparrow[3] = { {r.width() - 12 - 0.5,12 - 3.5},{r.width() - 12 + 4.5,12 - 3.5},{r.width() - 12 + 2,12 - 7.5} };
 	qp.drawPolygon(uparrow, 3);
 }
+
