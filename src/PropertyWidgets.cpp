@@ -13,7 +13,7 @@ IntPropertyWidget::IntPropertyWidget(IntProperty* propIn, QWidget* parent) : QWi
 	textbox->setValue(propIn->data.data);
 	connect(textbox, &QSpinBox::valueChanged, this, &IntPropertyWidget::textchanged);
 	setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-	setMinimumWidth(64);
+	setMinimumWidth(68);
 	setMinimumHeight(24);
 	prop = propIn;
 }
@@ -61,11 +61,58 @@ void ColorPropertyWidget::paintEvent(QPaintEvent* event)
 	QPainter qp(this);
 	qp.setRenderHint(QPainter::Antialiasing);
 	
-	qp.setPen(QColor(255, 255, 255));
-	qp.setBrush(prop->color);
+	//qp.setPen(QColor(255, 255, 255));
+	//qp.setBrush(prop->color);
 
-	QRectF r = rect();
-	qp.drawRect(QRectF(r.x() + 1.5, r.y() + 1.5, r.width() - 4, r.height() - 4));
+	//QRectF r = rect();
+	//qp.drawRect(QRectF(r.x() + 1.5, r.y() + 1.5, r.width() - 4, r.height() - 4));
+
+	QRadialGradient grad(12, height(), height());
+	grad.setColorAt(0.0, InterpolateQColor(prop->color,QColor(255,255,255),0.5));
+	grad.setColorAt(0.3, prop->color);
+	grad.setColorAt(0.55, prop->color);
+	grad.setColorAt(0.7, InterpolateQColor(prop->color, QColor(255, 255, 255), 0.5));
+	grad.setColorAt(1.0, InterpolateQColor(prop->color, QColor(255, 255, 255), 0.75));
+
+	QLinearGradient maingrad(0, height(), 0, 0);
+	maingrad.setColorAt(0.0, InterpolateQColor(prop->color, QColor(255, 255, 255), 0.5));
+	maingrad.setColorAt(0.3, prop->color);
+	maingrad.setColorAt(0.55, prop->color);
+	maingrad.setColorAt(0.7, InterpolateQColor(prop->color, QColor(255, 255, 255), 0.5));
+	maingrad.setColorAt(1.0, InterpolateQColor(prop->color, QColor(255, 255, 255), 0.75));
+
+	float cornerradius = fmin(12.0, width() / 2);
+
+	if (cornerradius < 12.0)
+	{
+		grad.setCenter(rect().center().x(), 24);
+		grad.setFocalPoint(rect().center().x(), 24);
+		qp.setBrush(grad);
+	}
+	else
+	{
+		qp.setBrush(maingrad);
+	}
+	qp.setPen(Qt::NoPen);
+	qp.drawRoundedRect(rect(), cornerradius, cornerradius);
+
+	if (width() >= height())
+	{
+		qp.setBrush(grad);
+
+		qp.drawPie(0, 0, 24, 24, 90 * 16, 180 * 16);
+
+		grad.setCenter(rect().right() - 12, 24);
+		grad.setFocalPoint(rect().right() - 12, 24);
+		qp.setBrush(grad);
+		qp.drawPie(rect().right() - 24, 0, 24, 24, -90 * 16, 180 * 16);
+	}
+
+	qp.setPen(QColor(255, 255, 255));
+	qp.setBrush(Qt::NoBrush);
+	qp.drawRoundedRect(rect(), cornerradius, cornerradius);
+
+
 }
 
 void ColorPropertyWidget::mousePressEvent(QMouseEvent* event)
