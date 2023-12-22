@@ -81,8 +81,8 @@ jobs:
         mkdir install
         cmake --install ${{ steps.strings.outputs.build-output-dir }} --prefix install
         mkdir package
-        cp install/bin/czeditor.exe package/czeditor.exe
-        windeployqt --release --no-translations --no-opengl-sw --dir package package/czeditor.exe
+        cp install/bin/CZEditor.exe package/CZEditor.exe
+        windeployqt --release --no-translations --no-opengl-sw --dir package package/CZEditor.exe
     
     - name: Package (Linux)
       if: ${{ matrix.os == 'ubuntu-latest' }}
