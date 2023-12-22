@@ -42,7 +42,7 @@ public:
 		corners[2][2]->setGeometry(width() - 8, height() - 8, 8, 8);
 		titlebar->setGeometry(0, 0, width(), 24);
 		closebutton->setGeometry(width() - closebutton->width() - 4, 4, closebutton->width(), closebutton->height());
-		maximizebutton->setGeometry(width() - maximizebutton->width() - closebutton->width() - 4 * 2, 4, maximizebutton->width(), maximizebutton->height());
+		maximizebutton->setGeometry(width() - maximizebutton->width() - closebutton->width() - 4 * 2 + 4, 4, maximizebutton->width(), maximizebutton->height());
 		inner->setGeometry(0, 24, width(), height() - 24);
 	}
 	void mousePressEvent(QMouseEvent* event)
