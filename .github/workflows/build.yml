@@ -86,8 +86,10 @@ jobs:
     - name: Package (Linux)
       if: ${{ matrix.os == 'ubuntu-latest' }}
       run: |
-        mkdir install
-        cmake --install ${{ steps.strings.outputs.build-output-dir }} --prefix install
+        mkdir appdir
+        cmake --install ${{ steps.strings.outputs.build-output-dir }} --prefix appdir
+
+        tree appdir
 
         sudo apt install libfuse2 libxcb-cursor0
         
@@ -101,7 +103,10 @@ jobs:
         chmod +x linuxdeploy-plugin-appimage-x86_64.AppImage
         chmod +x appimagetool-x86_64.AppImage
         
-        ./linuxdeploy-x86_64.AppImage --plugin=qt --output=appimage --create-desktop-file --icon-file=CZEditor.png --executable=install/bin/czeditor --appdir appdir
+        ./linuxdeploy-x86_64.AppImage --plugin=qt --verbosity=2 --desktop-file appdir/usr/share/applications/CZEditor.desktop --output=appimage --appdir appdir
+
+        ls
+
         ./appimagetool-x86_64.AppImage appdir CZEditor-x86_64.AppImage
         
         mkdir package

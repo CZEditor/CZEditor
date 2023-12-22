@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.25)
-project(czeditor LANGUAGES CXX)
+project(CZEditor LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -30,3 +30,9 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 endif()
 
 install(TARGETS ${PROJECT_NAME})
+
+if(UNIX)
+	install(FILES data/desktop/CZEditor.desktop DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/applications")
+	install(FILES data/desktop/CZEditor.png DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/pixmap")
+endif()
+
