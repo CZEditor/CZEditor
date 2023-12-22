@@ -3,6 +3,6 @@ Type=Application
 Name=CZEditor
 Icon=CZEditor
 Terminal=false
-Exec=czeditor
+Exec=CZEditor
 Categories=AudioVideo;AudioVideoEditing;Qt;
 GenericName=Video Editor
