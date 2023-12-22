@@ -82,6 +82,26 @@ jobs:
         mkdir package
         cp install/bin/czeditor.exe package/czeditor.exe
         windeployqt --release --no-translations --no-opengl-sw --dir package package/czeditor.exe
+    
+    - name: Package (Linux)
+      if: ${{ matrix.os == 'ubuntu-latest' }}
+      run: |
+        mkdir install
+        cmake --install ${{ steps.strings.outputs.build-output-dir }} --prefix install
+        
+        wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+        wget https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
+        wget https://github.com/linuxdeploy/linuxdeploy-plugin-appimage/releases/download/continuous/linuxdeploy-plugin-appimage-x86_64.AppImage
+        wget https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage
+
+        chmod +x linuxdeploy-x86_64.AppImage
+        chmod +x appimagetool-x86_64.AppImage
+        
+        ./linuxdeploy-x86_64.AppImage --plugin=qt --output=appimage --create-desktop-file --executable=install/bin/czeditor --appdir appdir
+        ./appimagetool-x86_64.AppImage appdir CZEditor-x86_64.AppImage
+        
+        mkdir package
+        mv CZEditor-x86_64.AppImage package
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4.0.0
