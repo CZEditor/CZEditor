@@ -66,7 +66,7 @@ CzeSpinBox::CzeSpinBox(QWidget* parent) : QSpinBox(parent)
 	setStyleSheet("QSpinBox::down-button{ height: 12px; width:13px; }\n"
 		"QSpinBox::up-button{ height: 12px; width:13px; }\n");
 	setFixedHeight(24);
-	setMinimumWidth(64);
+	setMinimumWidth(68);
 }
 
 
@@ -97,3 +97,4 @@ void CzeSpinBox::paintEvent(QPaintEvent* event)
 	static QPointF uparrow[3] = { {r.width() - 12 - 0.5,12 - 3.5},{r.width() - 12 + 4.5,12 - 3.5},{r.width() - 12 + 2,12 - 7.5} };
 	qp.drawPolygon(uparrow, 3);
 }
+

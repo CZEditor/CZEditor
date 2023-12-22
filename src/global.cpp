@@ -22,6 +22,14 @@ QColor GetAccentColor(int saturation, int value, int alpha)
 	return ret;
 }
 
+QColor InterpolateQColor(QColor colA, QColor colB, float i)
+{
+	QRgb B = colB.rgba();
+	QRgb A = colA.rgba();
+	int interpolation = i * 255;
+	int interpolationM = 255 - interpolation;
+	return QColor((qRed(B)  * interpolation + qRed(A) * interpolationM) / 255, (qGreen(B) * interpolation + qGreen(A) * interpolationM) / 255, (qBlue(B) * interpolation + qBlue(A) * interpolationM) / 255, (qAlpha(B) * interpolation + qAlpha(A) * interpolationM) / 255);
+}
 
 
 #include "Keyframes.hpp"
