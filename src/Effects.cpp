@@ -51,7 +51,20 @@ void SimpleImageEffect::effectVertices(std::vector<float>& verticesIn)
 void SimpleImageEffect::addFragmentShaders(std::list<FragmentShader>& vertexshaders)
 {
 	FragmentShader f;
-	f.call = "SimpleImageEffect()";
+	f.call = "SimpleImageEffect(pos, image);";
+	f.declaration = "vec4 SimpleImageEffect(vec2 pos, sampler2D image);";
+	f.type = FST_Color;
+	f.shader = fragmentshader;
+}
+
+void SimpleImageEffect::initializeShaders(QOpenGLExtraFunctions extra)
+{
+	fragmentshader = extra.glCreateShader(GL_FRAGMENT_SHADER);
+	extra.glShaderSource(fragmentshader, 1, &"vec4 SimpleImageEffect(vec2 pos, sampler2D image)\n\
+{\n\
+return texture(pos,image)\n\
+}",0);
+	extra.glCompileShader(fragmentshader);
 }
 
 Params* SimpleImageEffect::getDefaultParams()
