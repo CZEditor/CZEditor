@@ -13,7 +13,10 @@ class CzeViewportOpenGL : public QOpenGLWidget
 public:
 	CzeViewportOpenGL(QWidget* parent = nullptr) : QOpenGLWidget(parent)
 	{
-		
+		//QSurfaceFormat f;
+		//f.setVersion(4, 6);
+		//f.setProfile(QSurfaceFormat::CoreProfile);
+		//setFormat(f);
 	}
 
 	~CzeViewportOpenGL()
@@ -71,7 +74,10 @@ public:
 		extra.glAttachShader(program, vertshader);
 		extra.glAttachShader(program, fragshader);
 		extra.glLinkProgram(program);
-
+		char IDK[512];
+		int retlen;
+		extra.glGetProgramInfoLog(program, 512, &retlen, IDK);
+		qWarning("%s\n", IDK);
 
 	}
 
@@ -86,21 +92,21 @@ public:
 		extra.glBindVertexArray(vao);
 		QMatrix4x4 projection;
 		projection.perspective(90, ((float)width()) / ((float)height()), 1, 128);
-		std::vector<float> vertices;
 		glViewport(0, 0, width(), height());
-		extra.glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture);
-		extra.glUniformMatrix4fv(extra.glGetUniformLocation(program, "matrix"), 1, GL_FALSE, projection.data());
-		extra.glUniform1i(extra.glGetUniformLocation(program, "image"), 0);
+		
 
-		DoKeyframeShit(extra);
+		if (!uninitializedKeyframes.empty())
+		{
+			for (auto& keyframe : uninitializedKeyframes)
+			{
+				InitializeKeyframe(keyframe, extra);
+			}
+			uninitializedKeyframes.clear();
+		}
 
-		if (vertices.size() == 0)
-			return;
+		DoKeyframeShit(extra, projection.data());
 
-		extra.glBufferData(GL_ARRAY_BUFFER, vertices.size()*4, vertices.data(), GL_DYNAMIC_DRAW);
-		extra.glUseProgram(program);
-		glDrawArrays(GL_TRIANGLES, 0, (int)(vertices.size()/5));
+		
 	}
 
 	GLuint vao;

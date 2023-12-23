@@ -2,6 +2,9 @@
 
 #include <qcolor.h>
 #include <QFont>
+#include <qopenglextrafunctions.h>
+#include <qopenglfunctions.h>
+
 
 
 extern void InitGlobals();
@@ -15,31 +18,11 @@ extern int currentframe;
 #include "Keyframes.hpp"
 
 extern KeyframeList keyframelist;
-#include <qopenglextrafunctions.h>
-#include <qopenglfunctions.h>
+extern std::list<Keyframe*> uninitializedKeyframes;
 
-void DoKeyframeShit(QOpenGLExtraFunctions extra);
+void DoKeyframeShit(QOpenGLExtraFunctions extra, GLfloat* projectiondata);
+void InitializeKeyframe(Keyframe* keyframe, QOpenGLExtraFunctions extra);
 
 #include "ICZEditor.hpp"
 extern ICZEditor* cze;
 
-struct VertexShader
-{
-	int shader;
-	QString declaration;
-	QString call;
-};
-
-enum FRAGMENT_SHADER_TYPE
-{
-	FST_Position,
-	FST_Color
-};
-
-struct FragmentShader
-{
-	int shader;
-	QString declaration;
-	QString call;
-	FRAGMENT_SHADER_TYPE type;
-};

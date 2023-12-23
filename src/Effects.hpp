@@ -23,10 +23,10 @@ namespace Effects
 		INIT_PARAMS(SimpleImageEffect)
 			virtual void effectVertices(std::vector<float>& vertices) { return; };
 		virtual void addVertexShaders(std::list<VertexShader>& vertexshaders) { return; };
-		virtual void addFragmentShaders(std::list<FragmentShader>& vertexshaders);
+		virtual void addFragmentShaders(std::list<FragmentShader>& fragmentshaders);
 		virtual void initializeShaders(QOpenGLExtraFunctions extra);
 		virtual Params* getDefaultParams();
-		int fragmentshader;
+		GLuint fragmentshader;
 	};
 
 };

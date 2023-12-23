@@ -11,8 +11,6 @@ class ColorProperty;
 
 class CzeTextbox;
 
-#define T(p) _Generic(p, IntProperty : "IntProperty", VertexProperty : "VertexProperty")
-
 class IntPropertyWidget : public QWidget
 {
 public:

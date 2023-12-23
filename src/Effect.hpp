@@ -2,7 +2,8 @@
 
 #include "Params.hpp"
 
-#include "global.hpp"
+#include "OpenGLStructs.hpp"
+
 
 class Effect : public KeyframeParam
 {

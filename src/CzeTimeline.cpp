@@ -114,9 +114,11 @@ public:
 		{
 			Keyframe* newKeyframe = new Keyframe();
 			newKeyframe->effects.push_back(new Effects::SimpleVertexEffect());
+			newKeyframe->effects.push_back(new Effects::SimpleImageEffect());
 			newKeyframe->actions.push_back(new Actions::NormalKeyframe());
 			newKeyframe->source = new Sources::ColorSource();
 			keyframelist.keyframes.push_back(newKeyframe);
+			uninitializedKeyframes.push_back(newKeyframe);
 			scene()->addItem(new CzeTimelineKeyframeItem(newKeyframe));
 		}
 	}

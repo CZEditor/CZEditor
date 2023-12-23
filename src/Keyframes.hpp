@@ -5,7 +5,7 @@
 #include "Source.hpp"
 #include "Action.hpp"
 #include "Effect.hpp"
-
+#include <qopenglfunctions.h>
 class Keyframe
 {
 public:
@@ -13,7 +13,8 @@ public:
 	Source* source;
 	std::list<Action*> actions;
 	std::list<Effect*> effects;
-	int texture;
+	GLuint texture;
+	std::list<GLuint> programs;
 };
 
 class KeyframeList
