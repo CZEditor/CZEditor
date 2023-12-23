@@ -1,7 +1,6 @@
 #include "global.hpp"
 #include <time.h>
 #include "Properties.hpp"
-
 static int todayshue;
 QFont defaultfont;
 int currentframe = 0;
@@ -33,7 +32,7 @@ QColor InterpolateQColor(QColor colA, QColor colB, float i)
 
 
 #include "Keyframes.hpp"
-void DoKeyframeShit(std::vector<float> &vertices)
+void DoKeyframeShit(QOpenGLExtraFunctions extra)
 {
 	KeyframeList klist;
 	for (auto& keyframe : keyframelist.keyframes)
@@ -43,11 +42,12 @@ void DoKeyframeShit(std::vector<float> &vertices)
 			action->actOnKeyframes(&klist, keyframe);
 		}
 	}
+	
 	for (auto& keyframe : klist.keyframes)
 	{
 		for (auto& effect : keyframe->effects)
 		{
-			effect->effectVertices(vertices);
+			
 		}
 	}
 }

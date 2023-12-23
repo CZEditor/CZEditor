@@ -13,7 +13,7 @@ IntPropertyWidget::IntPropertyWidget(IntProperty* propIn, QWidget* parent) : QWi
 	textbox->setValue(propIn->data.data);
 	connect(textbox, &QSpinBox::valueChanged, this, &IntPropertyWidget::textchanged);
 	setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-	setMinimumWidth(68);
+	setMinimumWidth(64);
 	setMinimumHeight(24);
 	prop = propIn;
 }

@@ -93,7 +93,7 @@ public:
 		extra.glUniformMatrix4fv(extra.glGetUniformLocation(program, "matrix"), 1, GL_FALSE, projection.data());
 		extra.glUniform1i(extra.glGetUniformLocation(program, "image"), 0);
 
-		DoKeyframeShit(vertices);
+		DoKeyframeShit(extra);
 
 		if (vertices.size() == 0)
 			return;

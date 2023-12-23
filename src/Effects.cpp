@@ -22,6 +22,7 @@ void SimpleVertexEffect::effectVertices(std::vector<float>& verticesIn)
 	verticesIn.push_back(0.0);
 }
 
+
 Params* SimpleVertexEffect::getDefaultParams()
 {
 	Params* ret = new Params();
@@ -36,6 +37,26 @@ Params* SimpleVertexEffect::getDefaultParams()
 	v->vertices[2][1] = 0;
 	v->vertices[2][2] = -3;
 	ret->elements["vertexfunc"] = v;
+
+	return ret;
+}
+
+
+
+void SimpleImageEffect::effectVertices(std::vector<float>& verticesIn)
+{
+	
+}
+
+void SimpleImageEffect::addFragmentShaders(std::list<FragmentShader>& vertexshaders)
+{
+	FragmentShader f;
+	f.call = "SimpleImageEffect()";
+}
+
+Params* SimpleImageEffect::getDefaultParams()
+{
+	Params* ret = new Params();
 
 	return ret;
 }

@@ -66,7 +66,7 @@ CzeSpinBox::CzeSpinBox(QWidget* parent) : QSpinBox(parent)
 	setStyleSheet("QSpinBox::down-button{ height: 12px; width:13px; }\n"
 		"QSpinBox::up-button{ height: 12px; width:13px; }\n");
 	setFixedHeight(24);
-	setMinimumWidth(68);
+	setMinimumWidth(64);
 }
 
 
@@ -90,11 +90,13 @@ void CzeSpinBox::paintEvent(QPaintEvent* event)
 	qp.setBrush(grad);
 	QRectF r = rect();
 	qp.drawRect(QRectF(0.5, 0.5, r.width() - 12, r.height() - 2));
-	qp.drawPie(QRectF(r.width() - 16 + 0.5, 0.5 , 11, 22), 0, 180 * 16);
-	qp.drawPie(QRectF(r.width() - 16 + 0.5, 0.5, 11, 22), 0, -180 * 16);
-    static QPointF downarrow[3] = { {r.width() - 12 - 0.5,12 + 2.5},{r.width() - 12 + 4.5,12 + 2.5},{r.width() - 12 + 2,12 + 6.5} };
+	//qp.drawPie(QRectF(r.width() - 12 + 0.5, 0.5 , 11, 22), 0, 180 * 16);
+	//qp.drawPie(QRectF(r.width() - 12 + 0.5, 0.5, 11, 22), 0, -180 * 16);
+	qp.drawRect(QRectF(r.width() - 12 + 0.5, 0.5, 11, 11));
+	qp.drawRect(QRectF(r.width() - 12 + 0.5, height()/2 - 0.5, 11, 11));
+    static QPointF downarrow[3] = { {r.width() - 8 - 0.5,12 + 3.5},{r.width() - 8 + 4.5,12 + 3.5},{r.width() - 8 + 2,12 + 7.5} };
 	qp.drawPolygon(downarrow, 3);
-	static QPointF uparrow[3] = { {r.width() - 12 - 0.5,12 - 3.5},{r.width() - 12 + 4.5,12 - 3.5},{r.width() - 12 + 2,12 - 7.5} };
+	static QPointF uparrow[3] = { {r.width() - 8 - 0.5,12 - 4.5},{r.width() - 8 + 4.5,12 - 4.5},{r.width() - 8 + 2,12 - 8.5} };
 	qp.drawPolygon(uparrow, 3);
 }
 

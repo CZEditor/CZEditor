@@ -15,8 +15,31 @@ extern int currentframe;
 #include "Keyframes.hpp"
 
 extern KeyframeList keyframelist;
+#include <qopenglextrafunctions.h>
+#include <qopenglfunctions.h>
 
-void DoKeyframeShit(std::vector<float> &vertices);
+void DoKeyframeShit(QOpenGLExtraFunctions extra);
 
 #include "ICZEditor.hpp"
 extern ICZEditor* cze;
+
+struct VertexShader
+{
+	int shader;
+	QString declaration;
+	QString call;
+};
+
+enum FRAGMENT_SHADER_TYPE
+{
+	FST_Position,
+	FST_Color
+};
+
+struct FragmentShader
+{
+	int shader;
+	QString declaration;
+	QString call;
+	FRAGMENT_SHADER_TYPE type;
+};
