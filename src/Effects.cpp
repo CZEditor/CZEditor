@@ -4,6 +4,8 @@
 
 using namespace Effects;
 
+static KeyframeConstructorDict EffectsDict;
+
 void SimpleVertexEffect::effectVertices(std::vector<float>& verticesIn)
 {
 	verticesIn.push_back(((VertexProperty*)params->elements["vertexfunc"])->vertices[0].x());
@@ -42,7 +44,7 @@ Params* SimpleVertexEffect::getDefaultParams()
 	return ret;
 }
 
-
+RegisterEffect("Simple Vertex Effect", SimpleVertexEffect);
 
 void SimpleImageEffect::addFragmentShaders(std::list<FragmentShader>& fragmentshaders)
 {
@@ -74,3 +76,5 @@ Params* SimpleImageEffect::getDefaultParams()
 
 	return ret;
 }
+
+RegisterEffect("Simple Image Effect", SimpleImageEffect);

@@ -6,6 +6,7 @@
 #include <QLayout>
 #include "Property.hpp"
 #include "CzeLabel.hpp"
+#include <QComboBox>
 
 class CzeParamView : public QWidget
 {
@@ -14,6 +15,8 @@ public:
 	void UpdateParams();
 
 	KeyframeParam* params;
+	QWidget* inner;
+	QComboBox* list;
 };
 
 class CzeParamViewList : public QWidget

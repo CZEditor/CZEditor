@@ -3,6 +3,8 @@
 #include <qformlayout.h>
 #include "CzeScrollArea.hpp"
 #include <qsizepolicy.h>
+#include "Sources.hpp"
+#include <qvariant.h>
 
 CzeProperties::CzeProperties(QWidget* parent) : CzeWindow(parent, "Properties")
 {
@@ -58,9 +60,20 @@ void CzeParamViewList::UpdateParams()
 
 CzeParamView::CzeParamView(QWidget* parent, KeyframeParam* paramsIn) : QWidget(parent)
 {
-	QFormLayout* l = new QFormLayout(this);
-	setLayout(l);
+	inner = new QWidget(this);
+	QFormLayout* l = new QFormLayout(inner);
+	inner->setLayout(l);
 	l->setFieldGrowthPolicy(QFormLayout::FieldsStayAtSizeHint);
+	QVBoxLayout* vbox = new QVBoxLayout(this);
+	setLayout(vbox);
+	list = new QComboBox(this);
+	for (auto& i : SourcesDict)
+	{
+		list->addItem(i.first.c_str(), i.first.c_str());
+	}
+	vbox->addWidget(list);
+	vbox->addWidget(inner);
+
 	params = paramsIn;
 	if (params)
 	{
@@ -72,7 +85,7 @@ void CzeParamView::UpdateParams()
 {
 	if (!params)
 		return;
-	QFormLayout* l = (QFormLayout*)layout();
+	QFormLayout* l = (QFormLayout*)inner->layout();
 	int c = l->rowCount();
 	for (int i = 0; i < c; i++)
 	{
@@ -80,7 +93,7 @@ void CzeParamView::UpdateParams()
 	}
 	for (auto& it : params->params->elements)
 	{
-		QWidget* w = it.second->Widget(this);
+		QWidget* w = it.second->Widget(inner);
 		l->addRow(new CzeLabel(this, it.first.c_str()), w);
 	}
 	setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);

@@ -2,6 +2,8 @@
 #include "Properties.hpp"
 using namespace Sources;
 
+KeyframeConstructorDict SourcesDict;
+
 void ColorSource::getImage(unsigned char* img, int width, int height)
 {
 	int s = width * height * 4;
@@ -29,3 +31,5 @@ Params* ColorSource::getDefaultParams()
 	p->elements["color"] = new ColorProperty(QColor(127, 127, 127));
 	return p;
 }
+
+RegisterSource("Color", ColorSource)
