@@ -2,6 +2,7 @@
 #include <qscrollbar.h>
 #include <qpainter.h>
 #include <algorithm>
+#include "global.hpp"
 
 class CzeScrollAreaViewport : public QWidget
 {
@@ -14,7 +15,7 @@ public:
 
 CzeScrollBar::CzeScrollBar(QWidget* parent) : QWidget(parent)
 {
-	setFixedWidth(24);
+	setFixedWidth(16);
 	maximum = 1;
 	value = 0;
 }
@@ -23,13 +24,26 @@ void CzeScrollBar::paintEvent(QPaintEvent* event)
 {
 	if (height() >= maximum)
 		return;
+
 	float h = height();
 	float offset = 0;
 	QPainter qp(this);
+	qp.setRenderHint(QPainter::Antialiasing);
 	int size = maximum;
 	float draggablesize = h / (float)size * h;
-	qp.setBrush(QColor(0, 255, 0));
-	qp.drawRect(0, (float)value / (float)maximum * (h - draggablesize), width(), draggablesize);
+	float y = (float)value / (float)maximum * (h - draggablesize);
+	QLinearGradient grad(2, 0, width()-2, 0);
+	grad.setColorAt(0.0, GetAccentColor(127, 127));
+	grad.setColorAt(2.0 / width(), GetAccentColor(255, 32));
+	grad.setColorAt(0.5, QColor(0,0,0));
+	grad.setColorAt(1.0-2.0/width(), GetAccentColor(255, 32));
+	grad.setColorAt(1, GetAccentColor(127, 127));
+	qp.setBrush(grad);
+	qp.setPen(QColor(255, 255, 255));
+	QRectF r = QRectF(0.5, y + 0.5, width() - 1, draggablesize - 1);
+	qp.drawRoundedRect(r,4,4);
+
+	
 }
 
 void CzeScrollBar::mousePressEvent(QMouseEvent* event)
