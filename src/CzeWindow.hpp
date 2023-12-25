@@ -51,23 +51,7 @@ public:
 		{
 			if (event->pos().y() < 21)
 			{
-				CzeWindow* splitterwindow = (CzeWindow*) (parentWidget()->parentWidget());
-
-				QSplitter* splitter = (QSplitter*) splitterwindow->inner;
-
 				SwitchToUndocked();
-
-				for (int i = 0; i < 2; i++)
-				{
-					CzeWindow* dockedwindow = (CzeWindow*) splitter->widget(i);
-					
-					if (dockedwindow == nullptr) continue;
-
-					dockedwindow->SwitchToUndocked();
-				}
-
-				splitterwindow->close();
-
 				windowHandle()->startSystemMove();
 			}
 			QWidget::mousePressEvent(event);
@@ -119,9 +103,7 @@ public:
 			if (prect.contains(curpos))
 			{
 				int after = 1;
-
 				Qt::Orientation direction = Qt::Horizontal;
-
 				if (fmin(prect.bottom() - curpos.y(), curpos.y()-prect.top()) < fmin(prect.right()- curpos.x(),curpos.x()-prect.left()))
 				{
 					direction = Qt::Vertical;
@@ -134,59 +116,24 @@ public:
 				{
 					after = 0;
 				}
-
+				qWarning("found %ls", otherwidget->windowTitle().data());
 				CzeWindow* otherwindow = (CzeWindow*)otherwidget;
-
-				int splitterwidth, splitterheight;
-				if (direction == Qt::Horizontal)
-				{
-					splitterwidth = width() + otherwindow->width();
-					splitterheight = std::max(height(), otherwindow->height());
-				}
-				else
-				{
-					splitterwidth = std::max(width(), otherwindow->width());
-					splitterheight = height() + otherwindow->height();
-				}
-
-				CzeWindow* splitterwindow = new CzeWindow(nullptr, "CZEditor");
-				splitterwindow->resize(splitterwidth, splitterheight);
-				splitterwindow->done = false;
-
-				QSplitter* splitter = new QSplitter(direction, splitterwindow);
-				splitterwindow->inner = splitter;
-				//splitterwindow->resizehelper->lower();
-				//splitter->lower();
+				otherwindow->done = false;
+				QWidget* otherinner = otherwindow->inner;
+				otherwindow->inner = new QSplitter(direction,otherwindow);
+				otherwindow->inner->lower();
+				otherwindow->resizehelper->lower();
+				//otherinner->setParent(otherwindow->inner);
+				((QSplitter*)otherwindow->inner)->addWidget(otherinner);
+				//inner->setParent(otherwindow->inner);
+				SwitchToDocked(otherwindow->inner);
+				//((QSplitter*)otherwindow->inner)->addWidget(this);
+				((QSplitter*)otherwindow->inner)->insertWidget(after, this);
+				otherwindow->done = true;
+				//close();
+				otherwindow->update();
 				
-				splitter->addWidget(otherwindow);
-
-				SwitchToDocked(splitter);
-				otherwindow->SwitchToDocked(splitter);
-
-				splitter->insertWidget(after, this);
-
-				splitterwindow->done = true;
-				splitterwindow->update();
-
-				qWarning("%ls docking to %ls", this->windowTitle().data(), otherwidget->windowTitle().data());
-
-			//	otherwindow->done = false;
-
-			//	QWidget* otherinner = otherwindow->inner;
-
-			//	otherwindow->inner = new QSplitter(direction,otherwindow);
-			//	otherwindow->inner->lower();
-			//	otherwindow->resizehelper->lower();
-
-			//	((QSplitter*)otherwindow->inner)->addWidget(otherinner);
-
-			//	SwitchToDocked(otherwindow->inner);
-
-
-			//	((QSplitter*)otherwindow->inner)->insertWidget(after, this);
-			//	otherwindow->done = true;
-			//	otherwindow->update();
-				
+				//deleteLater();
 				return;
 			}
 			
@@ -254,10 +201,10 @@ public:
 	{
 		docked = false;
 		QPoint screenpos = mapToGlobal(QPoint(0,0));
-		QSize screensize = size();
 		setParent(nullptr);
 		show();
-		setGeometry(QRect(screenpos,screensize));
+		setGeometry(QRect(screenpos,size()));
+		
 	}
 
 	void childEvent(QChildEvent* event)
