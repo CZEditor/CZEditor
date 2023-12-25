@@ -7,6 +7,7 @@
 #include "Property.hpp"
 #include <qvector3d.h>
 #include <QColor>
+#include "Keyframes.hpp"
 
 class IntProperty : public Property
 {

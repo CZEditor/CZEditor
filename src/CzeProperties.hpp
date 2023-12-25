@@ -19,6 +19,7 @@ public:
 	QWidget* inner;
 	QComboBox* list;
 	KeyframeConstructorDict* constructors;
+	Keyframe* keyframe;
 };
 
 class CzeParamViewList : public QWidget
@@ -26,12 +27,14 @@ class CzeParamViewList : public QWidget
 public:
 	CzeParamViewList(QWidget* parent, std::list<KeyframeParam*>* paramsListIn, KeyframeConstructorDict* constructorsIn);
 	void UpdateParams();
-	void AddParams();
+	void AddParams(void* data);
+	void RemoveParams(void* data);
 
 	std::list<KeyframeParam*>* paramsList;
 	KeyframeConstructorDict* constructors;
 	QWidget* inner;
 	QComboBox* list;
+	Keyframe* keyframe;
 };
 
 class CzeProperties : public CzeWindow

@@ -1,8 +1,9 @@
 #pragma once
 #include <unordered_map>
 #include "Property.hpp"
+#include "IKeyframe.hpp"
 
-#define INIT_PARAMS(cls) cls() { params = getDefaultParams(); }
+#define INIT_PARAMS(cls) cls(IKeyframe* keyframeIn) { keyframe = keyframeIn; params = getDefaultParams(); }
 
 class Params
 {
@@ -16,9 +17,10 @@ public:
 	~KeyframeParam() { delete params; }
 	virtual Params* getDefaultParams() = 0;
 	Params* params;
+	IKeyframe* keyframe;
 };
 
-typedef KeyframeParam*(*KeyframeConstructor)();
+typedef KeyframeParam*(*KeyframeConstructor)(IKeyframe*);
 
 typedef std::unordered_map<std::string, KeyframeConstructor> KeyframeConstructorDict;
 
@@ -39,8 +41,8 @@ public:
 //      |
 //      V
 #define RegisterKeyframeParam(name, className, globalList) \
-KeyframeParam* className##Constructor()\
+KeyframeParam* className##Constructor(IKeyframe* keyframe)\
 {\
-	return (KeyframeParam*)(new className##());\
+	return (KeyframeParam*)(new className##(keyframe));\
 }\
 static KeyframeParamRegisterator className##Registerator(name,&className##Constructor,globalList);

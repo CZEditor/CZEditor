@@ -4,7 +4,7 @@
 #include "Properties.hpp"
 #include <qformlayout.h>
 #include "CzeLabel.hpp"
-
+#include "global.hpp"
 
 
 IntPropertyWidget::IntPropertyWidget(IntProperty* propIn, QWidget* parent) : QWidget(parent)
@@ -21,6 +21,10 @@ IntPropertyWidget::IntPropertyWidget(IntProperty* propIn, QWidget* parent) : QWi
 void IntPropertyWidget::textchanged(int value)
 {
 	prop->data.data = value;
+	if (prop->callback)
+	{
+		prop->callback(prop->callbackData);
+	}
 }
 
 VertexPropertyWidget::VertexPropertyWidget(VertexProperty* propIn, QWidget* parent) : QWidget(parent)
@@ -45,6 +49,10 @@ VertexPropertyWidget::VertexPropertyWidget(VertexProperty* propIn, QWidget* pare
 void VertexPropertyWidget::textchanged(float value, int i)
 {
 	prop->vertices[i / 3][i % 3] = value;
+	if (prop->callback)
+	{
+		prop->callback(prop->callbackData);
+	}
 }
 
 ColorPropertyWidget::ColorPropertyWidget(ColorProperty* propIn, QWidget* parent) : QWidget(parent)
@@ -125,6 +133,10 @@ void ColorPropertyWidget::mousePressEvent(QMouseEvent* event)
 void ColorPropertyWidget::colorSelected(const QColor& color)
 {
 	prop->color = color;
+	if (prop->callback)
+	{
+		prop->callback(prop->callbackData);
+	}
 	repaint();
 }
 

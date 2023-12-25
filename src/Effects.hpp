@@ -18,7 +18,6 @@ namespace Effects
 		virtual void addFragmentShaders(std::list<FragmentShader>& vertexshaders) { return; };
 		virtual void initializeShaders(QOpenGLExtraFunctions extra) { return; };
 		virtual Params* getDefaultParams();
-
 	};
 
 	class SimpleImageEffect : public Effect

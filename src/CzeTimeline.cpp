@@ -113,10 +113,10 @@ public:
 		if (event->text() == 'k')
 		{
 			Keyframe* newKeyframe = new Keyframe();
-			newKeyframe->effects.push_back(new Effects::SimpleVertexEffect());
-			newKeyframe->effects.push_back(new Effects::SimpleImageEffect());
-			newKeyframe->actions.push_back(new Actions::NormalKeyframe());
-			newKeyframe->source = new Sources::ColorSource();
+			newKeyframe->effects.push_back(new Effects::SimpleVertexEffect(newKeyframe));
+			newKeyframe->effects.push_back(new Effects::SimpleImageEffect(newKeyframe));
+			newKeyframe->actions.push_back(new Actions::NormalKeyframe(newKeyframe));
+			newKeyframe->source = new Sources::ColorSource(newKeyframe);
 			keyframelist.keyframes.push_back(newKeyframe);
 			uninitializedKeyframes.push_back(newKeyframe);
 			scene()->addItem(new CzeTimelineKeyframeItem(newKeyframe));

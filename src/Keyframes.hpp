@@ -6,7 +6,9 @@
 #include "Action.hpp"
 #include "Effect.hpp"
 #include <qopenglfunctions.h>
-class Keyframe
+#include "IKeyframe.hpp"
+
+class Keyframe : public IKeyframe
 {
 public:
 	int frame;

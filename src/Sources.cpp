@@ -1,5 +1,7 @@
 #include "Sources.hpp"
 #include "Properties.hpp"
+#include "Keyframes.hpp"
+#include "global.hpp"
 using namespace Sources;
 
 KeyframeConstructorDict SourcesDict;
@@ -29,6 +31,8 @@ Params* ColorSource::getDefaultParams()
 	p->elements["width"] = new IntProperty(new IntData(32));
 	p->elements["height"] = new IntProperty(new IntData(32));
 	p->elements["color"] = new ColorProperty(QColor(127, 127, 127));
+	p->elements["color"]->callback = [&](void* data) { UpdateKeyframeTexture((Keyframe*)data); };
+	p->elements["color"]->callbackData = keyframe;
 	return p;
 }
 

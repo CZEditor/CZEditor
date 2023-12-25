@@ -34,10 +34,13 @@ void CzeProperties::UpdateParams()
 		return;
 	source->params = (KeyframeParam**)&keyframe->source;
 	source->UpdateParams();
+	source->keyframe = keyframe;
 	actions->paramsList = (std::list<KeyframeParam*>*)(&(keyframe->actions));
 	actions->UpdateParams();
+	actions->keyframe = keyframe;
 	effects->paramsList = (std::list<KeyframeParam*>*)(&(keyframe->effects));
 	effects->UpdateParams();
+	effects->keyframe = keyframe;
 }
 
 CzeParamViewList::CzeParamViewList(QWidget* parent, std::list<KeyframeParam*>* paramsListIn, KeyframeConstructorDict* constructorsIn) : QWidget(parent)
@@ -66,22 +69,42 @@ void CzeParamViewList::UpdateParams()
 {
 	while (inner->layout()->count())
 	{
-		inner->layout()->removeItem(inner->layout()->itemAt(0));
+		inner->layout()->takeAt(0)->widget()->deleteLater();
 	}
 	for (auto& param : *paramsList)
 	{
-		inner->layout()->addWidget(new CzeParamView(inner, &param, constructors));
+		QWidget* holder = new QWidget(inner);
+		QHBoxLayout* hbox = new QHBoxLayout(holder);
+		holder->setLayout(hbox);
+		CzeParamView* paramview = new CzeParamView(holder, &param, constructors);
+		paramview->keyframe = keyframe;
+		hbox->addWidget(paramview);
+		QVBoxLayout* vbox = new QVBoxLayout(holder);
+		hbox->addLayout(vbox);
+		CzeButton* minusbutton = new CzeButton(holder, "-", &param);
+		connect(minusbutton, &CzeButton::pressed, this, &CzeParamViewList::RemoveParams);
+		inner->layout()->addWidget(holder);
 	}
 }
 
-void CzeParamViewList::AddParams()
+void CzeParamViewList::AddParams(void* data)
 {
 	if (paramsList)
 	{
-		paramsList->push_back(constructors->operator[](list->currentText().toStdString())());
+		paramsList->push_back(constructors->operator[](list->currentText().toStdString())(keyframe));
 		UpdateParams();
 	}
 }
+
+void CzeParamViewList::RemoveParams(void* data)
+{
+	if (!paramsList)
+		return;
+	KeyframeParam** params = (KeyframeParam**)data;
+	paramsList->remove(*params);
+	UpdateParams();
+}
+
 
 CzeParamView::CzeParamView(QWidget* parent, KeyframeParam** paramsIn, KeyframeConstructorDict* constructorsIn) : QWidget(parent)
 {
@@ -130,7 +153,7 @@ void CzeParamView::ChangeParams(int index)
 {
 	KeyframeConstructor constr = constructors->operator[](list->itemText(index).toStdString());
 	delete *params;
-	*params = constr();
+	*params = constr(keyframe);
 	UpdateParams();
 }
 

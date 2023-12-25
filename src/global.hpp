@@ -19,9 +19,11 @@ extern int currentframe;
 
 extern KeyframeList keyframelist;
 extern std::list<Keyframe*> uninitializedKeyframes;
+extern std::list<Keyframe*> updatedKeyframes;
 
 void DoKeyframeShit(QOpenGLExtraFunctions extra, GLfloat* projectiondata);
 void InitializeKeyframe(Keyframe* keyframe, QOpenGLExtraFunctions extra);
+void UpdateKeyframeTexture(Keyframe* keyframe);
 
 #include "ICZEditor.hpp"
 extern ICZEditor* cze;

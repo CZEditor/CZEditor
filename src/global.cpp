@@ -6,6 +6,7 @@ QFont defaultfont;
 int currentframe = 0;
 KeyframeList keyframelist;
 std::list<Keyframe*> uninitializedKeyframes;
+std::list<Keyframe*> updatedKeyframes;
 
 ICZEditor* cze = 0;
 
@@ -163,4 +164,9 @@ uniform sampler2D image;\n");
 		}
 	}
 	
+}
+
+void UpdateKeyframeTexture(Keyframe* keyframe)
+{
+	updatedKeyframes.push_back(keyframe);
 }

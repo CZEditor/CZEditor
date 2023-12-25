@@ -104,6 +104,21 @@ public:
 			uninitializedKeyframes.clear();
 		}
 
+		if (!updatedKeyframes.empty())
+		{
+			for (auto& keyframe : updatedKeyframes)
+			{
+				int width, height;
+				keyframe->source->getSize(width, height);
+				unsigned char* pixels = (unsigned char*)malloc(width * height * 4);
+				keyframe->source->getImage(pixels, width, height);
+				glBindTexture(GL_TEXTURE_2D, keyframe->texture);
+				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+				glBindTexture(GL_TEXTURE_2D, 0);
+			}
+			updatedKeyframes.clear();
+		}
+
 		DoKeyframeShit(extra, projection.data());
 
 		
