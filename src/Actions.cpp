@@ -3,7 +3,7 @@
 
 using namespace Actions;
 
-static KeyframeConstructorDict ActionsDict;
+KeyframeConstructorDict ActionsDict;
 
 void NormalKeyframe::actOnKeyframes(KeyframeList* klist, Keyframe* keyframe)
 {

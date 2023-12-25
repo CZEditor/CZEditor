@@ -4,6 +4,8 @@
 #include "CzeScrollArea.hpp"
 #include <qsizepolicy.h>
 #include "Sources.hpp"
+#include "Actions.hpp"
+#include "Effects.hpp"
 #include <qvariant.h>
 
 CzeProperties::CzeProperties(QWidget* parent) : CzeWindow(parent, "Properties")
@@ -14,9 +16,9 @@ CzeProperties::CzeProperties(QWidget* parent) : CzeWindow(parent, "Properties")
 	filllayout->addWidget(scroll);
 	QVBoxLayout* l = new QVBoxLayout(scroll);
 	scroll->setLayout(l);
-	source = new CzeParamView(scroll, nullptr);
-	actions = new CzeParamViewList(scroll, nullptr);
-	effects = new CzeParamViewList(scroll, nullptr);
+	source = new CzeParamView(scroll, nullptr, &SourcesDict);
+	actions = new CzeParamViewList(scroll, nullptr, &ActionsDict);
+	effects = new CzeParamViewList(scroll, nullptr, &EffectsDict);
 	l->setSizeConstraint(QLayout::SetMinimumSize);
 	l->addWidget(new CzeLabel(scroll,"Source"));
 	l->addWidget(source);
@@ -38,8 +40,9 @@ void CzeProperties::UpdateParams()
 	effects->UpdateParams();
 }
 
-CzeParamViewList::CzeParamViewList(QWidget* parent, std::list<KeyframeParam*>* paramsListIn) : QWidget(parent)
+CzeParamViewList::CzeParamViewList(QWidget* parent, std::list<KeyframeParam*>* paramsListIn, KeyframeConstructorDict* constructorsIn) : QWidget(parent)
 {
+	constructors = constructorsIn;
 	QFormLayout* l = new QFormLayout(this);
 	setLayout(l);
 	l->setFieldGrowthPolicy(QFormLayout::FieldsStayAtSizeHint);
@@ -54,12 +57,13 @@ void CzeParamViewList::UpdateParams()
 	}
 	for (auto& param : *paramsList)
 	{
-		layout()->addWidget(new CzeParamView(this, param));
+		layout()->addWidget(new CzeParamView(this, param, constructors));
 	}
 }
 
-CzeParamView::CzeParamView(QWidget* parent, KeyframeParam* paramsIn) : QWidget(parent)
+CzeParamView::CzeParamView(QWidget* parent, KeyframeParam* paramsIn, KeyframeConstructorDict* constructorsIn) : QWidget(parent)
 {
+	constructors = constructorsIn;
 	inner = new QWidget(this);
 	QFormLayout* l = new QFormLayout(inner);
 	inner->setLayout(l);
@@ -67,7 +71,7 @@ CzeParamView::CzeParamView(QWidget* parent, KeyframeParam* paramsIn) : QWidget(p
 	QVBoxLayout* vbox = new QVBoxLayout(this);
 	setLayout(vbox);
 	list = new QComboBox(this);
-	for (auto& i : SourcesDict)
+	for (auto& i : *constructors)
 	{
 		list->addItem(i.first.c_str(), i.first.c_str());
 	}

@@ -4,7 +4,7 @@
 
 using namespace Effects;
 
-static KeyframeConstructorDict EffectsDict;
+KeyframeConstructorDict EffectsDict;
 
 void SimpleVertexEffect::effectVertices(std::vector<float>& verticesIn)
 {

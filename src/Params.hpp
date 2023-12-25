@@ -30,10 +30,13 @@ public:
 	KeyframeParamRegisterator(std::string name, constructorPtr constructor, KeyframeConstructorDict &globallist)
 	{
 		globallist[name] = constructor;
-		qWarning("huh %s %i", name.c_str(), globallist.size());
 	}
 };
 
+
+//      +--Will make a static class which, when the program starts up, get constructed and add a function to a global list. That function just constructs a new instance of the provided class.
+//      |
+//      V
 #define RegisterKeyframeParam(name, className, globalList) \
 KeyframeParam* className##Constructor()\
 {\
