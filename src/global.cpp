@@ -55,19 +55,12 @@ void DoKeyframeShit(QOpenGLExtraFunctions extra, GLfloat* projectiondata)
 		}
 		if (vertices.size() == 0)
 			continue;
-		qWarning("%i: %i\n", __LINE__, glGetError());
 		extra.glActiveTexture(GL_TEXTURE0);
-		qWarning("%i: %i\n", __LINE__,glGetError());
 		glBindTexture(GL_TEXTURE_2D, keyframe->texture);
-		qWarning("%i: %i\n", __LINE__, glGetError());
 		extra.glUniformMatrix4fv(extra.glGetUniformLocation(keyframe->programs.back(), "matrix"), 1, GL_FALSE, projectiondata);
-		qWarning("%i: %i\n", __LINE__, glGetError());
 		extra.glUniform1i(extra.glGetUniformLocation(keyframe->programs.back(), "image"), 0);
-		qWarning("%i: %i\n", __LINE__, glGetError());
 		extra.glBufferData(GL_ARRAY_BUFFER, vertices.size() * 4, vertices.data(), GL_DYNAMIC_DRAW);
-		qWarning("%i: %i\n", __LINE__, glGetError());
 		extra.glUseProgram(keyframe->programs.back());
-		qWarning("%i: %i\n", __LINE__, glGetError());
 		glDrawArrays(GL_TRIANGLES, 0, (int)(vertices.size() / 5));
 
 		
@@ -120,11 +113,9 @@ void InitializeKeyframe(Keyframe* keyframe, QOpenGLExtraFunctions extra)
 	{
 		effect->initializeShaders(extra);
 		effect->addFragmentShaders(fraglist);
-		qWarning("%i: %i\n", __LINE__, glGetError());
 		for (auto& fragmentshader : fraglist)
 		{
 			extra.glAttachShader(keyframe->programs.back(), fragmentshader.shader);
-			qWarning("%i: %i\n", __LINE__, glGetError());
 			if (fragmentshader.type == FST_Color)
 			{
 				
@@ -167,18 +158,8 @@ uniform sampler2D image;\n");
 				extra.glAttachShader(keyframe->programs.back(), finalshader);
 				extra.glAttachShader(keyframe->programs.back(), vertshader);
 				extra.glLinkProgram(a);
-				
-				
-				//if ((void*)effect != (void*)keyframe->effects.back());
-				//{
-				//	keyframe->programs.push_back(extra.glCreateProgram());
-				//	qWarning("adding");
-				//}
 				extra.glGetShaderInfoLog(finalshader, 512, &retlen, IDK);
-				qWarning("%s\n", IDK);
-				qWarning("%s\n", shadersrc);
 			}
-			qWarning("type: %i", fragmentshader.type);
 		}
 	}
 	

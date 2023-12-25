@@ -1,17 +1,27 @@
 #include "CzeProperties.hpp"
+#include <QLayout>
 #include <qformlayout.h>
+#include "CzeScrollArea.hpp"
+#include <qsizepolicy.h>
 
 CzeProperties::CzeProperties(QWidget* parent) : CzeWindow(parent, "Properties")
 {
-	QFormLayout* l = new QFormLayout(this);
-	setLayout(l);
-	source = new CzeParamView(this, nullptr);
-	actions = new CzeParamViewList(this, nullptr);
-	effects = new CzeParamViewList(this, nullptr);
-	l->addRow(source);
-	l->addRow(actions);
-	l->addRow(effects);
-	l->setFieldGrowthPolicy(QFormLayout::FieldsStayAtSizeHint);
+	QVBoxLayout* filllayout = new QVBoxLayout(this);
+	setLayout(filllayout);
+	CzeScrollArea* scroll = new CzeScrollArea(this);
+	filllayout->addWidget(scroll);
+	QVBoxLayout* l = new QVBoxLayout(scroll);
+	scroll->setLayout(l);
+	source = new CzeParamView(scroll, nullptr);
+	actions = new CzeParamViewList(scroll, nullptr);
+	effects = new CzeParamViewList(scroll, nullptr);
+	l->setSizeConstraint(QLayout::SetMinimumSize);
+	l->addWidget(new CzeLabel(scroll,"Source"));
+	l->addWidget(source);
+	l->addWidget(new CzeLabel(scroll,"Actions"));
+	l->addWidget(actions);
+	l->addWidget(new CzeLabel(scroll,"Effects"));
+	l->addWidget(effects);
 }
 
 void CzeProperties::UpdateParams()

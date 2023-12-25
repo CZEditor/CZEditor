@@ -2,7 +2,11 @@
 #include <unordered_map>
 #include "Property.hpp"
 
-#define INIT_PARAMS(cls) cls() { params = getDefaultParams(); }
+#define INIT_PARAMS(cls,paramname) cls() { params = getDefaultParams(); } \
+virtual const char* name() \
+{\
+return paramname;\
+}
 
 class Params
 {
@@ -14,5 +18,6 @@ class KeyframeParam
 {
 public:
 	virtual Params* getDefaultParams() = 0;
+	virtual const char* name() = 0;
 	Params* params;
 };
