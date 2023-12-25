@@ -32,7 +32,7 @@ void CzeProperties::UpdateParams()
 {
 	if (!keyframe)
 		return;
-	source->params = keyframe->source;
+	source->params = (KeyframeParam**)&keyframe->source;
 	source->UpdateParams();
 	actions->paramsList = (std::list<KeyframeParam*>*)(&(keyframe->actions));
 	actions->UpdateParams();
@@ -43,25 +43,47 @@ void CzeProperties::UpdateParams()
 CzeParamViewList::CzeParamViewList(QWidget* parent, std::list<KeyframeParam*>* paramsListIn, KeyframeConstructorDict* constructorsIn) : QWidget(parent)
 {
 	constructors = constructorsIn;
-	QFormLayout* l = new QFormLayout(this);
-	setLayout(l);
+	QVBoxLayout* vbox = new QVBoxLayout(this);
+	setLayout(vbox);
+	inner = new QWidget(this);
+	QFormLayout* l = new QFormLayout(inner);
+	inner->setLayout(l);
+	vbox->addWidget(inner);
+	CzeButton* plusbutton = new CzeButton(this, "+");
+	list = new QComboBox(this);
+	for (auto& i : *constructors)
+	{
+		list->addItem(i.first.c_str(), i.first.c_str());
+	}
+	vbox->addWidget(list);
+	vbox->addWidget(plusbutton);
+	connect(plusbutton, &CzeButton::pressed, this, &CzeParamViewList::AddParams);
 	l->setFieldGrowthPolicy(QFormLayout::FieldsStayAtSizeHint);
 	paramsList = paramsListIn;
 }
 
 void CzeParamViewList::UpdateParams()
 {
-	while (layout()->count())
+	while (inner->layout()->count())
 	{
-		layout()->removeItem(layout()->itemAt(0));
+		inner->layout()->removeItem(inner->layout()->itemAt(0));
 	}
 	for (auto& param : *paramsList)
 	{
-		layout()->addWidget(new CzeParamView(this, param, constructors));
+		inner->layout()->addWidget(new CzeParamView(inner, &param, constructors));
 	}
 }
 
-CzeParamView::CzeParamView(QWidget* parent, KeyframeParam* paramsIn, KeyframeConstructorDict* constructorsIn) : QWidget(parent)
+void CzeParamViewList::AddParams()
+{
+	if (paramsList)
+	{
+		paramsList->push_back(constructors->operator[](list->currentText().toStdString())());
+		UpdateParams();
+	}
+}
+
+CzeParamView::CzeParamView(QWidget* parent, KeyframeParam** paramsIn, KeyframeConstructorDict* constructorsIn) : QWidget(parent)
 {
 	constructors = constructorsIn;
 	inner = new QWidget(this);
@@ -75,6 +97,7 @@ CzeParamView::CzeParamView(QWidget* parent, KeyframeParam* paramsIn, KeyframeCon
 	{
 		list->addItem(i.first.c_str(), i.first.c_str());
 	}
+	connect(list, &QComboBox::currentIndexChanged, this, &CzeParamView::ChangeParams);
 	vbox->addWidget(list);
 	vbox->addWidget(inner);
 
@@ -87,7 +110,7 @@ CzeParamView::CzeParamView(QWidget* parent, KeyframeParam* paramsIn, KeyframeCon
 
 void CzeParamView::UpdateParams()
 {
-	if (!params)
+	if (!params || !*params)
 		return;
 	QFormLayout* l = (QFormLayout*)inner->layout();
 	int c = l->rowCount();
@@ -95,7 +118,7 @@ void CzeParamView::UpdateParams()
 	{
 		l->removeRow(0);
 	}
-	for (auto& it : params->params->elements)
+	for (auto& it : (*params)->params->elements)
 	{
 		QWidget* w = it.second->Widget(inner);
 		l->addRow(new CzeLabel(this, it.first.c_str()), w);
@@ -103,6 +126,13 @@ void CzeParamView::UpdateParams()
 	setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 }
 
+void CzeParamView::ChangeParams(int index)
+{
+	KeyframeConstructor constr = constructors->operator[](list->itemText(index).toStdString());
+	delete *params;
+	*params = constr();
+	UpdateParams();
+}
 
 /*
 

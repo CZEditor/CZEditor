@@ -13,13 +13,14 @@ public:
 class KeyframeParam
 {
 public:
+	~KeyframeParam() { delete params; }
 	virtual Params* getDefaultParams() = 0;
 	Params* params;
 };
 
-typedef KeyframeParam*(*constructorPtr)();
+typedef KeyframeParam*(*KeyframeConstructor)();
 
-typedef std::unordered_map<std::string, constructorPtr> KeyframeConstructorDict;
+typedef std::unordered_map<std::string, KeyframeConstructor> KeyframeConstructorDict;
 
 class KeyframeParamRegisterator // they call me doof
 {
@@ -27,7 +28,7 @@ public:
 	                                        //  +--normal function pointer which just returns a KeyframeParam object pointer
 									        //  |
 	                                        //  V
-	KeyframeParamRegisterator(std::string name, constructorPtr constructor, KeyframeConstructorDict &globallist)
+	KeyframeParamRegisterator(std::string name, KeyframeConstructor constructor, KeyframeConstructorDict &globallist)
 	{
 		globallist[name] = constructor;
 	}

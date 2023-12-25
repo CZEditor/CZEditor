@@ -11,7 +11,7 @@ class CzeButton : public QAbstractButton
 	Q_OBJECT
 
 public:
-	CzeButton(QWidget* parent, const char* text, std::function<void()> callbackIn, void* argsIn = nullptr);
+	CzeButton(QWidget* parent, const char* text);
 	//void pressedEvent()
 	//{
 	//	callback();
@@ -34,7 +34,7 @@ public:
 	{
 		held = true;
 		repaint();
-		callback();
+		emit pressed();
 		QWidget::mousePressEvent(event);
 	}
 
@@ -102,10 +102,10 @@ public:
 		event->accept();
 	}
 
-	std::function<void()> callback;
-	void* args;
-
 	bool hovered = false;
 	bool held = false;
+
+signals:
+	void pressed();
 };
 
