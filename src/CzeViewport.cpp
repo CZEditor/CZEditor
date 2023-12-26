@@ -110,10 +110,21 @@ public:
 			{
 				int width, height;
 				keyframe->source->getSize(width, height);
-				unsigned char* pixels = (unsigned char*)malloc(width * height * 4);
+				int newsize = width * height * 4;
+				unsigned char* pixels = (unsigned char*)malloc(newsize);
 				keyframe->source->getImage(pixels, width, height);
 				glBindTexture(GL_TEXTURE_2D, keyframe->texture);
-				glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+				int maxwidth, maxheight;
+				extra.glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &maxwidth);
+				extra.glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &maxheight);
+				if (newsize > maxwidth * maxheight * 4)
+				{
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+				}
+				else
+				{
+					glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+				}
 				glBindTexture(GL_TEXTURE_2D, 0);
 			}
 			updatedKeyframes.clear();
