@@ -140,3 +140,24 @@ void ColorPropertyWidget::colorSelected(const QColor& color)
 	repaint();
 }
 
+
+
+StringPropertyWidget::StringPropertyWidget(StringProperty* propIn, QWidget* parent) : QWidget(parent)
+{
+	textbox = new CzeTextbox(this);
+	textbox->setText(propIn->text);
+	connect(textbox, &CzeTextbox::textChanged, this, &StringPropertyWidget::textchanged);
+	setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+	setMinimumWidth(64);
+	setMinimumHeight(24);
+	prop = propIn;
+}
+
+void StringPropertyWidget::textchanged(QString text)
+{
+	prop->text = text;
+	if (prop->callback)
+	{
+		prop->callback(prop->callbackData);
+	}
+}

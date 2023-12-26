@@ -4,10 +4,12 @@
 #include <QWidget>
 #include <QPainter>
 #include "CzeSpinBox.hpp"
+#include "CzeTextbox.hpp"
 
 class IntProperty;
 class VertexProperty;
 class ColorProperty;
+class StringProperty;
 
 class CzeTextbox;
 
@@ -44,3 +46,12 @@ public:
 	ColorProperty* prop;
 };
 
+class StringPropertyWidget : public QWidget
+{
+public:
+	StringPropertyWidget(StringProperty* propIn, QWidget* parent = nullptr);
+	void textchanged(QString);
+
+	CzeTextbox* textbox;
+	StringProperty* prop;
+};

@@ -39,3 +39,12 @@ public:
 	QColor color;
 };
 
+class StringProperty : public Property
+{
+public:
+	StringProperty(QString textIn) : text(textIn) { }
+	virtual QString Serialize() { return text; }
+	virtual void Deserialize(const QString serialized) { return; }
+	virtual QWidget* Widget(QWidget* parent) { return new StringPropertyWidget(this, parent); }
+	QString text;
+};

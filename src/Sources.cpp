@@ -6,6 +6,10 @@ using namespace Sources;
 
 KeyframeConstructorDict SourcesDict;
 
+#define SetUpdateKeyframe(name) \
+p->elements[name]->callback = [&](void* data) { UpdateKeyframeTexture((Keyframe*)data); };\
+p->elements[name]->callbackData = keyframe
+
 void ColorSource::getImage(unsigned char* img, int width, int height)
 {
 	int s = width * height * 4;
@@ -37,3 +41,28 @@ Params* ColorSource::getDefaultParams()
 }
 
 RegisterSource("Color", ColorSource)
+
+
+
+class ImageSource : public Source
+{
+public:
+	INIT_PARAMS(ImageSource)
+	virtual void getImage(unsigned char* img, int width, int height)
+	{
+		
+	}
+	virtual void getSize(int& width, int& height)
+	{
+		
+	}
+	virtual Params* getDefaultParams()
+	{
+		Params* p = new Params();
+		p->elements["path"] = new StringProperty("");
+		SetUpdateKeyframe("path");
+		return p;
+	}
+};
+
+RegisterSource("Image", ImageSource)

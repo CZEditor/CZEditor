@@ -74,10 +74,9 @@ public:
 		extra.glAttachShader(program, vertshader);
 		extra.glAttachShader(program, fragshader);
 		extra.glLinkProgram(program);
-		char IDK[512];
-		int retlen;
-		extra.glGetProgramInfoLog(program, 512, &retlen, IDK);
-		qWarning("%s\n", IDK);
+		//char IDK[512];
+		//int retlen;
+		//extra.glGetProgramInfoLog(program, 512, &retlen, IDK);
 
 	}
 
