@@ -5,8 +5,6 @@
 #include <qopenglextrafunctions.h>
 #include <qopenglfunctions.h>
 
-
-
 extern void InitGlobals();
 extern QColor GetAccentColor(int saturation, int value, int alpha = 255);
 extern QColor InterpolateQColor(QColor colA, QColor colB, float i);

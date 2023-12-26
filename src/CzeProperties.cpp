@@ -110,9 +110,8 @@ CzeParamView::CzeParamView(QWidget* parent, KeyframeParam** paramsIn, KeyframeCo
 {
 	constructors = constructorsIn;
 	inner = new QWidget(this);
-	QFormLayout* l = new QFormLayout(inner);
+	QVBoxLayout* l = new QVBoxLayout(inner);
 	inner->setLayout(l);
-	l->setFieldGrowthPolicy(QFormLayout::FieldsStayAtSizeHint);
 	QVBoxLayout* vbox = new QVBoxLayout(this);
 	setLayout(vbox);
 	list = new QComboBox(this);
@@ -135,16 +134,17 @@ void CzeParamView::UpdateParams()
 {
 	if (!params || !*params)
 		return;
-	QFormLayout* l = (QFormLayout*)inner->layout();
-	int c = l->rowCount();
+	QVBoxLayout* l = (QVBoxLayout*)inner->layout();
+	int c = l->count();
 	for (int i = 0; i < c; i++)
 	{
-		l->removeRow(0);
+		l->takeAt(0)->widget()->deleteLater();
 	}
 	for (auto& it : (*params)->params->elements)
 	{
 		QWidget* w = it.second->Widget(inner);
-		l->addRow(new CzeLabel(this, it.first.c_str()), w);
+		l->addWidget(new CzeLabel(this, it.first.c_str()));
+		l->addWidget(w);
 	}
 	setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
 }

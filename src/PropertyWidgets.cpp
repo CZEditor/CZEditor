@@ -5,6 +5,7 @@
 #include <qformlayout.h>
 #include "CzeLabel.hpp"
 #include "global.hpp"
+#include "CzeColorPicker.hpp"
 
 
 IntPropertyWidget::IntPropertyWidget(IntProperty* propIn, QWidget* parent) : QWidget(parent)
@@ -58,12 +59,16 @@ void VertexPropertyWidget::textchanged(float value, int i)
 ColorPropertyWidget::ColorPropertyWidget(ColorProperty* propIn, QWidget* parent) : QWidget(parent)
 {
 	setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-	setMinimumWidth(64);
-	setMinimumHeight(24);
+	CzeColorPicker* picker = new CzeColorPicker(this);
+	
+	setMinimumWidth(360);
+	setMinimumHeight(256);
 
 	prop = propIn;
 }
 
+
+/*
 void ColorPropertyWidget::paintEvent(QPaintEvent* event)
 {
 	QPainter qp(this);
@@ -139,7 +144,7 @@ void ColorPropertyWidget::colorSelected(const QColor& color)
 	}
 	repaint();
 }
-
+*/
 
 
 StringPropertyWidget::StringPropertyWidget(StringProperty* propIn, QWidget* parent) : QWidget(parent)

@@ -39,10 +39,10 @@ class ColorPropertyWidget : public QWidget
 public:
 	ColorPropertyWidget(ColorProperty* propIn, QWidget* parent = nullptr);
 
-	void paintEvent(QPaintEvent* event);
-	void mousePressEvent(QMouseEvent* event);
+	//void paintEvent(QPaintEvent* event);
+	//void mousePressEvent(QMouseEvent* event);
 
-	void colorSelected(const QColor& color);
+	//void colorSelected(const QColor& color);
 
 	ColorProperty* prop;
 };
