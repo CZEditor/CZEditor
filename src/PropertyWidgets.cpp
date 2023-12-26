@@ -161,3 +161,31 @@ void StringPropertyWidget::textchanged(QString text)
 		prop->callback(prop->callbackData);
 	}
 }
+
+QuadPropertyWidget::QuadPropertyWidget(QuadProperty* propIn, QWidget* parent) : QWidget(parent)
+{
+	prop = propIn;
+	QFormLayout* l = new QFormLayout(this);
+	for (int i = 0; i < 4; i++)
+	{
+		l->addRow(new CzeLabel(this, QString::asprintf("Vert%i X", i)), (values[i][0] = new CzeSpinBox(this)));
+		connect(values[i][0], &CzeSpinBox::valueChanged, this, [&, i](float g) {textchanged(g, i * 3); });
+		values[i][0]->setValue(propIn->vertices[i].x());
+		l->addRow(new CzeLabel(this, QString::asprintf("Vert%i Y", i)), (values[i][1] = new CzeSpinBox(this)));
+		connect(values[i][1], &CzeSpinBox::valueChanged, this, [&, i](float g) {textchanged(g, i * 3 + 1); });
+		values[i][1]->setValue(propIn->vertices[i].y());
+		l->addRow(new CzeLabel(this, QString::asprintf("Vert%i Z", i)), (values[i][2] = new CzeSpinBox(this)));
+		connect(values[i][2], &CzeSpinBox::valueChanged, this, [&, i](float g) {textchanged(g, i * 3 + 2); });
+		values[i][2]->setValue(propIn->vertices[i].z());
+	}
+	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+}
+
+void QuadPropertyWidget::textchanged(float value, int i)
+{
+	prop->vertices[i / 3][i % 3] = value;
+	if (prop->callback)
+	{
+		prop->callback(prop->callbackData);
+	}
+}

@@ -43,18 +43,22 @@ Params* ColorSource::getDefaultParams()
 RegisterSource("Color", ColorSource)
 
 
+#include <qimage.h>
 
 class ImageSource : public Source
 {
 public:
 	INIT_PARAMS(ImageSource)
-	virtual void getImage(unsigned char* img, int width, int height)
+	virtual void getImage(unsigned char* imgIn, int width, int height)
 	{
-		
+		memcpy(imgIn, img.bits(), img.sizeInBytes());
 	}
 	virtual void getSize(int& width, int& height)
 	{
-		
+		img.load(((StringProperty*)(params->elements["path"]))->text);
+		img.convertTo(QImage::Format_RGBA8888);
+		width = img.width();
+		height = img.height();
 	}
 	virtual Params* getDefaultParams()
 	{
@@ -63,6 +67,7 @@ public:
 		SetUpdateKeyframe("path");
 		return p;
 	}
+	QImage img;
 };
 
 RegisterSource("Image", ImageSource)

@@ -78,3 +78,68 @@ Params* SimpleImageEffect::getDefaultParams()
 }
 
 RegisterEffect("Simple Image Effect", SimpleImageEffect);
+
+class _2DMedia : public Effect
+{
+public:
+	INIT_PARAMS(_2DMedia)
+	virtual void addVertexShaders(std::list<VertexShader>& vertexshaders) { return; };
+	virtual void addFragmentShaders(std::list<FragmentShader>& vertexshaders) { return; };
+	virtual void initializeShaders(QOpenGLExtraFunctions extra) { return; };
+	void effectVertices(std::vector<float>& verticesIn)
+	{
+		verticesIn.push_back(((VertexProperty*)params->elements["vertexfunc"])->vertices[0].x());
+		verticesIn.push_back(((VertexProperty*)params->elements["vertexfunc"])->vertices[0].y());
+		verticesIn.push_back(((VertexProperty*)params->elements["vertexfunc"])->vertices[0].z());
+		verticesIn.push_back(0.0);
+		verticesIn.push_back(0.0);
+		verticesIn.push_back(((VertexProperty*)params->elements["vertexfunc"])->vertices[1].x());
+		verticesIn.push_back(((VertexProperty*)params->elements["vertexfunc"])->vertices[1].y());
+		verticesIn.push_back(((VertexProperty*)params->elements["vertexfunc"])->vertices[1].z());
+		verticesIn.push_back(0.0);
+		verticesIn.push_back(1.0);
+		verticesIn.push_back(((VertexProperty*)params->elements["vertexfunc"])->vertices[2].x());
+		verticesIn.push_back(((VertexProperty*)params->elements["vertexfunc"])->vertices[2].y());
+		verticesIn.push_back(((VertexProperty*)params->elements["vertexfunc"])->vertices[2].z());
+		verticesIn.push_back(1.0);
+		verticesIn.push_back(0.0);
+
+		verticesIn.push_back(((VertexProperty*)params->elements["vertexfunc"])->vertices[1].x());
+		verticesIn.push_back(((VertexProperty*)params->elements["vertexfunc"])->vertices[1].y());
+		verticesIn.push_back(((VertexProperty*)params->elements["vertexfunc"])->vertices[1].z());
+		verticesIn.push_back(0.0);
+		verticesIn.push_back(1.0);
+		verticesIn.push_back(((VertexProperty*)params->elements["vertexfunc"])->vertices[3].x());
+		verticesIn.push_back(((VertexProperty*)params->elements["vertexfunc"])->vertices[3].y());
+		verticesIn.push_back(((VertexProperty*)params->elements["vertexfunc"])->vertices[3].z());
+		verticesIn.push_back(1.0);
+		verticesIn.push_back(1.0);
+		verticesIn.push_back(((VertexProperty*)params->elements["vertexfunc"])->vertices[2].x());
+		verticesIn.push_back(((VertexProperty*)params->elements["vertexfunc"])->vertices[2].y());
+		verticesIn.push_back(((VertexProperty*)params->elements["vertexfunc"])->vertices[2].z());
+		verticesIn.push_back(1.0);
+		verticesIn.push_back(0.0);
+	}
+	Params* getDefaultParams()
+	{
+		Params* ret = new Params();
+		QuadProperty* v = new QuadProperty();
+		v->vertices[0][0] = -1;
+		v->vertices[0][1] = 1;
+		v->vertices[0][2] = -3;
+		v->vertices[1][0] = -1;
+		v->vertices[1][1] = -1;
+		v->vertices[1][2] = -3;
+		v->vertices[2][0] = 1;
+		v->vertices[2][1] = 1;
+		v->vertices[2][2] = -3;
+		v->vertices[3][0] = 1;
+		v->vertices[3][1] = -1;
+		v->vertices[3][2] = -3;
+		ret->elements["vertexfunc"] = v;
+
+		return ret;
+	}
+};
+
+RegisterEffect("2D Media", _2DMedia)

@@ -10,6 +10,7 @@ class IntProperty;
 class VertexProperty;
 class ColorProperty;
 class StringProperty;
+class QuadProperty;
 
 class CzeTextbox;
 
@@ -54,4 +55,15 @@ public:
 
 	CzeTextbox* textbox;
 	StringProperty* prop;
+};
+
+
+class QuadPropertyWidget : public QWidget
+{
+public:
+	QuadPropertyWidget(QuadProperty* propIn, QWidget* parent = nullptr);
+
+	void textchanged(float value, int i);
+	CzeSpinBox* values[4][3];
+	QuadProperty* prop;
 };
