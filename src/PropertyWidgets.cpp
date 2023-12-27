@@ -4,7 +4,8 @@
 #include "Properties.hpp"
 #include <qformlayout.h>
 #include "CzeLabel.hpp"
-
+#include "global.hpp"
+#include "CzeColorPicker.hpp"
 
 
 IntPropertyWidget::IntPropertyWidget(IntProperty* propIn, QWidget* parent) : QWidget(parent)
@@ -13,7 +14,7 @@ IntPropertyWidget::IntPropertyWidget(IntProperty* propIn, QWidget* parent) : QWi
 	textbox->setValue(propIn->data.data);
 	connect(textbox, &QSpinBox::valueChanged, this, &IntPropertyWidget::textchanged);
 	setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-	setMinimumWidth(68);
+	setMinimumWidth(64);
 	setMinimumHeight(24);
 	prop = propIn;
 }
@@ -21,6 +22,10 @@ IntPropertyWidget::IntPropertyWidget(IntProperty* propIn, QWidget* parent) : QWi
 void IntPropertyWidget::textchanged(int value)
 {
 	prop->data.data = value;
+	if (prop->callback)
+	{
+		prop->callback(prop->callbackData);
+	}
 }
 
 VertexPropertyWidget::VertexPropertyWidget(VertexProperty* propIn, QWidget* parent) : QWidget(parent)
@@ -29,14 +34,14 @@ VertexPropertyWidget::VertexPropertyWidget(VertexProperty* propIn, QWidget* pare
 	QFormLayout* l = new QFormLayout(this);
 	for (int i = 0; i < 3; i++)
 	{
-		l->addRow(new CzeLabel(this, QString::asprintf("Vert%i X", i)), (values[i][0] = new CzeSpinBox(this)));
-		connect(values[i][0], &CzeSpinBox::valueChanged, this, [&, i](float g) {textchanged(g, i * 3); });
+		l->addRow(new CzeLabel(this, QString::asprintf("Vert%i X", i)), (values[i][0] = new CzeDoubleSpinBox(this)));
+		connect(values[i][0], &CzeDoubleSpinBox::valueChanged, this, [&, i](float g) {textchanged(g, i * 3); });
 		values[i][0]->setValue(propIn->vertices[i].x());
-		l->addRow(new CzeLabel(this,QString::asprintf("Vert%i Y",i)), (values[i][1] = new CzeSpinBox(this)));
-		connect(values[i][1], &CzeSpinBox::valueChanged, this, [&, i](float g) {textchanged(g, i * 3 + 1); });
+		l->addRow(new CzeLabel(this,QString::asprintf("Vert%i Y",i)), (values[i][1] = new CzeDoubleSpinBox(this)));
+		connect(values[i][1], &CzeDoubleSpinBox::valueChanged, this, [&, i](float g) {textchanged(g, i * 3 + 1); });
 		values[i][1]->setValue(propIn->vertices[i].y());
-		l->addRow(new CzeLabel(this,QString::asprintf("Vert%i Z",i)), (values[i][2] = new CzeSpinBox(this)));
-		connect(values[i][2], &CzeSpinBox::valueChanged, this, [&, i](float g) {textchanged(g, i * 3 + 2); });
+		l->addRow(new CzeLabel(this,QString::asprintf("Vert%i Z",i)), (values[i][2] = new CzeDoubleSpinBox(this)));
+		connect(values[i][2], &CzeDoubleSpinBox::valueChanged, this, [&, i](float g) {textchanged(g, i * 3 + 2); });
 		values[i][2]->setValue(propIn->vertices[i].z());
 	}
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -45,17 +50,25 @@ VertexPropertyWidget::VertexPropertyWidget(VertexProperty* propIn, QWidget* pare
 void VertexPropertyWidget::textchanged(float value, int i)
 {
 	prop->vertices[i / 3][i % 3] = value;
+	if (prop->callback)
+	{
+		prop->callback(prop->callbackData);
+	}
 }
 
 ColorPropertyWidget::ColorPropertyWidget(ColorProperty* propIn, QWidget* parent) : QWidget(parent)
 {
 	setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-	setMinimumWidth(64);
-	setMinimumHeight(24);
+	CzeColorPicker* picker = new CzeColorPicker(this);
+	connect(picker, &CzeColorPicker::colorChanged, this, &ColorPropertyWidget::colorSelected);
+	setMinimumWidth(360);
+	setMinimumHeight(256);
 
 	prop = propIn;
 }
 
+
+/*
 void ColorPropertyWidget::paintEvent(QPaintEvent* event)
 {
 	QPainter qp(this);
@@ -122,9 +135,61 @@ void ColorPropertyWidget::mousePressEvent(QMouseEvent* event)
 	dialog->show();
 }
 
-void ColorPropertyWidget::colorSelected(const QColor& color)
+
+*/
+void ColorPropertyWidget::colorSelected(QColor color)
 {
 	prop->color = color;
-	repaint();
+	if (prop->callback)
+	{
+		prop->callback(prop->callbackData);
+	}
 }
 
+StringPropertyWidget::StringPropertyWidget(StringProperty* propIn, QWidget* parent) : QWidget(parent)
+{
+	textbox = new CzeTextbox(this);
+	textbox->setText(propIn->text);
+	connect(textbox, &CzeTextbox::textChanged, this, &StringPropertyWidget::textchanged);
+	setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+	setMinimumWidth(64);
+	setMinimumHeight(24);
+	prop = propIn;
+}
+
+void StringPropertyWidget::textchanged(QString text)
+{
+	prop->text = text;
+	if (prop->callback)
+	{
+		prop->callback(prop->callbackData);
+	}
+}
+
+QuadPropertyWidget::QuadPropertyWidget(QuadProperty* propIn, QWidget* parent) : QWidget(parent)
+{
+	prop = propIn;
+	QFormLayout* l = new QFormLayout(this);
+	for (int i = 0; i < 4; i++)
+	{
+		l->addRow(new CzeLabel(this, QString::asprintf("Vert%i X", i)), (values[i][0] = new CzeDoubleSpinBox(this)));
+		connect(values[i][0], &CzeDoubleSpinBox::valueChanged, this, [&, i](float g) {textchanged(g, i * 3); });
+		values[i][0]->setValue(propIn->vertices[i].x());
+		l->addRow(new CzeLabel(this, QString::asprintf("Vert%i Y", i)), (values[i][1] = new CzeDoubleSpinBox(this)));
+		connect(values[i][1], &CzeDoubleSpinBox::valueChanged, this, [&, i](float g) {textchanged(g, i * 3 + 1); });
+		values[i][1]->setValue(propIn->vertices[i].y());
+		l->addRow(new CzeLabel(this, QString::asprintf("Vert%i Z", i)), (values[i][2] = new CzeDoubleSpinBox(this)));
+		connect(values[i][2], &CzeDoubleSpinBox::valueChanged, this, [&, i](float g) {textchanged(g, i * 3 + 2); });
+		values[i][2]->setValue(propIn->vertices[i].z());
+	}
+	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+}
+
+void QuadPropertyWidget::textchanged(float value, int i)
+{
+	prop->vertices[i / 3][i % 3] = value;
+	if (prop->callback)
+	{
+		prop->callback(prop->callbackData);
+	}
+}

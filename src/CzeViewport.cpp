@@ -13,7 +13,10 @@ class CzeViewportOpenGL : public QOpenGLWidget
 public:
 	CzeViewportOpenGL(QWidget* parent = nullptr) : QOpenGLWidget(parent)
 	{
-		
+		//QSurfaceFormat f;
+		//f.setVersion(4, 6);
+		//f.setProfile(QSurfaceFormat::CoreProfile);
+		//setFormat(f);
 	}
 
 	~CzeViewportOpenGL()
@@ -71,7 +74,9 @@ public:
 		extra.glAttachShader(program, vertshader);
 		extra.glAttachShader(program, fragshader);
 		extra.glLinkProgram(program);
-
+		//char IDK[512];
+		//int retlen;
+		//extra.glGetProgramInfoLog(program, 512, &retlen, IDK);
 
 	}
 
@@ -86,21 +91,47 @@ public:
 		extra.glBindVertexArray(vao);
 		QMatrix4x4 projection;
 		projection.perspective(90, ((float)width()) / ((float)height()), 1, 128);
-		std::vector<float> vertices;
 		glViewport(0, 0, width(), height());
-		extra.glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture);
-		extra.glUniformMatrix4fv(extra.glGetUniformLocation(program, "matrix"), 1, GL_FALSE, projection.data());
-		extra.glUniform1i(extra.glGetUniformLocation(program, "image"), 0);
+		
 
-		DoKeyframeShit(vertices);
+		if (!uninitializedKeyframes.empty())
+		{
+			for (auto& keyframe : uninitializedKeyframes)
+			{
+				InitializeKeyframe(keyframe, extra);
+			}
+			uninitializedKeyframes.clear();
+		}
 
-		if (vertices.size() == 0)
-			return;
+		if (!updatedKeyframes.empty())
+		{
+			for (auto& keyframe : updatedKeyframes)
+			{
+				int width, height;
+				keyframe->source->getSize(width, height);
+				int newsize = width * height * 4;
+				unsigned char* pixels = (unsigned char*)malloc(newsize);
+				keyframe->source->getImage(pixels, width, height);
+				glBindTexture(GL_TEXTURE_2D, keyframe->texture);
+				int maxwidth, maxheight;
+				extra.glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &maxwidth);
+				extra.glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &maxheight);
+				if (newsize > maxwidth * maxheight * 4)
+				{
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+				}
+				else
+				{
+					glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+				}
+				glBindTexture(GL_TEXTURE_2D, 0);
+			}
+			updatedKeyframes.clear();
+		}
 
-		extra.glBufferData(GL_ARRAY_BUFFER, vertices.size()*4, vertices.data(), GL_DYNAMIC_DRAW);
-		extra.glUseProgram(program);
-		glDrawArrays(GL_TRIANGLES, 0, (int)(vertices.size()/5));
+		DoKeyframeShit(extra, projection.data());
+
+		
 	}
 
 	GLuint vao;

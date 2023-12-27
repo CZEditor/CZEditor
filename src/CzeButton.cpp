@@ -1,10 +1,9 @@
 #include "CzeButton.hpp"
 
 
-CzeButton::CzeButton(QWidget* parent, const char* text, std::function<void()> callbackIn, void* argsIn) : QAbstractButton(parent)
+CzeButton::CzeButton(QWidget* parent, const char* text, void* dataIn) : QAbstractButton(parent)
 {
-	callback = callbackIn;
-	args = argsIn;
+	data = dataIn;
 	//connect(this, &CzeButton::pressed, this, &CzeButton::pressedEvent);
 	QFont fn("Segoe UI", 9);
 	QFontMetrics fm(fn);

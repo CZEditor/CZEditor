@@ -2,6 +2,10 @@
 
 #include "Action.hpp"
 
+#define RegisterAction(name, className) RegisterKeyframeParam(name,className,ActionsDict)
+
+extern KeyframeConstructorDict ActionsDict;
+
 namespace Actions
 {
 
@@ -9,7 +13,7 @@ namespace Actions
 	{
 	public:
 		INIT_PARAMS(NormalKeyframe)
-			virtual void actOnKeyframes(KeyframeList* klist, Keyframe* keyframe);
+		virtual void actOnKeyframes(KeyframeList* klist, Keyframe* keyframe);
 		virtual Params* getDefaultParams();
 	};
 

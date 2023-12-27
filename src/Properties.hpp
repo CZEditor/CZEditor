@@ -7,6 +7,7 @@
 #include "Property.hpp"
 #include <qvector3d.h>
 #include <QColor>
+#include "Keyframes.hpp"
 
 class IntProperty : public Property
 {
@@ -38,3 +39,22 @@ public:
 	QColor color;
 };
 
+class StringProperty : public Property
+{
+public:
+	StringProperty(QString textIn) : text(textIn) { }
+	virtual QString Serialize() { return text; }
+	virtual void Deserialize(const QString serialized) { return; }
+	virtual QWidget* Widget(QWidget* parent) { return new StringPropertyWidget(this, parent); }
+	QString text;
+};
+
+class QuadProperty : public Property
+{
+public:
+	QuadProperty() { }
+	virtual QString Serialize() { return "YEAH"; }
+	virtual void Deserialize(const QString serialized) { return; }
+	virtual QWidget* Widget(QWidget* parent) { return new QuadPropertyWidget(this, parent); }
+	QVector3D vertices[4];
+};

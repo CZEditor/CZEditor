@@ -4,14 +4,15 @@
 #include <QWidget>
 #include <QPainter>
 #include "CzeSpinBox.hpp"
+#include "CzeTextbox.hpp"
 
 class IntProperty;
 class VertexProperty;
 class ColorProperty;
+class StringProperty;
+class QuadProperty;
 
 class CzeTextbox;
-
-#define T(p) _Generic(p, IntProperty : "IntProperty", VertexProperty : "VertexProperty")
 
 class IntPropertyWidget : public QWidget
 {
@@ -29,7 +30,7 @@ public:
 	VertexPropertyWidget(VertexProperty* propIn, QWidget* parent = nullptr);
 
 	void textchanged(float value, int i);
-	CzeSpinBox* values[3][3];
+	CzeDoubleSpinBox* values[3][3];
 	VertexProperty* prop;
 };
 
@@ -38,11 +39,31 @@ class ColorPropertyWidget : public QWidget
 public:
 	ColorPropertyWidget(ColorProperty* propIn, QWidget* parent = nullptr);
 
-	void paintEvent(QPaintEvent* event);
-	void mousePressEvent(QMouseEvent* event);
+	//void paintEvent(QPaintEvent* event);
+	//void mousePressEvent(QMouseEvent* event);
 
-	void colorSelected(const QColor& color);
+	void colorSelected(QColor color);
 
 	ColorProperty* prop;
 };
 
+class StringPropertyWidget : public QWidget
+{
+public:
+	StringPropertyWidget(StringProperty* propIn, QWidget* parent = nullptr);
+	void textchanged(QString);
+
+	CzeTextbox* textbox;
+	StringProperty* prop;
+};
+
+
+class QuadPropertyWidget : public QWidget
+{
+public:
+	QuadPropertyWidget(QuadProperty* propIn, QWidget* parent = nullptr);
+
+	void textchanged(float value, int i);
+	CzeDoubleSpinBox* values[4][3];
+	QuadProperty* prop;
+};
