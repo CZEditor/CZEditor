@@ -206,7 +206,7 @@ OriginPropertyWidget::OriginPropertyWidget(OriginProperty* propIn, QWidget* pare
 		originpresetbuttons[i] = new CzeButton(this, buttonlabels[i], *(void **)&i);
 		originpresetbuttons[i]->setMinimumSize(24, 24);
 
-		connect(originpresetbuttons[i], CzeButton::pressed, this, OriginPropertyWidget::originPresetPressed);
+		connect(originpresetbuttons[i], &CzeButton::pressed, this, &OriginPropertyWidget::originPresetPressed);
 
 		originpresetgridlayout->addWidget(originpresetbuttons[i], i / 3, i % 3);
 	}
@@ -220,8 +220,8 @@ OriginPropertyWidget::OriginPropertyWidget(OriginProperty* propIn, QWidget* pare
 		originpresetgridlayout->addWidget(originspinboxes[i], i * 2, 4);
 	}
 
-	connect(originspinboxes[0], CzeDoubleSpinBox::valueChanged, this, OriginPropertyWidget::originXChanged);
-	connect(originspinboxes[1], CzeDoubleSpinBox::valueChanged, this, OriginPropertyWidget::originYChanged);
+	connect(originspinboxes[0], &CzeDoubleSpinBox::valueChanged, this, &OriginPropertyWidget::originXChanged);
+	connect(originspinboxes[1], &CzeDoubleSpinBox::valueChanged, this, &OriginPropertyWidget::originYChanged);
 
 	prop = propIn;
 }
