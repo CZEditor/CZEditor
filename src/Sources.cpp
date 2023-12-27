@@ -7,7 +7,7 @@ using namespace Sources;
 KeyframeConstructorDict SourcesDict;
 
 #define SetUpdateKeyframe(name) \
-p->elements[name]->callback = [&](void* data) { UpdateKeyframeTexture((Keyframe*)data); };\
+p->elements[name]->callback = &UpdateKeyframeTextureVoid;\
 p->elements[name]->callbackData = keyframe
 
 void ColorSource::getImage(unsigned char* img, int width, int height)
@@ -25,18 +25,22 @@ void ColorSource::getImage(unsigned char* img, int width, int height)
 
 void ColorSource::getSize(int& width, int& height)
 {
-	width = ((IntProperty*)params->elements["width"])->data.data;
-	height = ((IntProperty*)params->elements["height"])->data.data;
+	width = ((SizeProperty*)params->elements["size"])->width;
+	height = ((SizeProperty*)params->elements["size"])->height;
+}
+
+void UpdateKeyframeTextureVoid(void* data)
+{
+	UpdateKeyframeTexture((Keyframe*)data);
 }
 
 Params* ColorSource::getDefaultParams()
 {
 	Params* p = new Params();
-	p->elements["width"] = new IntProperty(new IntData(32));
-	p->elements["height"] = new IntProperty(new IntData(32));
+	p->elements["size"] = new SizeProperty(32, 32);
+	p->elements["size"]->callback = &UpdateKeyframeTextureVoid; p->elements["size"]->callbackData = keyframe;
 	p->elements["color"] = new ColorProperty(QColor(127, 127, 127));
-	p->elements["color"]->callback = [&](void* data) { UpdateKeyframeTexture((Keyframe*)data); };
-	p->elements["color"]->callbackData = keyframe;
+	p->elements["color"]->callback = &UpdateKeyframeTextureVoid; p->elements["color"]->callbackData = keyframe;
 	return p;
 }
 
@@ -64,7 +68,7 @@ public:
 	{
 		Params* p = new Params();
 		p->elements["path"] = new StringProperty("");
-		SetUpdateKeyframe("path");
+		p->elements["path"]->callback = &UpdateKeyframeTextureVoid; p->elements["path"]->callbackData = keyframe;
 		return p;
 	}
 	QImage img;

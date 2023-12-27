@@ -58,3 +58,14 @@ public:
 	virtual QWidget* Widget(QWidget* parent) { return new QuadPropertyWidget(this, parent); }
 	QVector3D vertices[4];
 };
+
+class SizeProperty : public Property
+{
+public:
+	SizeProperty(int widthIn = 32, int heightIn = 32) : width(widthIn), height(heightIn) { }
+	virtual QString Serialize() { return "YEAH"; }
+	virtual void Deserialize(const QString serialized) { return; }
+	virtual QWidget* Widget(QWidget* parent) { return new SizePropertyWidget(this, parent); }
+	int width;
+	int height;
+};

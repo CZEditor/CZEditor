@@ -193,3 +193,38 @@ void QuadPropertyWidget::textchanged(float value, int i)
 		prop->callback(prop->callbackData);
 	}
 }
+
+
+SizePropertyWidget::SizePropertyWidget(SizeProperty* propIn, QWidget* parent) : QWidget(parent)
+{
+	prop = propIn;
+	QHBoxLayout* l = new QHBoxLayout(this);
+
+	CzeSpinBox* width = new CzeSpinBox(this);
+	connect(width, &CzeSpinBox::valueChanged, this, &SizePropertyWidget::widthChanged);
+	l->addWidget(width);
+
+	CzeSpinBox* height = new CzeSpinBox(this);
+	connect(height, &CzeSpinBox::valueChanged, this, &SizePropertyWidget::heightChanged);
+	l->addWidget(height);
+}
+
+
+void SizePropertyWidget::widthChanged(int w)
+{
+	prop->width = w;
+	if (prop->callback)
+	{
+		prop->callback(prop->callbackData);
+	}
+}
+
+
+void SizePropertyWidget::heightChanged(int h)
+{
+	prop->height = h;
+	if (prop->callback)
+	{
+		prop->callback(prop->callbackData);
+	}
+}

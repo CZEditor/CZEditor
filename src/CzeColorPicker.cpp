@@ -186,5 +186,3 @@ void CzeColorPicker::colorChangedSlot(QColor colorIn)
 	alpha ->setValue(color.alpha());
 	block = false;
 }
-
-#include "CzeColorPicker.moc"

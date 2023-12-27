@@ -10,6 +10,7 @@ class IntProperty;
 class VertexProperty;
 class ColorProperty;
 class StringProperty;
+class SizeProperty;
 class QuadProperty;
 
 class CzeTextbox;
@@ -67,3 +68,13 @@ public:
 	CzeDoubleSpinBox* values[4][3];
 	QuadProperty* prop;
 };
+
+
+class SizePropertyWidget : public QWidget 
+{
+public: 
+	SizePropertyWidget(SizeProperty* propIn, QWidget* parent = nullptr); 
+	void widthChanged(int);
+	void heightChanged(int);
+	SizeProperty* prop;
+}
