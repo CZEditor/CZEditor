@@ -34,14 +34,14 @@ VertexPropertyWidget::VertexPropertyWidget(VertexProperty* propIn, QWidget* pare
 	QFormLayout* l = new QFormLayout(this);
 	for (int i = 0; i < 3; i++)
 	{
-		l->addRow(new CzeLabel(this, QString::asprintf("Vert%i X", i)), (values[i][0] = new CzeSpinBox(this)));
-		connect(values[i][0], &CzeSpinBox::valueChanged, this, [&, i](float g) {textchanged(g, i * 3); });
+		l->addRow(new CzeLabel(this, QString::asprintf("Vert%i X", i)), (values[i][0] = new CzeDoubleSpinBox(this)));
+		connect(values[i][0], &CzeDoubleSpinBox::valueChanged, this, [&, i](float g) {textchanged(g, i * 3); });
 		values[i][0]->setValue(propIn->vertices[i].x());
-		l->addRow(new CzeLabel(this,QString::asprintf("Vert%i Y",i)), (values[i][1] = new CzeSpinBox(this)));
-		connect(values[i][1], &CzeSpinBox::valueChanged, this, [&, i](float g) {textchanged(g, i * 3 + 1); });
+		l->addRow(new CzeLabel(this,QString::asprintf("Vert%i Y",i)), (values[i][1] = new CzeDoubleSpinBox(this)));
+		connect(values[i][1], &CzeDoubleSpinBox::valueChanged, this, [&, i](float g) {textchanged(g, i * 3 + 1); });
 		values[i][1]->setValue(propIn->vertices[i].y());
-		l->addRow(new CzeLabel(this,QString::asprintf("Vert%i Z",i)), (values[i][2] = new CzeSpinBox(this)));
-		connect(values[i][2], &CzeSpinBox::valueChanged, this, [&, i](float g) {textchanged(g, i * 3 + 2); });
+		l->addRow(new CzeLabel(this,QString::asprintf("Vert%i Z",i)), (values[i][2] = new CzeDoubleSpinBox(this)));
+		connect(values[i][2], &CzeDoubleSpinBox::valueChanged, this, [&, i](float g) {textchanged(g, i * 3 + 2); });
 		values[i][2]->setValue(propIn->vertices[i].z());
 	}
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -172,14 +172,14 @@ QuadPropertyWidget::QuadPropertyWidget(QuadProperty* propIn, QWidget* parent) : 
 	QFormLayout* l = new QFormLayout(this);
 	for (int i = 0; i < 4; i++)
 	{
-		l->addRow(new CzeLabel(this, QString::asprintf("Vert%i X", i)), (values[i][0] = new CzeSpinBox(this)));
-		connect(values[i][0], &CzeSpinBox::valueChanged, this, [&, i](float g) {textchanged(g, i * 3); });
+		l->addRow(new CzeLabel(this, QString::asprintf("Vert%i X", i)), (values[i][0] = new CzeDoubleSpinBox(this)));
+		connect(values[i][0], &CzeDoubleSpinBox::valueChanged, this, [&, i](float g) {textchanged(g, i * 3); });
 		values[i][0]->setValue(propIn->vertices[i].x());
-		l->addRow(new CzeLabel(this, QString::asprintf("Vert%i Y", i)), (values[i][1] = new CzeSpinBox(this)));
-		connect(values[i][1], &CzeSpinBox::valueChanged, this, [&, i](float g) {textchanged(g, i * 3 + 1); });
+		l->addRow(new CzeLabel(this, QString::asprintf("Vert%i Y", i)), (values[i][1] = new CzeDoubleSpinBox(this)));
+		connect(values[i][1], &CzeDoubleSpinBox::valueChanged, this, [&, i](float g) {textchanged(g, i * 3 + 1); });
 		values[i][1]->setValue(propIn->vertices[i].y());
-		l->addRow(new CzeLabel(this, QString::asprintf("Vert%i Z", i)), (values[i][2] = new CzeSpinBox(this)));
-		connect(values[i][2], &CzeSpinBox::valueChanged, this, [&, i](float g) {textchanged(g, i * 3 + 2); });
+		l->addRow(new CzeLabel(this, QString::asprintf("Vert%i Z", i)), (values[i][2] = new CzeDoubleSpinBox(this)));
+		connect(values[i][2], &CzeDoubleSpinBox::valueChanged, this, [&, i](float g) {textchanged(g, i * 3 + 2); });
 		values[i][2]->setValue(propIn->vertices[i].z());
 	}
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);

@@ -30,7 +30,7 @@ public:
 	VertexPropertyWidget(VertexProperty* propIn, QWidget* parent = nullptr);
 
 	void textchanged(float value, int i);
-	CzeSpinBox* values[3][3];
+	CzeDoubleSpinBox* values[3][3];
 	VertexProperty* prop;
 };
 
@@ -64,6 +64,6 @@ public:
 	QuadPropertyWidget(QuadProperty* propIn, QWidget* parent = nullptr);
 
 	void textchanged(float value, int i);
-	CzeSpinBox* values[4][3];
+	CzeDoubleSpinBox* values[4][3];
 	QuadProperty* prop;
 };
