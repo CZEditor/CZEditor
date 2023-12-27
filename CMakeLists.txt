@@ -9,6 +9,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Dependencies
 
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets Gui OpenGLWidgets)
+find_package(OpenGL REQUIRED)
 
 qt_standard_project_setup()
 
@@ -20,30 +21,22 @@ qt_add_executable(${PROJECT_NAME} ${SOURCES})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES AUTOMOC TRUE)
 
-set(LIBRARIES
-	Qt6::Core
-	Qt6::Widgets
-	Qt6::Gui
-	Qt6::OpenGLWidgets
-)
-
 # Platform-dependent setup
 
-
-if(WIN32)
-	list(APPEND LIBRARIES opengl32)
-
- 	# Hide console on Windows Release builds
- 	if(CMAKE_BUILD_TYPE STREQUAL "Release")
-		target_link_options(${PROJECT_NAME} PRIVATE /SUBSYSTEM:windows /ENTRY:mainCRTStartup)
-  	endif()
-elseif(UNIX)
-	list(APPEND LIBRARIES GL)
+# Hide console on Windows Release builds
+if(WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Release")
+	target_link_options(${PROJECT_NAME} PRIVATE /SUBSYSTEM:windows /ENTRY:mainCRTStartup)
 endif()
 
 # Link libraries
 
-target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBRARIES})
+target_link_libraries(${PROJECT_NAME} PRIVATE
+	Qt6::Core
+	Qt6::Widgets
+	Qt6::Gui
+	Qt6::OpenGLWidgets
+ 	OpenGL::GL
+)
 
 # Link and compile with libc++ instead of libstdc++ if on Clang
 
