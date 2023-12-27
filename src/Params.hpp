@@ -43,6 +43,6 @@ public:
 #define RegisterKeyframeParam(name, className, globalList) \
 KeyframeParam* className##Constructor(IKeyframe* keyframe)\
 {\
-	return (KeyframeParam*)(new className##(keyframe));\
+	return (KeyframeParam*)(new className(keyframe));\
 }\
 static KeyframeParamRegisterator className##Registerator(name,&className##Constructor,globalList);

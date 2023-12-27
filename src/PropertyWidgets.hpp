@@ -5,12 +5,15 @@
 #include <QPainter>
 #include "CzeSpinBox.hpp"
 #include "CzeTextbox.hpp"
+#include "CzeButton.hpp"
+#include <QGridLayout>
 
 class IntProperty;
 class VertexProperty;
 class ColorProperty;
 class StringProperty;
 class QuadProperty;
+class OriginProperty;
 
 class CzeTextbox;
 
@@ -67,3 +70,24 @@ public:
 	CzeDoubleSpinBox* values[4][3];
 	QuadProperty* prop;
 };
+
+class OriginPropertyWidget : public QWidget
+{
+private:
+	static constexpr const char* buttonlabels[9] = {"\\", "^", "/", "<", "o", ">", "/", "v", "\\"};
+public:
+	OriginPropertyWidget(OriginProperty* propIn, QWidget* parent = nullptr);
+
+	void originPresetPressed(void* data);
+	void originXChanged(double val);
+	void originYChanged(double val);
+
+	void updateSpinboxes();
+
+	QGridLayout* originpresetgridlayout;
+	CzeButton* originpresetbuttons[9];
+	CzeDoubleSpinBox* originspinboxes[2];
+
+	OriginProperty* prop;
+};
+

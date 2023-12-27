@@ -8,6 +8,7 @@
 #include <qvector3d.h>
 #include <QColor>
 #include "Keyframes.hpp"
+#include <QGridLayout>
 
 class IntProperty : public Property
 {
@@ -58,3 +59,15 @@ public:
 	virtual QWidget* Widget(QWidget* parent) { return new QuadPropertyWidget(this, parent); }
 	QVector3D vertices[4];
 };
+
+class OriginProperty : public Property
+{
+	static constexpr const char* buttonlabels[9] = {"\\", "^", "/", "<", "o", ">", "/", "v", "\\"};
+public:
+	OriginProperty(QPointF originIn) : origin(originIn) { }
+	virtual QString Serialize() { return ""; }
+	virtual void Deserialize(const QString serialized) { return; }
+	virtual QWidget* Widget(QWidget* parent) { return new OriginPropertyWidget(this, parent); }
+	QPointF origin;
+};
+
