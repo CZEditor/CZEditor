@@ -193,3 +193,59 @@ void QuadPropertyWidget::textchanged(float value, int i)
 		prop->callback(prop->callbackData);
 	}
 }
+
+OriginPropertyWidget::OriginPropertyWidget(OriginProperty* propIn, QWidget* parent) : QWidget(parent)
+{
+	setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+
+	originpresetgridlayout = new QGridLayout(this);
+	originpresetgridlayout->setSpacing(0);
+
+	for (int i = 0; i < 9; i++)
+	{
+		originpresetbuttons[i] = new CzeButton(this, buttonlabels[i], *(void **)&i);
+		originpresetbuttons[i]->setMinimumSize(24, 24);
+
+		connect(originpresetbuttons[i], CzeButton::pressed, this, OriginPropertyWidget::originPresetPressed);
+
+		originpresetgridlayout->addWidget(originpresetbuttons[i], i / 3, i % 3);
+	}
+
+	for (int i = 0; i < 2; i++)
+	{
+		originspinboxes[i] = new CzeDoubleSpinBox(this);
+		originspinboxes[i]->setRange(0.0f, 1.0f);
+		originspinboxes[i]->setSingleStep(0.1f);
+
+		originpresetgridlayout->addWidget(originspinboxes[i], i * 2, 4);
+	}
+
+	connect(originspinboxes[0], CzeDoubleSpinBox::valueChanged, this, OriginPropertyWidget::originXChanged);
+	connect(originspinboxes[1], CzeDoubleSpinBox::valueChanged, this, OriginPropertyWidget::originYChanged);
+
+	prop = propIn;
+}
+
+void OriginPropertyWidget::originPresetPressed(void* data)
+{
+	int i = *(int *)&data;
+	prop->origin = QPointF((float) (i % 3) / 2, (float) (i / 3) / 2);
+	updateSpinboxes();
+}
+
+void OriginPropertyWidget::originXChanged(double val)
+{
+	prop->origin.setX(val);
+}
+
+void OriginPropertyWidget::originYChanged(double val)
+{
+	prop->origin.setY(val);
+}
+
+void OriginPropertyWidget::updateSpinboxes()
+{
+	originspinboxes[0]->setValue(prop->origin.x());
+	originspinboxes[1]->setValue(prop->origin.y());
+}
+
