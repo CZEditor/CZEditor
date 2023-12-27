@@ -60,7 +60,7 @@ ColorPropertyWidget::ColorPropertyWidget(ColorProperty* propIn, QWidget* parent)
 {
 	setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 	CzeColorPicker* picker = new CzeColorPicker(this);
-	
+	connect(picker, &CzeColorPicker::colorChanged, this, &ColorPropertyWidget::colorSelected);
 	setMinimumWidth(360);
 	setMinimumHeight(256);
 
@@ -135,17 +135,16 @@ void ColorPropertyWidget::mousePressEvent(QMouseEvent* event)
 	dialog->show();
 }
 
-void ColorPropertyWidget::colorSelected(const QColor& color)
+
+*/
+void ColorPropertyWidget::colorSelected(QColor color)
 {
 	prop->color = color;
 	if (prop->callback)
 	{
 		prop->callback(prop->callbackData);
 	}
-	repaint();
 }
-*/
-
 
 StringPropertyWidget::StringPropertyWidget(StringProperty* propIn, QWidget* parent) : QWidget(parent)
 {

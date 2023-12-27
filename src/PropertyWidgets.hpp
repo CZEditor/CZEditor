@@ -42,7 +42,7 @@ public:
 	//void paintEvent(QPaintEvent* event);
 	//void mousePressEvent(QMouseEvent* event);
 
-	//void colorSelected(const QColor& color);
+	void colorSelected(QColor color);
 
 	ColorProperty* prop;
 };
