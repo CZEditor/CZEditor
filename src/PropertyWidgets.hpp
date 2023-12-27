@@ -70,11 +70,11 @@ public:
 };
 
 
-class SizePropertyWidget : public QWidget 
+class SizePropertyWidget : public QWidget
 {
-public: 
-	SizePropertyWidget(SizeProperty* propIn, QWidget* parent = nullptr); 
+public:
+	SizePropertyWidget(SizeProperty* propIn, QWidget* parent = nullptr);
 	void widthChanged(int);
 	void heightChanged(int);
 	SizeProperty* prop;
-}
+};
