@@ -3,6 +3,8 @@ project(CZEditor LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # Dependencies
 
@@ -16,6 +18,8 @@ file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.cpp")
 
 qt_add_executable(${PROJECT_NAME} ${SOURCES})
 
+set_target_properties(${PROJECT_NAME} PROPERTIES AUTOMOC TRUE)
+
 set(LIBRARIES
 	Qt6::Core
 	Qt6::Widgets
@@ -24,6 +28,7 @@ set(LIBRARIES
 )
 
 # Platform-dependent setup
+
 
 if(WIN32)
 	list(APPEND LIBRARIES opengl32)

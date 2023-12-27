@@ -1,6 +1,14 @@
 #include "Sources.hpp"
 #include "Properties.hpp"
+#include "Keyframes.hpp"
+#include "global.hpp"
 using namespace Sources;
+
+KeyframeConstructorDict SourcesDict;
+
+#define SetUpdateKeyframe(name) \
+p->elements[name]->callback = [&](void* data) { UpdateKeyframeTexture((Keyframe*)data); };\
+p->elements[name]->callbackData = keyframe
 
 void ColorSource::getImage(unsigned char* img, int width, int height)
 {
@@ -27,5 +35,39 @@ Params* ColorSource::getDefaultParams()
 	p->elements["width"] = new IntProperty(new IntData(32));
 	p->elements["height"] = new IntProperty(new IntData(32));
 	p->elements["color"] = new ColorProperty(QColor(127, 127, 127));
+	p->elements["color"]->callback = [&](void* data) { UpdateKeyframeTexture((Keyframe*)data); };
+	p->elements["color"]->callbackData = keyframe;
 	return p;
 }
+
+RegisterSource("Color", ColorSource)
+
+
+#include <qimage.h>
+
+class ImageSource : public Source
+{
+public:
+	INIT_PARAMS(ImageSource)
+	virtual void getImage(unsigned char* imgIn, int width, int height)
+	{
+		memcpy(imgIn, img.bits(), img.sizeInBytes());
+	}
+	virtual void getSize(int& width, int& height)
+	{
+		img.load(((StringProperty*)(params->elements["path"]))->text);
+		img.convertTo(QImage::Format_RGBA8888);
+		width = img.width();
+		height = img.height();
+	}
+	virtual Params* getDefaultParams()
+	{
+		Params* p = new Params();
+		p->elements["path"] = new StringProperty("");
+		SetUpdateKeyframe("path");
+		return p;
+	}
+	QImage img;
+};
+
+RegisterSource("Image", ImageSource)
