@@ -7,6 +7,7 @@
 #include "Actions.hpp"
 #include "Effects.hpp"
 #include <qvariant.h>
+#include <qstring.h>
 
 CzeProperties::CzeProperties(QWidget* parent) : CzeWindow(parent, "Properties")
 {
