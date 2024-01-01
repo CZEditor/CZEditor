@@ -75,3 +75,36 @@ public:
 };
 
 RegisterSource("Image", ImageSource)
+
+#include "Manager.hpp"
+class TestSource : public Source
+{
+public:
+	INIT_PARAMS(TestSource)
+	virtual void getImage(unsigned char* imgIn, int width, int height)
+	{
+		uint8_t* yeah;
+		epicmanager->getFrame(yeah);
+		int second = -1;
+		for (int i = -1; i < width * height * 4 - 1;)
+		{
+			imgIn[++i] = yeah[++second];
+			imgIn[++i] = yeah[second];
+			imgIn[++i] = yeah[second];
+			imgIn[++i] = 255;
+		}
+		//memcpy(imgIn, yeah, width*height*3);
+	}
+	virtual void getSize(int& width, int& height)
+	{
+		epicmanager->getSize(width, height);
+	}
+	virtual Params* getDefaultParams()
+	{
+		Params* p = new Params();
+		return p;
+	}
+	QImage img;
+};
+
+RegisterSource("Test", TestSource)

@@ -119,7 +119,6 @@ void InitializeKeyframe(Keyframe* keyframe, QOpenGLExtraFunctions extra)
 			extra.glAttachShader(keyframe->programs.back(), fragmentshader.shader);
 			if (fragmentshader.type == FST_Color)
 			{
-				
 				QString main;
 				main.append("#version 460 core\n\
 out vec4 FragColor;\n\

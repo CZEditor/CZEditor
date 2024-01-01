@@ -125,6 +125,7 @@ public:
 					glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 				}
 				glBindTexture(GL_TEXTURE_2D, 0);
+				free(pixels);
 			}
 			updatedKeyframes.clear();
 		}

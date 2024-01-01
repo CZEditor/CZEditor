@@ -19,7 +19,7 @@ public:
 	QWidget* inner;
 	QComboBox* list;
 	KeyframeConstructorDict* constructors;
-	Keyframe* keyframe;
+	Keyframe* keyframe = 0;
 };
 
 class CzeParamViewList : public QWidget
@@ -34,7 +34,7 @@ public:
 	KeyframeConstructorDict* constructors;
 	QWidget* inner;
 	QComboBox* list;
-	Keyframe* keyframe;
+	Keyframe* keyframe = 0;
 };
 
 class CzeProperties : public CzeWindow

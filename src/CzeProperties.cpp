@@ -34,14 +34,14 @@ void CzeProperties::UpdateParams()
 	if (!keyframe)
 		return;
 	source->params = (KeyframeParam**)&keyframe->source;
-	source->UpdateParams();
 	source->keyframe = keyframe;
+	source->UpdateParams();
 	actions->paramsList = (std::list<KeyframeParam*>*)(&(keyframe->actions));
-	actions->UpdateParams();
 	actions->keyframe = keyframe;
+	actions->UpdateParams();
 	effects->paramsList = (std::list<KeyframeParam*>*)(&(keyframe->effects));
-	effects->UpdateParams();
 	effects->keyframe = keyframe;
+	effects->UpdateParams();
 }
 
 CzeParamViewList::CzeParamViewList(QWidget* parent, std::list<KeyframeParam*>* paramsListIn, KeyframeConstructorDict* constructorsIn) : QWidget(parent)
@@ -155,6 +155,10 @@ void CzeParamView::ChangeParams(int index)
 	KeyframeConstructor constr = constructors->operator[](list->itemText(index).toStdString());
 	delete *params;
 	*params = constr(keyframe);
+	if (keyframe)
+	{
+		UpdateKeyframeTexture(keyframe);
+	}
 	UpdateParams();
 }
 
