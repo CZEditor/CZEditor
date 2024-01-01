@@ -83,16 +83,7 @@ public:
 	INIT_PARAMS(TestSource)
 	virtual void getImage(unsigned char* imgIn, int width, int height)
 	{
-		uint8_t* yeah;
-		epicmanager->getFrame(yeah);
-		int second = -1;
-		for (int i = -1; i < width * height * 4 - 1;)
-		{
-			imgIn[++i] = yeah[++second];
-			imgIn[++i] = yeah[second];
-			imgIn[++i] = yeah[second];
-			imgIn[++i] = 255;
-		}
+		epicmanager->getFrame(imgIn);
 		//memcpy(imgIn, yeah, width*height*3);
 	}
 	virtual void getSize(int& width, int& height)

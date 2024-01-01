@@ -5,6 +5,7 @@ extern "C"
 {
 #include <libavformat/avformat.h>
 #include <libavcodec/avcodec.h>
+#include <libswscale/swscale.h>
 }
 
 class VideoManager : public Manager
@@ -16,13 +17,16 @@ public:
 		widthOut = width;
 		heightOut = height;
 	}
-	void getFrame(uint8_t*& theframe)
+	void getFrame(uint8_t* theframe)
 	{
-		theframe = epic;
+		int stride[] = {width*4 };
+		sws_scale(swsctx, pFrame->data, pFrame->linesize, 0, height, &theframe, stride);
 	}
 	uint8_t* epic = 0;
+	AVFrame* pFrame;
 	int width = 0;
 	int height = 0;
+	SwsContext* swsctx;
 };
 
 static VideoManager themanger;
@@ -67,7 +71,7 @@ VideoManager::VideoManager()
 		qWarning("Error at %i", __LINE__);
 		return;
 	}
-	AVFrame* pFrame = av_frame_alloc();
+	pFrame = av_frame_alloc();
 	if (!pFrame)
 	{
 		qWarning("Error at %i", __LINE__);
@@ -106,8 +110,11 @@ VideoManager::VideoManager()
 		qWarning("Error at %i", __LINE__);
 		return;
 	}
-	epic = pFrame->data[1];
-	width = pFrame->linesize[1];
+	
+	epic = pFrame->data[0];
+	width = codecctx->width;
 	height = codecctx->height;
+	swsctx = sws_getContext(width, height, codecctx->pix_fmt, width, height, AV_PIX_FMT_RGBA, SWS_BICUBIC, NULL, NULL, NULL);
+	
 	qWarning("%i %i %i", pFrame->width, pFrame->linesize[0], pFrame->linesize[0] * height);
 }
