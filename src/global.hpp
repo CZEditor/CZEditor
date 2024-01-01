@@ -12,6 +12,7 @@ extern QColor InterpolateQColor(QColor colA, QColor colB, float i);
 extern QFont defaultfont;
 
 extern int currentframe;
+extern bool isplaying;
 
 #include "Keyframes.hpp"
 

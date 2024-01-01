@@ -95,6 +95,11 @@ public:
 		Params* p = new Params();
 		return p;
 	}
+	virtual void checkForUpdate()
+	{
+		epicmanager->nextFrame();
+		UpdateKeyframeTexture((Keyframe*)keyframe);
+	}
 	QImage img;
 };
 

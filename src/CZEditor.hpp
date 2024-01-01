@@ -16,6 +16,8 @@ public:
     CZEditor(QWidget *parent = nullptr);
     void SelectKeyframe(Keyframe* keyframe);
     ~CZEditor();
+    void timerEvent(QTimerEvent* event);
+    void keyPressEvent(QKeyEvent* event);
 private:
     QSplitter* hozsplitter;
     QSplitter* vertsplitter;

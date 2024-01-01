@@ -105,6 +105,7 @@ public:
 
 		if (!updatedKeyframes.empty())
 		{
+			//qWarning("yeah");
 			for (auto& keyframe : updatedKeyframes)
 			{
 				int width, height;

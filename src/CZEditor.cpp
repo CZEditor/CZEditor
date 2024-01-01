@@ -29,7 +29,8 @@ CZEditor::CZEditor(QWidget *parent) : CzeWindow(parent)
 
 
     resize(200, 200);
-    
+    startTimer(33,Qt::PreciseTimer);
+    setFocusPolicy(Qt::StrongFocus);
     //char yeah[64];
     //snprintf(yeah, 64, "%i %i", viewport->width(), viewport->height());
     //new QLabel(yeah, this);
@@ -45,4 +46,26 @@ void CZEditor::SelectKeyframe(Keyframe* keyframe)
 {
     propertyWidget->keyframe = keyframe;
     propertyWidget->UpdateParams();
+}
+
+void CZEditor::timerEvent(QTimerEvent* event)
+{
+    if (isplaying)
+    {
+        //qWarning("f");
+        for (auto& keyframe : keyframelist.keyframes)
+        {
+            keyframe->source->checkForUpdate();
+        }
+        viewport->opengl->repaint();
+        currentframe++;
+    }
+}
+
+void CZEditor::keyPressEvent(QKeyEvent* event)
+{
+    if (event->key() == Qt::Key::Key_Space)
+    {
+        isplaying = !isplaying;
+    }
 }
