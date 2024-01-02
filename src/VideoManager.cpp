@@ -89,6 +89,9 @@ void GetNextFrame(AVFormatContext* formatcontext, AVFormatContext* formatcontext
 {
 	int err;
 	char why[64];
+
+	bool audio = false;
+	bool video = false;
 	while (true)
 	{
 		if ((err = av_read_frame(formatcontext2, pPacket2)) < 0)
@@ -101,7 +104,7 @@ void GetNextFrame(AVFormatContext* formatcontext, AVFormatContext* formatcontext
 		//if (formatcontext2->streams[pPacket2->stream_index]->codecpar->codec_type == codecctx->codec_type)
 		if(pPacket2->stream_index == 0)
 		{
-			for (int k = 0; k < 3; k++)
+			for (int k = 0; k < 1; k++)
 			{
 				if (avcodec_send_packet(codecctx, pPacket2) < 0)
 				{
@@ -125,7 +128,7 @@ void GetNextFrame(AVFormatContext* formatcontext, AVFormatContext* formatcontext
 			{
 				continue;
 			}
-			break;
+			video = true;
 		}
 		else if (pPacket2->stream_index == 1)
 		{
@@ -142,9 +145,14 @@ void GetNextFrame(AVFormatContext* formatcontext, AVFormatContext* formatcontext
 				return;
 			}
 			buf->write((char*)(pFrameAudio->extended_data[0]), pFrameAudio->linesize[0]);
-			qWarning("%x", pFrameAudio->extended_data[0]);
+			audio = true;
+			//qWarning("%x", pFrameAudio->extended_data[0]);
 			
-
+			
+		}
+		if (video && audio)
+		{
+			break;
 		}
 	}
 	/*while (true)
@@ -189,20 +197,16 @@ VideoManager::VideoManager()
 	//QAudioDevice adevice = QAudioDevice(QMediaDevices::defaultAudioOutput());
 	QAudioOutput* output = new QAudioOutput;
 	QAudioFormat format;
-	format.setSampleRate(44100);
-	format.setChannelCount(1);
-	format.setSampleFormat(QAudioFormat::Float);
-	player = new QAudioSink(format);
+	
 	//connect(player, &QAudioSink::stateChanged, this, &VideoManager::keepPlaying);
 	
 	//player->start(buf);
-	player->setBufferSize(8192);
-	buf = player->start();
+	
 	
 
 	int vid = -1;
 	int audio = -1;
-	formatcontext = OpenVid("C:\\Users\\relt\\Downloads\\EED2FF76-84E6-41EF-A028-A48320F496E2.mov",vid,audio);
+	formatcontext = OpenVid("C:\\Users\\relt\\Downloads\\IOsx2LYFctVWBcKuSSHtxQ.mp4",vid,audio);
 
 	const AVCodec* decoder = avcodec_find_decoder(formatcontext->streams[vid]->codecpar->codec_id);
 	const AVCodec* audiodecoder = avcodec_find_decoder(formatcontext->streams[audio]->codecpar->codec_id);
@@ -269,11 +273,19 @@ VideoManager::VideoManager()
 	GetNextFrame(formatcontext2, formatcontext, pPacket2, pFrame, pFrameAudio,codecctx, audiocodecctx, buf, player);
 		
 	
-	epic = pFrame->data[0];
 	width = codecctx->width;
 	height = codecctx->height;
 	swsctx = sws_getContext(width, height, codecctx->pix_fmt, width, height, AV_PIX_FMT_RGBA, SWS_BICUBIC, NULL, NULL, NULL);
 	
+	format.setSampleRate(audiocodecctx->sample_rate);
+	format.setChannelCount(1);
+	format.setSampleFormat(QAudioFormat::Float);
+
+	player = new QAudioSink(format);
+	player->setBufferSize(pFrameAudio->linesize[0]);
+	buf = player->start();
+
+
 	qWarning("%i %i %i", pFrame->width, pFrame->linesize[0], pFrame->linesize[0] * height);
 }
 
