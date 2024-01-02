@@ -29,7 +29,7 @@ CZEditor::CZEditor(QWidget *parent) : CzeWindow(parent)
 
 
     resize(200, 200);
-    startTimer(16,Qt::PreciseTimer);
+    startTimer(33,Qt::PreciseTimer);
     setFocusPolicy(Qt::StrongFocus);
     //char yeah[64];
     //snprintf(yeah, 64, "%i %i", viewport->width(), viewport->height());
