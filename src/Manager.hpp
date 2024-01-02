@@ -1,4 +1,5 @@
 #pragma once
+#include "qobject.h"
 
 class Manager
 {

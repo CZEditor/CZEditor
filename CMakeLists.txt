@@ -8,7 +8,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # Dependencies
 
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets Gui OpenGLWidgets)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets Gui OpenGLWidgets Multimedia)
 find_package(OpenGL REQUIRED)
 
 
@@ -38,6 +38,7 @@ if(WIN32)
 	configure_file("${CMAKE_SOURCE_DIR}/lib/libav/avutil-58.dll" "${CMAKE_CURRENT_BINARY_DIR}/avutil-58.dll" COPYONLY)
 	configure_file("${CMAKE_SOURCE_DIR}/lib/libav/avformat-60.dll" "${CMAKE_CURRENT_BINARY_DIR}/avformat-60.dll" COPYONLY)
 	configure_file("${CMAKE_SOURCE_DIR}/lib/libav/avdevice-60.dll" "${CMAKE_CURRENT_BINARY_DIR}/avdevice-60.dll" COPYONLY)
+	configure_file("${CMAKE_SOURCE_DIR}/lib/libav/avcodec-60.dll" "${CMAKE_CURRENT_BINARY_DIR}/avcodec-60.dll" COPYONLY)
 	configure_file("${CMAKE_SOURCE_DIR}/lib/libav/swresample-4.dll" "${CMAKE_CURRENT_BINARY_DIR}/swresample-4.dll" COPYONLY)
 	configure_file("${CMAKE_SOURCE_DIR}/lib/libav/swscale-7.dll" "${CMAKE_CURRENT_BINARY_DIR}/swscale-7.dll" COPYONLY)
 endif()
@@ -48,6 +49,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 	Qt6::Widgets
 	Qt6::Gui
 	Qt6::OpenGLWidgets
+	Qt6::Multimedia
  	OpenGL::GL
 	${libavutil}
 	${libavformat}

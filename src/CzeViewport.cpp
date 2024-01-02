@@ -111,7 +111,7 @@ public:
 				int width, height;
 				keyframe->source->getSize(width, height);
 				int newsize = width * height * 4;
-				unsigned char* pixels = (unsigned char*)malloc(newsize);
+				unsigned char* pixels = (unsigned char*)malloc(newsize+256);
 				keyframe->source->getImage(pixels, width, height);
 				glBindTexture(GL_TEXTURE_2D, keyframe->texture);
 				int maxwidth, maxheight;
