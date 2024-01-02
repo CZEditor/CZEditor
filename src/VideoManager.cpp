@@ -12,59 +12,6 @@ extern "C"
 #include <libswscale/swscale.h>
 }
 
-class Generator : public QIODevice
-{
-	Q_OBJECT
-
-public:
-	Generator();
-
-	void start();
-	void stop();
-
-	qint64 readData(char* data, qint64 maxlen) override;
-	qint64 writeData(const char* data, qint64 len) override;
-	qint64 bytesAvailable() const override;
-	qint64 size() const override { return thesize; }
-	char* dat;
-	int thesize = 0;
-};
-
-Generator::Generator()
-{
-}
-
-void Generator::start()
-{
-	open(QIODevice::ReadOnly);
-}
-
-void Generator::stop()
-{
-	close();
-}
-
-
-qint64 Generator::readData(char* data, qint64 len)
-{
-	qint64 total = 0;
-	memcpy(data, dat, thesize);
-	return total;
-}
-
-qint64 Generator::writeData(const char* data, qint64 len)
-{
-	Q_UNUSED(data);
-	Q_UNUSED(len);
-
-	return 0;
-}
-
-qint64 Generator::bytesAvailable() const
-{
-	return thesize;
-}
-
 class VideoManager : public QObject, public Manager
 {
 	Q_OBJECT
