@@ -2,8 +2,9 @@
 #include <QtMultimedia/qaudiodevice.h>
 #include <QtMultimedia/qaudiooutput.h>
 #include <QMediaDevices>
-#include "Manager.hpp"
+#include "IVideoManager.hpp"
 #include <qbuffer.h>
+#include "CzeAVContext.hpp"
 
 extern "C"
 {
@@ -12,12 +13,16 @@ extern "C"
 #include <libswscale/swscale.h>
 }
 
-class VideoManager : public QObject, public Manager
+class VideoManager : public IVideoManager
 {
-	Q_OBJECT
 public:
-	VideoManager();
-	void getSize(int& widthOut, int& heightOut)
+	//VideoManager();
+	virtual AVHandle openVideo(const char* path);
+	virtual void getSize(AVHandle av, int& widthOut, int& heightOut);
+	virtual void getFrameRGBA(AVHandle av, uint32_t frameNumber, uint8_t* data);
+private:
+	void seekToFrame(CzeAVContext* av, uint32_t frameNumber);
+	/*void getSize(int& widthOut, int& heightOut)
 	{
 		widthOut = width;
 		heightOut = height;
@@ -27,35 +32,185 @@ public:
 		int stride[] = {width*4 };
 		sws_scale(swsctx, pFrame->data, pFrame->linesize, 0, height, &theframe, stride);
 	}
-	void keepPlaying(QAudio::State thestate)
-	{
-		qWarning("pos: %i", buf->pos());
+	*/
+	//void keepPlaying(QAudio::State thestate)
+	//{
+		//qWarning("pos: %i", buf->pos());
 		//if (thestate == QAudio::IdleState)
 		//{
 		//buf->seek(0);
 		//}
 		//qWarning("%i",thestate);
-	}
-	void nextFrame();
-	uint8_t* epic = 0;
-	AVFrame* pFrame;
-	AVFrame* pFrameAudio;
-	int width = 0;
-	int height = 0;
-	SwsContext* swsctx;
-	AVPacket* pPacket2;
-	AVCodecContext* codecctx;
-	AVCodecContext* audiocodecctx;
-	AVFormatContext* formatcontext2;
-	AVFormatContext* formatcontext;
-	QIODevice* buf;
-
-	QAudioSink* player;
+	//}
+	//void nextFrame();
+	//AVFrame* pFrame;
+	//AVFrame* pFrameAudio;
+	//SwsContext* swsctx;
+	//AVPacket* pPacket2;
+	//QIODevice* buf;
+	//QAudioSink* player;
 };
 
-static VideoManager themanger;
-Manager* epicmanager = &themanger;
 
+static VideoManager s_videomanger;
+IVideoManager* videomanager = &s_videomanger;
+
+
+
+
+AVHandle VideoManager::openVideo(const char* path)
+{
+	CzeAVContext* av = new CzeAVContext();
+	av->formatctx = avformat_alloc_context();
+	if (avformat_open_input(&av->formatctx, path, NULL, NULL) < 0)
+	{
+		qWarning("Error at %i", __LINE__);
+		return 0;
+	}
+
+	if (avformat_find_stream_info(av->formatctx, NULL) < 0)
+	{
+		qWarning("Error at %i", __LINE__);
+		return 0;
+	}
+
+
+	av->video_stream = -1;
+	av->audio_stream = -1;
+	for (int i = 0; i < av->formatctx->nb_streams; i++)
+	{
+		if (av->formatctx->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_VIDEO)
+		{
+			av->video_stream = i;
+		}
+		if (av->formatctx->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_AUDIO)
+		{
+			av->audio_stream = i;
+		}
+	}
+
+	const AVCodec* video_decoder = avcodec_find_decoder(av->formatctx->streams[av->video_stream]->codecpar->codec_id);
+	const AVCodec* audio_decoder = avcodec_find_decoder(av->formatctx->streams[av->audio_stream]->codecpar->codec_id);
+	if (video_decoder == 0 || audio_decoder == 0)
+	{
+		qWarning("Error at %i", __LINE__);
+		return 0;
+	}
+
+
+	av->video_codecctx = avcodec_alloc_context3(video_decoder);
+	av->video_codecctx->err_recognition = AV_EF_IGNORE_ERR;
+	av->video_codecctx->strict_std_compliance = FF_COMPLIANCE_VERY_STRICT;
+
+	avcodec_parameters_to_context(av->video_codecctx, av->formatctx->streams[av->video_stream]->codecpar);
+
+	if (avcodec_open2(av->video_codecctx, video_decoder, NULL) < 0)
+	{
+		qWarning("Error at %i", __LINE__);
+		return 0;
+	}
+
+
+	av->audio_codecctx = avcodec_alloc_context3(audio_decoder);
+	av->audio_codecctx->err_recognition = AV_EF_IGNORE_ERR;
+	av->audio_codecctx->strict_std_compliance = FF_COMPLIANCE_VERY_STRICT;
+
+	avcodec_parameters_to_context(av->audio_codecctx, av->formatctx->streams[av->audio_stream]->codecpar);
+
+	if (avcodec_open2(av->audio_codecctx, audio_decoder, NULL) < 0)
+	{
+		qWarning("Error at %i", __LINE__);
+		return 0;
+	}
+	av->video_frame = av_frame_alloc();
+	av->audio_frame = av_frame_alloc();
+	av->packet = av_packet_alloc();
+	av->swsctx = sws_getContext(
+		av->video_codecctx->width, 
+		av->video_codecctx->height, 
+		av->video_codecctx->pix_fmt, 
+		av->video_codecctx->width, 
+		av->video_codecctx->height,
+		AV_PIX_FMT_RGBA, SWS_POINT, NULL, NULL, NULL);
+	return (AVHandle)av;
+}
+
+void VideoManager::getSize(AVHandle avhandle, int& widthOut, int& heightOut)
+{
+	CzeAVContext* av = (CzeAVContext*)avhandle;
+	widthOut = av->video_codecctx->width;
+	heightOut = av->video_codecctx->height;
+}
+
+void VideoManager::getFrameRGBA(AVHandle avhandle, uint32_t frameNumber, uint8_t* data)
+{
+	CzeAVContext* av = (CzeAVContext*)avhandle;
+	AVRational currentframe = av_mul_q(av->formatctx->streams[av->video_stream]->r_frame_rate, av_mul_q(av->formatctx->streams[av->video_stream]->time_base, av_make_q(av->video_frame->pts, 1)));
+	int tbase = av->formatctx->streams[av->video_stream]->time_base.den / av->formatctx->streams[av->video_stream]->time_base.num;
+	if (currentframe.num > frameNumber)
+	{
+		
+		qWarning("%i/%i != %i", currentframe.num, currentframe.den, frameNumber);
+		
+		// Not the next frame, have to seek
+		seekToFrame(av, frameNumber* tbase);
+	}
+	int err = 0;
+
+	while (true)
+	{
+		err = av_read_frame(av->formatctx, av->packet); // Get packet from file
+		if (err < 0)
+		{
+			if (err == AVERROR_EOF)
+			{
+				//seekToFrame(av, 0); // Loop
+				//err = av_read_frame(av->formatctx, av->packet);
+				break;
+			}
+			// TODO : Add more error handling later
+		}
+		if (av->formatctx->streams[av->packet->stream_index]->codecpar->codec_type != AVMEDIA_TYPE_VIDEO)
+		{
+			continue;
+		}
+		err = avcodec_send_packet(av->video_codecctx, av->packet);        // Send packet
+		if (err < 0)
+		{
+			qWarning("%i: %x", __LINE__,err);
+		}
+		err = avcodec_receive_frame(av->video_codecctx, av->video_frame); // get frame
+		if (err < 0)
+		{
+			if (err == AVERROR(EAGAIN))
+			{
+				continue;
+			}
+		}
+		currentframe = av_mul_q(av->formatctx->streams[av->video_stream]->r_frame_rate, av_mul_q(av->formatctx->streams[av->video_stream]->time_base, av_make_q(av->video_frame->pts, 1)));
+		if (currentframe.num < frameNumber)
+		{
+			
+			continue;
+		}
+		break;
+	}
+	qWarning("%i/%i | %i", currentframe.num, currentframe.den, frameNumber);
+	
+	
+
+	int stride = av->video_frame->width * 4; // 4 bytes per pixel
+
+	sws_scale(av->swsctx, av->video_frame->data, av->video_frame->linesize, 0, av->video_frame->height, &data, &stride); // Convert YUV to RGBA
+
+}
+
+void VideoManager::seekToFrame(CzeAVContext* av, uint32_t frameNumber)
+{
+	av_seek_frame(av->formatctx, av->video_stream, frameNumber, AVSEEK_FLAG_ANY|AVSEEK_FORCE);
+}
+
+/*
 AVFormatContext* OpenVid(const char* name, int& vid, int& audio)
 {
 	AVFormatContext* formatcontext = avformat_alloc_context();
@@ -85,6 +240,7 @@ AVFormatContext* OpenVid(const char* name, int& vid, int& audio)
 	return formatcontext;
 }
 
+*/
 void GetNextFrame(AVFormatContext* formatcontext, AVFormatContext* formatcontext2, AVPacket* pPacket2, AVFrame* pFrame, AVFrame* pFrameAudio, AVCodecContext* codecctx, AVCodecContext* audiocodecctx, QIODevice* buf, QAudioSink* player, bool notinit)
 {
 	int err;
@@ -102,7 +258,7 @@ void GetNextFrame(AVFormatContext* formatcontext, AVFormatContext* formatcontext
 			qWarning("Error at %i, %s", __LINE__, why);
 			return;
 		}
-		pPacket2->data[rand()*pPacket2->size/RAND_MAX]++;
+		//pPacket2->data[rand()*pPacket2->size/RAND_MAX]++;
 		//pPacket2->data[pPacket2->size / 4] = 0;
 		if (formatcontext2->streams[pPacket2->stream_index]->codecpar->codec_type == codecctx->codec_type && !video)
 		//if(pPacket2->stream_index == 0)
@@ -236,7 +392,7 @@ void GetNextFrame(AVFormatContext* formatcontext, AVFormatContext* formatcontext
 	}
 	*/
 }
-
+/*
 const char justnothing[2048] = { };
 
 VideoManager::VideoManager()
@@ -302,7 +458,7 @@ VideoManager::VideoManager()
 	//formatcontext2 = formatcontext;
 
 	//qWarning("%i", pPacket->pos);
-	/*if (av_read_frame(formatcontext, pPacket2) < 0)
+	if (av_read_frame(formatcontext, pPacket2) < 0)
 	{
 		qWarning("Error at %i", __LINE__);
 		return;
@@ -321,13 +477,13 @@ VideoManager::VideoManager()
 			qWarning("Error at %i", __LINE__);
 			return;
 		}
-	}*/
+	}
 		
 	GetNextFrame(formatcontext2, formatcontext, pPacket2, pFrame, pFrameAudio,codecctx, audiocodecctx, buf, player,false);
 	
 	width = codecctx->width;
 	height = codecctx->height;
-	swsctx = sws_getContext(width, height, codecctx->pix_fmt, width, height, AV_PIX_FMT_RGBA, SWS_BICUBIC, NULL, NULL, NULL);
+	swsctx = sws_getContext(width, height, codecctx->pix_fmt, width, height, AV_PIX_FMT_RGBA, SWS_POINT, NULL, NULL, NULL);
 	
 	format.setSampleRate(audiocodecctx->sample_rate);
 	format.setChannelCount(1);
@@ -345,5 +501,4 @@ void VideoManager::nextFrame()
 {
 	GetNextFrame(formatcontext2, formatcontext, pPacket2, pFrame, pFrameAudio, codecctx, audiocodecctx, buf, player,true);
 }
-
-#include "VideoManager.moc"
+*/

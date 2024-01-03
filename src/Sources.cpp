@@ -76,31 +76,42 @@ public:
 
 RegisterSource("Image", ImageSource)
 
-#include "Manager.hpp"
+#include "IVideoManager.hpp"
 class TestSource : public Source
 {
 public:
 	INIT_PARAMS(TestSource)
 	virtual void getImage(unsigned char* imgIn, int width, int height)
 	{
-		epicmanager->getFrame(imgIn);
-		//memcpy(imgIn, yeah, width*height*3);
+		if (vidhandle)
+		{
+			videomanager->getFrameRGBA(vidhandle, currentframe, imgIn);
+		}
 	}
 	virtual void getSize(int& width, int& height)
 	{
-		epicmanager->getSize(width, height);
+		if(vidhandle)
+		{
+			videomanager->getSize(vidhandle, width, height);
+		}
 	}
 	virtual Params* getDefaultParams()
 	{
 		Params* p = new Params();
+		p->elements["path"] = new StringProperty("C:\\Users\\relt\\Downloads\\v12044gd0000cl1fk0nog65tmrq2hda0.mov");
 		return p;
 	}
 	virtual void checkForUpdate()
 	{
-		epicmanager->nextFrame();
+		if (lastpath != ((StringProperty*)params->elements["path"])->text || vidhandle == 0)
+		{
+			lastpath = ((StringProperty*)params->elements["path"])->text;
+			vidhandle = videomanager->openVideo(lastpath.toLocal8Bit().constData());
+		}
 		UpdateKeyframeTexture((Keyframe*)keyframe);
 	}
-	QImage img;
+	QString lastpath;
+	AVHandle vidhandle = 0;
 };
 
 RegisterSource("Test", TestSource)
