@@ -10,10 +10,10 @@
 CZEditor::CZEditor(QWidget *parent) : CzeWindow(parent)
 {
     SetTitle("CZEditor");
-    CzeTextbox* idk = new CzeTextbox(this);
-    idk->move(16,16);
-    (new CzeLabel(this, "czeditor ! !"))->move(16, 48);
-    (new CzeButton(this, "      !      "))->move(96, 48);
+    //CzeTextbox* idk = new CzeTextbox(this);
+    //idk->move(16,16);
+    //(new CzeLabel(this, "czeditor ! !"))->move(16, 48);
+    //(new CzeButton(this, "      !      "))->move(96, 48);
     viewport = new CzeViewport(nullptr);
     CzeTimeline* timeline = new CzeTimeline(nullptr);
     propertyWidget = new CzeProperties(nullptr);

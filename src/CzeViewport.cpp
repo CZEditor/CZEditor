@@ -90,8 +90,8 @@ public:
 		extra.glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		extra.glBindVertexArray(vao);
 		QMatrix4x4 projection;
-		projection.perspective(90, ((float)width()) / ((float)height()), 1, 128);
-		glViewport(0, 0, width(), height());
+		projection.perspective(90, ((float)projectsettings.width) / ((float)projectsettings.height), 1, 128);
+		glViewport(0, 0, projectsettings.width, projectsettings.height);
 		
 
 		if (!uninitializedKeyframes.empty())

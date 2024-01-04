@@ -4,6 +4,7 @@
 #include <QFont>
 #include <qopenglextrafunctions.h>
 #include <qopenglfunctions.h>
+#include "CzeProjectSettings.hpp"
 
 extern void InitGlobals();
 extern QColor GetAccentColor(int saturation, int value, int alpha = 255);
@@ -13,6 +14,8 @@ extern QFont defaultfont;
 
 extern int currentframe;
 extern bool isplaying;
+
+extern CzeProjectSettings projectsettings;
 
 #include "Keyframes.hpp"
 

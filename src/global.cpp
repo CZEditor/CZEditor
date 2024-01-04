@@ -1,6 +1,7 @@
 #include "global.hpp"
 #include <time.h>
 #include "Properties.hpp"
+#include "CzeProjectSettings.hpp"
 static int todayshue;
 QFont defaultfont;
 int currentframe = 0;
@@ -8,6 +9,8 @@ bool isplaying;
 KeyframeList keyframelist;
 std::list<Keyframe*> uninitializedKeyframes;
 std::list<Keyframe*> updatedKeyframes;
+
+CzeProjectSettings projectsettings;
 
 ICZEditor* cze = 0;
 

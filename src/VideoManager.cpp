@@ -195,7 +195,7 @@ void VideoManager::getFrameRGBA(AVHandle avhandle, uint32_t frameNumber, uint8_t
 		}
 		break;
 	}
-	qWarning("%i/%i | %i", currentframe.num, currentframe.den, frameNumber);
+	//qWarning("%i/%i | %i", currentframe.num, currentframe.den, frameNumber);
 	
 	
 
