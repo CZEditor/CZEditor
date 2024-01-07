@@ -106,8 +106,9 @@ AVHandle VideoManager::openVideo(const char* path)
 		av->video_codecctx->width, 
 		av->video_codecctx->height,
 		AV_PIX_FMT_RGBA, SWS_POINT, NULL, NULL, NULL);
-	av->swrctx = swr_alloc();
-	av->swrctx->
+	AVChannelLayout why = AV_CHANNEL_LAYOUT_STEREO;
+	swr_alloc_set_opts2(&av->swrctx, &why, AV_SAMPLE_FMT_FLTP, 48000, &av->audio_codecctx->ch_layout, av->audio_codecctx->sample_fmt, av->audio_codecctx->sample_rate, 0, 0);
+	swr_init(av->swrctx);
 	return (AVHandle)av;
 }
 
@@ -166,7 +167,6 @@ void VideoManager::getFrameRGBA(AVHandle avhandle, uint32_t frameNumber, uint8_t
 		currentframe = av_mul_q(av->formatctx->streams[av->video_stream]->r_frame_rate, av_mul_q(av->formatctx->streams[av->video_stream]->time_base, av_make_q(av->video_frame->pts, 1)));
 		if (currentframe.num < frameNumber)
 		{
-			
 			continue;
 		}
 		break;

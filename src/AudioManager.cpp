@@ -86,6 +86,7 @@ void AudioManager::getSamples(AVHandle avhandle, uint32_t frameNumber, float* da
 		}
 		break;
 	}
+	swr_convert(av->swrctx, (uint8_t**)&data, av->audio_frame->nb_samples, av->audio_frame->extended_data, av->audio_frame->nb_samples);
 }
 
 void AudioManager::seekToFrame(CzeAVContext* av, uint32_t frameNumber)
