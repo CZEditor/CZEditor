@@ -11,6 +11,7 @@ extern "C"
 #include <libavformat/avformat.h>
 #include <libavcodec/avcodec.h>
 #include <libswscale/swscale.h>
+#include <libswresample/swresample.h>
 }
 
 class VideoManager : public IVideoManager
@@ -22,33 +23,6 @@ public:
 	virtual void getFrameRGBA(AVHandle av, uint32_t frameNumber, uint8_t* data);
 private:
 	void seekToFrame(CzeAVContext* av, uint32_t frameNumber);
-	/*void getSize(int& widthOut, int& heightOut)
-	{
-		widthOut = width;
-		heightOut = height;
-	}
-	void getFrame(uint8_t* theframe)
-	{
-		int stride[] = {width*4 };
-		sws_scale(swsctx, pFrame->data, pFrame->linesize, 0, height, &theframe, stride);
-	}
-	*/
-	//void keepPlaying(QAudio::State thestate)
-	//{
-		//qWarning("pos: %i", buf->pos());
-		//if (thestate == QAudio::IdleState)
-		//{
-		//buf->seek(0);
-		//}
-		//qWarning("%i",thestate);
-	//}
-	//void nextFrame();
-	//AVFrame* pFrame;
-	//AVFrame* pFrameAudio;
-	//SwsContext* swsctx;
-	//AVPacket* pPacket2;
-	//QIODevice* buf;
-	//QAudioSink* player;
 };
 
 
@@ -132,6 +106,8 @@ AVHandle VideoManager::openVideo(const char* path)
 		av->video_codecctx->width, 
 		av->video_codecctx->height,
 		AV_PIX_FMT_RGBA, SWS_POINT, NULL, NULL, NULL);
+	av->swrctx = swr_alloc();
+	av->swrctx->
 	return (AVHandle)av;
 }
 
@@ -177,7 +153,7 @@ void VideoManager::getFrameRGBA(AVHandle avhandle, uint32_t frameNumber, uint8_t
 		err = avcodec_send_packet(av->video_codecctx, av->packet);        // Send packet
 		if (err < 0)
 		{
-			qWarning("%i: %x", __LINE__,err);
+			qWarning("%i: %x", __LINE__, err);
 		}
 		err = avcodec_receive_frame(av->video_codecctx, av->video_frame); // get frame
 		if (err < 0)

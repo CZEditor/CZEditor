@@ -1,6 +1,5 @@
 #pragma once
-
-typedef void* AVHandle;
+#include "AV.hpp"
 
 class IVideoManager
 {

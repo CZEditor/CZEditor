@@ -34,6 +34,7 @@ if(WIN32)
 	find_library(libavdevice NAMES "avdevice" HINTS "${CMAKE_SOURCE_DIR}/lib/libav" REQUIRED)
 	find_library(libavcodec NAMES "avcodec" HINTS "${CMAKE_SOURCE_DIR}/lib/libav" REQUIRED)
 	find_library(libswscale NAMES "swscale" HINTS "${CMAKE_SOURCE_DIR}/lib/libav" REQUIRED)
+	find_library(libswresample NAMES "swresample" HINTS "${CMAKE_SOURCE_DIR}/lib/libav" REQUIRED)
 	target_include_directories(${PROJECT_NAME} AFTER PRIVATE "${CMAKE_SOURCE_DIR}/lib/libav/include")
 	configure_file("${CMAKE_SOURCE_DIR}/lib/libav/avutil-58.dll" "${CMAKE_CURRENT_BINARY_DIR}/avutil-58.dll" COPYONLY)
 	configure_file("${CMAKE_SOURCE_DIR}/lib/libav/avformat-60.dll" "${CMAKE_CURRENT_BINARY_DIR}/avformat-60.dll" COPYONLY)
@@ -41,6 +42,7 @@ if(WIN32)
 	configure_file("${CMAKE_SOURCE_DIR}/lib/libav/avcodec-60.dll" "${CMAKE_CURRENT_BINARY_DIR}/avcodec-60.dll" COPYONLY)
 	configure_file("${CMAKE_SOURCE_DIR}/lib/libav/swresample-4.dll" "${CMAKE_CURRENT_BINARY_DIR}/swresample-4.dll" COPYONLY)
 	configure_file("${CMAKE_SOURCE_DIR}/lib/libav/swscale-7.dll" "${CMAKE_CURRENT_BINARY_DIR}/swscale-7.dll" COPYONLY)
+	configure_file("${CMAKE_SOURCE_DIR}/lib/libav/swresample-4.dll" "${CMAKE_CURRENT_BINARY_DIR}/swresample-4.dll" COPYONLY)
 endif()
 # Link libraries
 
@@ -56,6 +58,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 	${libavdevice}
 	${libavcodec}
 	${libswscale}
+	${libswresample}
 )
 
 # Link and compile with libc++ instead of libstdc++ if on Clang
