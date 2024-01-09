@@ -116,7 +116,7 @@ public:
 				{
 					after = 0;
 				}
-				qWarning("found %ls", otherwidget->windowTitle().data());
+				qWarning("found %ls", (wchar_t*)otherwidget->windowTitle().data());
 				CzeWindow* otherwindow = (CzeWindow*)otherwidget;
 				otherwindow->done = false;
 				QWidget* otherinner = otherwindow->inner;
