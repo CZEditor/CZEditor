@@ -14,7 +14,7 @@ public:
 class KeyframeParam
 {
 public:
-	~KeyframeParam() { delete params; }
+	virtual ~KeyframeParam() { if (params) { delete params; params = nullptr; } }
 	virtual Params* getDefaultParams() = 0;
 	Params* params;
 	IKeyframe* keyframe;
